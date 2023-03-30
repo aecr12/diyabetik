@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <EditText
+        android:id="@+id/search_bar_dinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search dinner items"
+        android:inputType="text"
+        android:maxLines="1"/>
+
+    <ImageView
+        android:id="@+id/dinner_image"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:src="@drawable/app_logo" />
+
+    <ListView
+        android:id="@+id/food_list_dinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

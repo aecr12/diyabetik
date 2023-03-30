@@ -1,0 +1,91 @@
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Uygulama logosu -->
+        <ImageView
+            android:id="@+id/imageViewLogo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="48dp"
+            android:src="@drawable/app_logo" />
+
+        <!-- E-posta giriş kutusu -->
+        <EditText
+            android:id="@+id/editTextEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageViewLogo"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="32dp"
+            android:hint="E-posta"
+            android:inputType="textEmailAddress"
+            android:maxLines="1" />
+
+        <!-- Şifre giriş kutusu -->
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextEmail"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="16dp"
+            android:hint="Şifre"
+            android:inputType="textPassword"
+            android:maxLines="1" />
+
+        <!-- Giriş yap butonu -->
+
+        <!-- Google hesabı ile devam et butonu -->
+        <Button
+            android:id="@+id/buttonLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextPassword"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="31dp"
+            android:background="@drawable/rounded_button"
+            android:text="Giriş Yap"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/buttonGoogleSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/buttonLogin"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_button"
+            android:text="Google Hesabı ile Devam Et"
+            android:textColor="@android:color/white" />
+
+        <!-- Apple hesabı ile devam et butonu -->
+        <Button
+            android:id="@+id/buttonAppleSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/buttonGoogleSignIn"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_button"
+            android:text="Apple Hesabı ile Devam Et"
+            android:textColor="@android:color/white" />
+        <!-- Hesap oluşturma metni -->
+        <TextView
+            android:id="@+id/textViewSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/buttonAppleSignIn"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="Hesabın yok mu? Kayıt Ol"
+            android:textColor="@color/colorPrimary" />
+    </RelativeLayout>
+</ScrollView>

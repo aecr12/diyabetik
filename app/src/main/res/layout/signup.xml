@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Uygulama logosu -->
+        <ImageView
+            android:id="@+id/imageViewlogo"
+            android:layout_centerHorizontal="true"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/app_logo" />
+
+        <!-- Ad Soyad -->
+        <EditText
+            android:id="@+id/editTextFullname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageViewlogo"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:hint="Ad Soyad"
+            android:inputType="text"
+            android:maxLines="1"/>
+
+        <!-- E-mail -->
+        <EditText
+            android:id="@+id/editTextEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editTextFullname"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:hint="E-mail"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"/>
+
+        <!-- Şifre -->
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editTextEmail"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:hint="Şifre"
+            android:inputType="textPassword"
+            android:maxLines="1"/>
+
+        <!-- Kayıt Ol Butonu -->
+        <Button
+            android:id="@+id/buttonRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editTextPassword"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/rounded_button"
+            android:text="Kayıt Ol" />
+
+    </RelativeLayout>
+</ScrollView>
