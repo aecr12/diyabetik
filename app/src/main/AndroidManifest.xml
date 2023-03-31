@@ -50,6 +50,7 @@
         <activity android:name=".DinnerTracker" />
         <activity android:name=".SnackTracker" />
         <activity android:name=".DiabetesManual" />
+        <activity android:name=".BloodSugarWithHBA1CDiagram"/>
     </application>
 
 </manifest>

@@ -1,44 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="8dp">
-
-    <!-- Kullanıcı tarafından girilen kan şekeri değeri için EditText -->
+    <!-- Kullanıcı tarafından girilen ilaç adı için EditText -->
     <EditText
-        android:id="@+id/bloodSugarValueEditText"
+        android:id="@+id/medicineName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:hint="Kan şekeri değeri girin"
+        android:hint="İlaç adı"
+        android:inputType="text"
         android:maxLines="1"
         android:textColor="@color/black"
         android:layout_marginTop="5dp"/>
 
-    <!-- Tarih seçimi için EditText -->
+    <!-- Kullanıcı tarafından girilen tarih için EditText -->
     <EditText
         android:id="@+id/dateEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/medicineName"
+        android:hint="Tarih giriniz"
         android:inputType="text"
-        android:hint="Tarih girin"
         android:maxLines="1"
-        android:textColor="@color/black"
-        android:layout_below="@+id/bloodSugarValueEditText"/>
+        android:textColor="@color/black" />
 
     <!-- Ekle butonu -->
     <Button
         android:id="@+id/addButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ekle"
         android:layout_below="@id/dateEditText"
         android:layout_alignParentEnd="true"
+        android:background="@drawable/rounded_button"
         android:onClick="addBloodSugarEntry"
-        android:background="@drawable/rounded_button"/>
+        android:text="Ekle" />
 
     <!-- Kartların listelendiği ListView -->
     <ListView
-        android:id="@+id/bloodSugarList"
+        android:id="@+id/medicineList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/addButton"
@@ -57,9 +58,9 @@
         android:orientation="horizontal"
         android:padding="10dp">
 
-        <!-- Kan şekeri değeri -->
+        <!-- İlaç adı -->
         <TextView
-            android:id="@+id/bloodSugarValueText"
+            android:id="@+id/medicineNameText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -68,7 +69,7 @@
 
         <!-- Tarih ve saat -->
         <TextView
-            android:id="@+id/bloodSugarDateTimeText"
+            android:id="@+id/medicineDateTimeText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -76,5 +77,4 @@
             android:textSize="12sp" />
 
     </LinearLayout>
-
 </RelativeLayout>
