@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,11 +42,14 @@ public class MedicineTracker extends AppCompatActivity {
     private ArrayAdapter<MedicineTracker.MedicineEntry> medicineListAdapter;
     private ListView medicineList;
     private Button addButton;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.medicine_tracker);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         addButton = findViewById(R.id.addButton);
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +133,7 @@ public class MedicineTracker extends AppCompatActivity {
                                 String updatedInput = inputText;
                                 // DatePicker ve TimePicker'dan alınan tarih/saat bilgisini bir Date objesine dönüştürün
                                 int day = datePicker.getDayOfMonth();
-                                int month = datePicker.getMonth()-1;
+                                int month = datePicker.getMonth() - 1;
                                 int year = datePicker.getYear();
                                 int hour = timePicker.getHour();
                                 int minute = timePicker.getMinute();
@@ -166,7 +171,7 @@ public class MedicineTracker extends AppCompatActivity {
         String dateString = dateEditText.getText().toString().trim();
 
         // Girilen değerin boş olup olmadığını kontrol eder
-        if (medicineNameString.isEmpty()&& dateString.isEmpty()) {
+        if (medicineNameString.isEmpty() && dateString.isEmpty()) {
             Toast.makeText(this, "Lütfen bir ilaç adı girin", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -183,9 +188,9 @@ public class MedicineTracker extends AppCompatActivity {
         // Girilen değerin date bir değer olup olmadığını kontrol eder
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
         Date date;
-        try{
-            date=dateFormat.parse(dateString);
-        }catch (ParseException e){
+        try {
+            date = dateFormat.parse(dateString);
+        } catch (ParseException e) {
             Toast.makeText(this, "Lütfen geçerli bir tarih girin", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -220,8 +225,8 @@ public class MedicineTracker extends AppCompatActivity {
             return dateTime;
         }
 
-        public void setDateTime(Date dateTime){
-            this.dateTime=dateTime;
+        public void setDateTime(Date dateTime) {
+            this.dateTime = dateTime;
         }
 
 
@@ -231,5 +236,23 @@ public class MedicineTracker extends AppCompatActivity {
             String dateString = dateFormat.format(dateTime);
             return String.format(Locale.getDefault(), "%s \n%s", medicineName, dateString);
         }
+    }
+
+    // geri butonu için menünün inflate edilmesi
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

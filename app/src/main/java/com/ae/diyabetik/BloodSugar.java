@@ -9,6 +9,8 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,11 +43,13 @@ public class BloodSugar extends AppCompatActivity {
     private ArrayAdapter<BloodSugarEntry> bloodSugarListAdapter;
     private ListView bloodSugarList;
     private Button addButton;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.blood_sugar_tracker);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         bloodSugarEntries = new ArrayList<>();
         bloodSugarListAdapter = new ArrayAdapter<>(this, R.layout.list_item1, bloodSugarEntries);
@@ -69,9 +73,10 @@ public class BloodSugar extends AppCompatActivity {
         bloodSugarList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Double selectedValue = bloodSugarEntries.get(position).getBloodSugarValue();
+                float selectedValue = bloodSugarEntries.get(position).getBloodSugarValue();
                 Intent intent = new Intent(BloodSugar.this,BloodSugarWithHBA1CDiagram.class);
                 intent.putExtra("selectedValue",selectedValue);
+                System.out.println("BloodSugar sınıfı selected value" + selectedValue);
                 startActivity(intent);
             }
         });
@@ -130,7 +135,7 @@ public class BloodSugar extends AppCompatActivity {
                         String inputText = input.getText().toString();
                         if(!inputText.isEmpty()){
                             try{
-                                double updatedInput = Double.parseDouble(inputText);
+                                float updatedInput = Float.parseFloat(inputText);
 
                                 // DatePicker ve TimePicker'dan alınan tarih/saat bilgisini bir Date objesine dönüştürün
                                 int day = datePicker.getDayOfMonth();
@@ -180,9 +185,9 @@ public class BloodSugar extends AppCompatActivity {
         }
 
         // Girilen değerin sayısal bir değer olup olmadığını kontrol eder
-        double bloodSugarValue;
+        float bloodSugarValue;
         try {
-            bloodSugarValue = Double.parseDouble(bloodSugarValueString);
+            bloodSugarValue = Float.parseFloat(bloodSugarValueString);
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Lütfen geçerli bir sayı girin", Toast.LENGTH_SHORT).show();
             return;
@@ -212,19 +217,19 @@ public class BloodSugar extends AppCompatActivity {
 
 
     public class BloodSugarEntry {
-        private double bloodSugarValue;
+        private float bloodSugarValue;
         private Date dateTime;
 
-        public BloodSugarEntry(double bloodSugarValue, Date dateTime) {
+        public BloodSugarEntry(Float bloodSugarValue, Date dateTime) {
             this.bloodSugarValue = bloodSugarValue;
             this.dateTime = dateTime;
         }
 
-        public double getBloodSugarValue() {
+        public float getBloodSugarValue() {
             return bloodSugarValue;
         }
 
-        public void setBloodSugarValue(double bloodSugarValue) {
+        public void setBloodSugarValue(float bloodSugarValue) {
             this.bloodSugarValue = bloodSugarValue;
         }
 
@@ -239,5 +244,22 @@ public class BloodSugar extends AppCompatActivity {
             String dateString = dateFormat.format(dateTime);
             return String.format(Locale.getDefault(), "%.1f mg/dL\n%s", bloodSugarValue, dateString);
         }
+    }
+    // geri butonu için menünün inflate edilmesi
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

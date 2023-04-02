@@ -2,30 +2,28 @@ package com.ae.diyabetik;
 
 public class BloodSugarCalculation {
 
-    private double bloodSugar;
-    private double hba1c;
-    private double targetBloodSugar;
+    private float bloodSugar;
+    private float hba1c;
+    private float targetBloodSugar;
 
-    public BloodSugarCalculation(double bloodSugar) {
+    private final float constHba1c = (float) 6.5;
+
+    public BloodSugarCalculation(float bloodSugar) {
         this.bloodSugar = bloodSugar;
-        this.hba1c = (bloodSugar + 46.7) / 28.7;
     }
-
-    public Double calculateTargetBloodSugar() {
-        targetBloodSugar = hba1c*10.929+36.421;
-        return targetBloodSugar;
-    }
-
-    public double getBloodSugar() {
-        return bloodSugar;
-    }
-
-    public double getHba1c() {
+    public float calculateHba1c(float bloodSugar){
+        hba1c = (float) ((bloodSugar + 46.7) / 28.7);
         return hba1c;
     }
+    public float getConstHba1c() {
+        return constHba1c;
+    }
 
-    public double getIdealBloodSugar(double hba1cGoal) {
-        return (hba1cGoal * 28.7) - 46.7;
+    public float getBloodSugar() {
+        return bloodSugar;
+    }
+    public float getHba1c() {
+        return hba1c;
     }
 
 }

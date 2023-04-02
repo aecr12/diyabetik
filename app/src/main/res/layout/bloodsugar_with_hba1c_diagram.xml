@@ -1,16 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:graph="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    tools:context=".BloodSugarWithHBA1CDiagram">
 
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/graph"
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        graph:title="Kan Şekeri Değerleri vs. HbA1c Grafikleri"
-         />
+        android:layout_above="@+id/textViewFeedback"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="8dp"
+        tools:ignore="MissingConstraints" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/textViewFeedback"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="8dp"
+        android:background="#999"
+        android:gravity="center"
+        android:text="Feedback goes here"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <ImageButton
+        android:id="@+id/imageButtonPDF"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@+id/textViewFeedback"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/textViewFeedback"
+        android:background="#fff"
+        android:src="@drawable/pdf_icon"
+        android:padding="10dp" />
+
+</RelativeLayout>

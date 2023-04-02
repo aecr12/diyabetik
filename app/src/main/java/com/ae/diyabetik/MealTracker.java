@@ -2,6 +2,8 @@ package com.ae.diyabetik;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +19,7 @@ public class MealTracker extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.meal_tracker);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         kahvalti_karti = findViewById(R.id.kahvalti_karti);
         ogleYemegiKarti = findViewById(R.id.ogle_yemegi_karti);
         aksamYemegiKarti=findViewById(R.id.aksam_yemegi_karti);
@@ -50,5 +53,22 @@ public class MealTracker extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+    // geri butonu için menünün inflate edilmesi
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
