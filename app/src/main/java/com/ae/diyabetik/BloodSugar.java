@@ -2,6 +2,7 @@ package com.ae.diyabetik;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -109,7 +110,6 @@ public class BloodSugar extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(BloodSugar.this);
                 builder.setTitle("Değeri Güncelle");
-
                 // EditText'leri ve tarih/saat seçicilerini içerecek bir View nesnesi oluşturun
                 ScrollView scrollView = new ScrollView(BloodSugar.this);
                 LinearLayout layout = new LinearLayout(getApplicationContext());
@@ -146,7 +146,6 @@ public class BloodSugar extends AppCompatActivity {
                                 Calendar calendar = Calendar.getInstance();
                                 calendar.set(year, month, day, hour, minute);
                                 Date updatedDateTime = calendar.getTime();
-
 
                                 bloodSugarEntries.set(position, new BloodSugarEntry(updatedInput, updatedDateTime));
 

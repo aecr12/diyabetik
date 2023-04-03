@@ -6,7 +6,7 @@
     android:padding="8dp">
     <!-- Kitapçık Başlık -->
     <TextView
-        android:id="@+id/tv_book_title"
+        android:id="@+id/textViewTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -14,26 +14,26 @@
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/tv_book_text"
+        app:layout_constraintBottom_toTopOf="@id/textViewBookText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <!-- Kitapçık Metni -->
     <TextView
-        android:id="@+id/tv_book_text"
+        android:id="@+id/textViewBookText"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:text="Burada kitapçık metni yer alacak."
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@id/btn_speak"
+        app:layout_constraintBottom_toTopOf="@id/buttonRead"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_book_title" />
+        app:layout_constraintTop_toBottomOf="@id/textViewTitle" />
 
 
     <!-- Megafon Simgesi -->
     <ImageButton
-        android:id="@+id/btn_speak"
+        android:id="@+id/buttonRead"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -41,6 +41,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_book_text" />
+        app:layout_constraintTop_toBottomOf="@id/textViewBookText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
