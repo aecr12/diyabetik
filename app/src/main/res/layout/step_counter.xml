@@ -4,12 +4,37 @@
     android:layout_height="match_parent"
     android:padding="8dp">
 
+    <ImageButton
+        android:id="@+id/buttonReset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/reset_icon"
+        android:padding="8dp" />
+
+    <ImageButton
+        android:id="@+id/buttonSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="64dp"
+        android:layout_marginTop="16dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/ic_save"
+        android:padding="8dp" />
+
+
     <!-- Tarih -->
     <TextView
         android:id="@+id/textViewDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="32dp"
         android:layout_marginTop="16dp"
         android:text="Bugünün Tarihi"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
@@ -36,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewStepCount"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="8dp">
 
         <!-- Yakılan Kalori -->
         <androidx.cardview.widget.CardView
@@ -53,24 +78,6 @@
                 android:layout_gravity="center_vertical|start"
                 android:padding="16dp"
                 android:text="Yakılan Kalori: 0"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
-
-        </androidx.cardview.widget.CardView>
-
-        <!-- Hız -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardVelocity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp">
-
-            <TextView
-                android:id="@+id/textViewVelocity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|start"
-                android:padding="16dp"
-                android:text="Hız: 0"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
 
         </androidx.cardview.widget.CardView>
@@ -113,16 +120,24 @@
 
     </LinearLayout>
 
-    <!-- Başla/Durdur Butonu -->
-    <Button
-        android:id="@+id/baslaDurdurButton"
 
+    <Button
+        android:id="@+id/buttonStop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_button"
-        android:text="Başla" />
+        android:text="Durdur" />
+    <Button
+        android:id="@+id/buttonStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="72dp"
+        android:background="@drawable/rounded_button"
+        android:text="Başlat" />
 
 </RelativeLayout>
