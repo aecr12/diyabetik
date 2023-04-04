@@ -1,155 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp">
+    tools:context=".BloodSugarTracker"
+    android:padding="12dp">
 
-    <!-- Kullanıcı tarafından girilen kan şekeri değeri için EditText -->
     <EditText
-        android:id="@+id/bloodSugarValueEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:hint="Kan şekeri değeri girin"
+        android:id="@+id/editTextBloodSugarValue"
         android:maxLines="1"
-        android:textColor="@color/black"
-        android:layout_marginTop="5dp"/>
-
-    <!-- Tarih seçimi için EditText -->
-    <EditText
-        android:id="@+id/dateEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:inputType="text"
-        android:hint="Tarih girin"
+        android:hint="Kan şekeri değerini giriniz (mg/dL)"
+        android:textSize="16dp"
+        android:textColor="@color/black"/>
+
+    <EditText
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextDate"
         android:maxLines="1"
+        android:hint="Tarih seçiniz"
+        android:textSize="16dp"
         android:textColor="@color/black"
-        android:layout_below="@+id/bloodSugarValueEditText"/>
+        android:layout_below="@id/editTextBloodSugarValue"/>
 
+    <ImageButton
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:id="@+id/imageButtonCalendar"
+        android:layout_alignBottom="@id/editTextDate"
+        android:layout_toEndOf="@id/editTextDate"
+        android:background="@drawable/calendar"/>
 
-    <!-- Ekle butonu -->
     <Button
-        android:id="@+id/addButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ekle"
-        android:layout_below="@id/dateEditText"
-        android:layout_alignParentEnd="true"
-        android:onClick="addBloodSugarEntry"
-        android:background="@drawable/rounded_button"/>
-
-    <!-- Kartların listelendiği ListView -->
-    <ListView
-        android:id="@+id/bloodSugarList"
+        android:id="@+id/buttonSave"
+        android:background="@drawable/rounded_button"
+        android:layout_below="@id/imageButtonCalendar"
+        android:text="KAYDET"/>
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/addButton"
-        android:dividerHeight="1dp"
-        android:layout_marginTop="8dp"/>
-
-    <!-- Kart görünümü için kullanılan layout -->
-    <LinearLayout
-        android:id="@+id/list_item"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/dateEditText"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@android:color/white"
-        android:orientation="horizontal"
-        android:padding="10dp">
-
-        <!-- Kan şekeri değeri -->
-        <TextView
-            android:id="@+id/bloodSugarValueText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="@android:color/black"
-            android:textSize="16sp" />
-
-        <!-- Tarih ve saat -->
-        <TextView
-            android:id="@+id/bloodSugarDateTimeText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="12sp" />
-
-    </LinearLayout>
+        android:layout_below="@id/buttonSave"
+        android:id="@+id/recyclerView"/>
 
 </RelativeLayout>
-
-<!--
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:padding="8dp">
-
-&lt;!&ndash; Kullanıcı tarafından girilen kan şekeri değeri için EditText &ndash;&gt;
-<EditText
-    android:id="@+id/bloodSugarValueEditText"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:inputType="numberDecimal"
-    android:hint="Kan şekeri değeri girin"
-    android:maxLines="1"
-    android:textColor="@color/black"
-    android:drawableLeft="@drawable/ic_calendar"
-    android:drawableStart="@drawable/ic_calendar"
-    android:drawablePadding="10dp"
-    android:layout_marginTop="5dp"/>
-
-&lt;!&ndash; Ekle butonu &ndash;&gt;
-<Button
-    android:id="@+id/addButton"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Ekle"
-    android:layout_below="@id/bloodSugarValueEditText"
-    android:layout_alignParentEnd="true"
-    android:onClick="addBloodSugarEntry"
-    android:background="@drawable/rounded_button"/>
-
-&lt;!&ndash; Kartların listelendiği ListView &ndash;&gt;
-<ListView
-    android:id="@+id/bloodSugarList"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_below="@id/addButton"
-    android:dividerHeight="1dp"
-    android:layout_marginTop="8dp"/>
-
-&lt;!&ndash; Kart görünümü için kullanılan layout &ndash;&gt;
-<LinearLayout
-    android:id="@+id/list_item"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp"
-    android:background="@android:color/white"
-    android:orientation="horizontal"
-    android:padding="10dp">
-
-    &lt;!&ndash; Kan şekeri değeri &ndash;&gt;
-    <TextView
-        android:id="@+id/bloodSugarValueText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textColor="@android:color/black"
-        android:textSize="16sp" />
-
-    &lt;!&ndash; Tarih ve saat &ndash;&gt;
-    <TextView
-        android:id="@+id/bloodSugarDateTimeText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="12sp" />
-
-</LinearLayout>
-
-</RelativeLayout>-->

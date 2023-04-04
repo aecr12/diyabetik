@@ -72,7 +72,7 @@ public class BloodSugarWithHBA1CDiagram extends AppCompatActivity {
         // intentten gelen kan şekeri değeri alınıyor
         selectedValue = (float) getIntent().getFloatExtra("selectedValue", 0);
         float bloodSugar;
-        bloodSugar = selectedValue;
+        bloodSugar = (float) selectedValue;
 
         bloodSugarCalculation = new BloodSugarCalculation(bloodSugar);
         float constHba1c = bloodSugarCalculation.getConstHba1c();

@@ -66,7 +66,7 @@ public class MedicineTracker extends AppCompatActivity {
         dateEditText.setText(formattedTime);
 
         medicineEntries = new ArrayList<>();
-        medicineListAdapter = new ArrayAdapter<>(this, R.layout.list_item1, medicineEntries);
+        medicineListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, medicineEntries);
         medicineList = findViewById(R.id.medicineList);
         medicineList.setAdapter(medicineListAdapter);
 

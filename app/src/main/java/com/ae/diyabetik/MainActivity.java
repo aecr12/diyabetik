@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         image3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent1 = new Intent(MainActivity.this,BloodSugar.class);
+                Intent intent1 = new Intent(MainActivity.this,BloodSugarTracker.class);
                 startActivity(intent1);
             }
         });

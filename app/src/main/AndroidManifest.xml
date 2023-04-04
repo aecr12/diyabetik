@@ -56,7 +56,6 @@
         <activity android:name=".LoginSignUp" />
         <activity android:name=".MedicineTracker" />
         <activity android:name=".Signup" />
-        <activity android:name=".BloodSugar" />
         <activity android:name=".StepCounter" />
         <activity android:name=".MealTracker" />
         <activity android:name=".BreakfastTracker" />
@@ -65,6 +64,7 @@
         <activity android:name=".SnackTracker" />
         <activity android:name=".DiabetesManual" />
         <activity android:name=".BloodSugarWithHBA1CDiagram"/>
+        <activity android:name=".BloodSugarTracker"/>
     </application>
 
 </manifest>
