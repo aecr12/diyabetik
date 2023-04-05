@@ -1,11 +1,15 @@
 package com.ae.diyabetik;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.Menu;
@@ -18,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -27,6 +32,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,223 +43,94 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
-public class MedicineTracker extends AppCompatActivity {
+public class MedicineTracker extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
-    private ArrayList<MedicineTracker.MedicineEntry> medicineEntries;
-    private ArrayAdapter<MedicineTracker.MedicineEntry> medicineListAdapter;
-    private ListView medicineList;
-    private Button addButton;
+    private EditText editTextMedicineName;
+    private EditText editTextTakenTime;
+    private ImageButton imageButtonCalendar;
+    private Button buttonSave;
+    private int year, month, day, hour, minute;
+    private RecyclerView recyclerView;
+    private MedicineAdapter medicineAdapter;
+    private ArrayList<Medicine> medicineList;
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.medicine_tracker);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        addButton = findViewById(R.id.addButton);
+        editTextMedicineName = findViewById(R.id.editTextMedicineName);
+        editTextTakenTime = findViewById(R.id.editTextTakenTime);
+        editTextTakenTime.setEnabled(false);
+        imageButtonCalendar = findViewById(R.id.imageButtonCalendar);
+        buttonSave = findViewById(R.id.buttonSave);
 
-        addButton.setOnClickListener(new View.OnClickListener() {
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        medicineList = new ArrayList<>();
+        medicineAdapter = new MedicineAdapter(medicineList,this);
+        recyclerView.setAdapter(medicineAdapter);
+
+        imageButtonCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                addMedicineEntry(v);
+            public void onClick(View view) {
+                showDateTimePicker();
             }
         });
-
-        Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        String formattedTime = formatter.format(currentTime);
-        EditText dateEditText = findViewById(R.id.dateEditText);
-        dateEditText.setText(formattedTime);
-
-        medicineEntries = new ArrayList<>();
-        medicineListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, medicineEntries);
-        medicineList = findViewById(R.id.medicineList);
-        medicineList.setAdapter(medicineListAdapter);
-
-        medicineList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });
-
-        // Kartı silmek için sola kaydırma işlemi
-        final GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                if (e1.getX() < e2.getX()) {
-                    return false;
-                }
-                int position = medicineList.pointToPosition((int) e1.getX(), (int) e1.getY());
-                if (position != AdapterView.INVALID_POSITION) {
-                    medicineEntries.remove(position);
-                    medicineListAdapter.notifyDataSetChanged();
-                }
-                return true;
-            }
-        });
-
-        medicineList.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gestureDetector.onTouchEvent(event);
-            }
-        });
-        // Kartı güncellemek için basılı tutma işlevi
-        medicineList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MedicineTracker.this);
-                builder.setTitle("Değeri Güncelle");
-
-                final EditText input = new EditText(getApplicationContext());
-                input.setHint("İlaç Adı");
-
-                ScrollView scrollView = new ScrollView(MedicineTracker.this);
-                LinearLayout layout = new LinearLayout(getApplicationContext());
-                layout.setOrientation(LinearLayout.VERTICAL);
-
-                final DatePicker datePicker = new DatePicker(getApplicationContext());
-                final TimePicker timePicker = new TimePicker(getApplicationContext());
-                timePicker.setIs24HourView(true);
-
-                // LinearLayout'a tarih/saat seçicilerini ekleyin
-                layout.addView(input);
-                layout.addView(datePicker);
-                layout.addView(timePicker);
-                scrollView.addView(layout);
-                builder.setView(scrollView);
-
-                builder.setPositiveButton("Tamam", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        String inputText = input.getText().toString();
-                        if (!inputText.isEmpty()) {
-                            try {
-                                String updatedInput = inputText;
-                                // DatePicker ve TimePicker'dan alınan tarih/saat bilgisini bir Date objesine dönüştürün
-                                int day = datePicker.getDayOfMonth();
-                                int month = datePicker.getMonth() - 1;
-                                int year = datePicker.getYear();
-                                int hour = timePicker.getHour();
-                                int minute = timePicker.getMinute();
-                                Calendar calendar = Calendar.getInstance();
-                                calendar.set(year, month, day, hour, minute);
-                                Date updatedDateTime = calendar.getTime();
-
-                                medicineEntries.set(position, new MedicineTracker.MedicineEntry(updatedInput, updatedDateTime));
-
-                            } catch (Exception e) {
-                                Toast.makeText(MedicineTracker.this, "Lütfen değerleri doğru giriniz.", Toast.LENGTH_SHORT).show();
-                            }
-                            medicineListAdapter.notifyDataSetChanged();
-                        }
-                    }
-                });
-                builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                });
-                builder.show();
-                return true;
+            public void onClick(View view) {
+                saveMedicine();
             }
         });
     }
+    private void showDateTimePicker() {
 
-    // Ekle butonuna tıklanınca çağrılır
-    public void addMedicineEntry(View view) {
+        Calendar calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        hour = calendar.get(Calendar.HOUR_OF_DAY);
+        minute = calendar.get(Calendar.MINUTE);
 
-        EditText medicineNameEditText = findViewById(R.id.medicineName);
-        String medicineNameString = medicineNameEditText.getText().toString().trim();
-        EditText dateEditText = findViewById(R.id.dateEditText);
-        String dateString = dateEditText.getText().toString().trim();
-
-        // Girilen değerin boş olup olmadığını kontrol eder
-        if (medicineNameString.isEmpty() && dateString.isEmpty()) {
-            Toast.makeText(this, "Lütfen bir ilaç adı girin", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Girilen değerin string bir değer olup olmadığını kontrol eder
-        String medicineName;
-        try {
-            medicineName = medicineNameString;
-        } catch (NumberFormatException e) {
-            Toast.makeText(this, "Lütfen geçerli bir sayı girin", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Girilen değerin date bir değer olup olmadığını kontrol eder
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
-        Date date;
-        try {
-            date = dateFormat.parse(dateString);
-        } catch (ParseException e) {
-            Toast.makeText(this, "Lütfen geçerli bir tarih girin", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        // Yeni bir MedicineEntry oluşturur ve listeye ekler
-        MedicineTracker.MedicineEntry medicineEntry = new MedicineTracker.MedicineEntry(medicineName, date);
-        medicineEntries.add(medicineEntry);
-
-        // Girilen değeri sıfırlar ve liste görünümünü günceller
-        medicineNameEditText.setText("");
-        medicineListAdapter.notifyDataSetChanged();
-    }
-
-
-    public class MedicineEntry {
-        private String medicineName; //medicine name
-        private Date dateTime;
-
-        public MedicineEntry(String medicineName, Date dateTime) {
-            this.medicineName = medicineName;
-            this.dateTime = dateTime;
-        }
-
-        public String getMedicineName() {
-            return medicineName;
-        }
-
-        public void setMedicineName(String medicineName) {
-            this.medicineName = medicineName;
-        }
-
-        public Date getDateTime() {
-            return dateTime;
-        }
-
-        public void setDateTime(Date dateTime) {
-            this.dateTime = dateTime;
-        }
-
-
-        @Override
-        public String toString() {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
-            String dateString = dateFormat.format(dateTime);
-            return String.format(Locale.getDefault(), "%s \n%s", medicineName, dateString);
-        }
-    }
-
-    // geri butonu için menünün inflate edilmesi
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, day);
+        datePickerDialog.show();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+        year = i;
+        month = i1;
+        day = i2;
 
-        if (id == android.R.id.home) {
-            onBackPressed();
-            return true;
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, this, hour, minute, DateFormat.is24HourFormat(this));
+        timePickerDialog.show();
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int i, int i1) {
+        hour = i;
+        minute = i1;
+
+        String selectedDateTime = day + "/" + (month + 1) + "/" + year + " " + String.format("%02d", hour) + ":" + String.format("%02d", minute);
+        editTextTakenTime.setText(selectedDateTime);
+    }
+
+    private void saveMedicine() {
+        String medicineName = editTextMedicineName.getText().toString();
+        String takenTime = editTextTakenTime.getText().toString();
+
+        if (TextUtils.isEmpty(medicineName) || TextUtils.isEmpty(takenTime)) {
+            Toast.makeText(this, "Lütfen ilaç adı ve tarihi giriniz.", Toast.LENGTH_SHORT).show();
+            return;
         }
-        return super.onOptionsItemSelected(item);
+
+        Medicine medicine = new Medicine(medicineName, takenTime);
+        medicineList.add(medicine);
+        medicineAdapter.notifyDataSetChanged();
+
+        editTextMedicineName.setText("");
+        editTextTakenTime.setText("");
     }
 }

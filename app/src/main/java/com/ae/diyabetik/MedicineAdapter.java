@@ -4,7 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
+
 import android.content.res.Resources;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -17,75 +17,43 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
+public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.ViewHolder> implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
-public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.ViewHolder> implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-    private ArrayList<BloodSugar> bloodSugarList;
+    private ArrayList<Medicine> medicineList;
     private int year, month, day, hour, minute;
     private Context context;
-    EditText bloodSugarValueEditText;
-    EditText dateEditText;
-    public BloodSugarAdapter(ArrayList<BloodSugar> bloodSugarList, Context context) {
-        this.context = context;
-        this.bloodSugarList = bloodSugarList;
-    }
+    EditText medicineNameEditText;
+    EditText takenTimeEditText;
 
+    public MedicineAdapter(ArrayList<Medicine> medicineList, Context context){
+        this.context=context;
+        this.medicineList=medicineList;
+    }
     // swipe to delete işlemi
     private final ItemTouchHelper.Callback swipeToDeleteCallback = new SwipeToDeleteCallback() {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
-            bloodSugarList.remove(position);
+            medicineList.remove(position);
             notifyItemRemoved(position);
         }
     };
-    private final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeToDeleteCallback);
 
+    private final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeToDeleteCallback);
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_blood_sugar, parent, false);
-        return new ViewHolder(view);
-    }
 
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        BloodSugar bloodSugar = bloodSugarList.get(position);
-        holder.bloodSugarValueTextView.setText(String.valueOf(bloodSugar.getBloodSugarValue()));
-        holder.dateTextView.setText(bloodSugar.getDate());
-
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                showUpdateBloodSugarDialog(bloodSugar, position);
-                return true;
-            }
-        });
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                BloodSugar bloodSugar1 = bloodSugarList.get(position);
-                String selectedValue = String.valueOf(bloodSugar1.getBloodSugarValue());
-                Intent intent = new Intent(context,BloodSugarWithHBA1CDiagram.class);
-                intent.putExtra("selectedValue",Float.parseFloat(selectedValue));
-                context.startActivity(intent);
-            }
-        });
-    }
-
-    @Override
-    public int getItemCount() {
-        return bloodSugarList.size();
-    }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -103,21 +71,47 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
         minute = minute;
 
         String selectedDateTime = day + "/" + (month + 1) + "/" + year + " " + String.format("%02d", hour) + ":" + String.format("%02d", minute);
-        dateEditText.setText(selectedDateTime);
+        takenTimeEditText.setText(selectedDateTime);
     }
 
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_medicine, parent, false);
+        return new MedicineAdapter.ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Medicine medicine = medicineList.get(position);
+        holder.medicineNameTextView.setText(medicine.getMedicineName());
+        holder.takenTimeTextView.setText(medicine.getTakenDate());
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                showUpdateBloodSugarDialog(medicine, position);
+                return true;
+            }
+        });
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return medicineList.size();
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView bloodSugarValueTextView;
-        public TextView dateTextView;
+        public TextView medicineNameTextView;
+        public TextView takenTimeTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            bloodSugarValueTextView = itemView.findViewById(R.id.textViewBloodSugarValue);
-            dateTextView = itemView.findViewById(R.id.textViewDate);
+            medicineNameTextView = itemView.findViewById(R.id.textViewMedicineName);
+            takenTimeTextView = itemView.findViewById(R.id.textViewTakenTime);
         }
     }
-
     private void showDateTimePicker() {
         Calendar calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
@@ -129,18 +123,18 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
         DatePickerDialog datePickerDialog = new DatePickerDialog(context, this, year, month, day);
         datePickerDialog.show();
     }
-    private void showUpdateBloodSugarDialog(BloodSugar bloodSugar, int adapterPosition) {
+    private void showUpdateBloodSugarDialog(Medicine medicine, int adapterPosition) {
         Dialog dialog = new Dialog(context);
-        dialog.setContentView(R.layout.dialog_update_blood_sugar);
-        bloodSugarValueEditText = dialog.findViewById(R.id.editTextBloodSugarValue);
-        dateEditText = dialog.findViewById(R.id.editTextDate);
-        dateEditText.setEnabled(false);
+        dialog.setContentView(R.layout.dialog_update_medicine);
+        medicineNameEditText = dialog.findViewById(R.id.editTextMedicineName);
+        takenTimeEditText = dialog.findViewById(R.id.editTextTakenTime);
+        takenTimeEditText.setEnabled(false);
         ImageButton calendarImageButton = dialog.findViewById(R.id.imageButtonCalendar);
         Button updateButton = dialog.findViewById(R.id.buttonUpdate);
         Button cancelButton = dialog.findViewById(R.id.buttonCancel);
 
-        bloodSugarValueEditText.setText(String.valueOf(bloodSugar.getBloodSugarValue()));
-        dateEditText.setText(bloodSugar.getDate());
+        medicineNameEditText.setText(String.valueOf(medicine.getMedicineName()));
+        takenTimeEditText.setText(medicine.getTakenDate());
 
         calendarImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,7 +146,7 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateBloodSugar(bloodSugar, adapterPosition);
+                updateMedicine(medicine, adapterPosition);
                 dialog.dismiss();
             }
         });
@@ -169,12 +163,13 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
         window.setLayout((int) (0.8 * Resources.getSystem().getDisplayMetrics().widthPixels),
                 (int) (0.55 * Resources.getSystem().getDisplayMetrics().heightPixels));
     }
-
-    private void updateBloodSugar(BloodSugar bloodSugarToUpdate, int adapterPosition) {
-        String bloodSugarValue = bloodSugarValueEditText.getText().toString();
-        String date = dateEditText.getText().toString();
-        bloodSugarToUpdate.setBloodSugarValue(Integer.parseInt(bloodSugarValue));
-        bloodSugarToUpdate.setDate(date);
+    private void updateMedicine(Medicine medicineToUpdate, int adapterPosition) {
+        String medicineName = medicineNameEditText.getText().toString();
+        String takenTime = takenTimeEditText.getText().toString();
+        medicineToUpdate.setMedicineName(medicineName);
+        medicineToUpdate.setTakenDate(takenTime);
         notifyItemChanged(adapterPosition);
     }
 }
+
+
