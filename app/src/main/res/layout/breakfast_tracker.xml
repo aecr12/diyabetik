@@ -1,28 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp">
-
-    <EditText
-        android:id="@+id/search_bar_breakfast"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Search breakfast items"
-        android:inputType="text"
-        android:imeOptions="actionSend"
-        android:maxLines="1"/>
+    tools:context=".BreakfastTracker"
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/breakfast_image"
         android:layout_width="match_parent"
         android:layout_height="125dp"
+        android:layout_margin="6dp"
         android:src="@drawable/app_logo" />
 
-    <ListView
-        android:id="@+id/food_list_breakfast"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/foodListBreakfast"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_above="@id/linearLayout"
+        android:layout_below="@id/breakfast_image"/>
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/linearLayout"
+        android:layout_alignParentBottom="true"
+        android:padding="8dp">
+        <EditText
+            android:id="@+id/editTextBreakfast"
+            android:layout_width="match_parent"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="Yiyecek Adı"
+            android:inputType="text"
+            android:background="@drawable/custom_edittext"
+            android:imeOptions="actionSend"
+            android:maxLines="1"/>
+        <EditText
+            android:id="@+id/editTextPortion"
+            android:layout_width="match_parent"
+            android:layout_weight="1.5"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_edittext"
+            android:hint="Porsiyon"
+            android:gravity="center"
+            android:inputType="text"
+            android:imeOptions="actionSend"
+            android:maxLines="1"/>
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/linearLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Kaydet"
+        android:visibility="invisible"
+        android:src="@drawable/ic_tick" />
+</RelativeLayout>

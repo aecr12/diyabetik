@@ -156,8 +156,8 @@
             android:orientation="horizontal"
             android:gravity="center">
 
-            <ImageView
-                android:id="@+id/decrement_button"
+            <ImageButton
+                android:id="@+id/azalt_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_baseline_arrow_left_24"
@@ -165,7 +165,7 @@
                 android:background="?android:attr/selectableItemBackground"/>
 
             <TextView
-                android:id="@+id/counter_textview"
+                android:id="@+id/sayac_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
@@ -174,8 +174,8 @@
                 android:textColor="@color/black"
                 android:gravity="center"/>
 
-            <ImageView
-                android:id="@+id/increment_button"
+            <ImageButton
+                android:id="@+id/arttir_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_baseline_arrow_right_24"

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:id="@+id/bilgi"
+        android:layout_height="wrap_content"
+        android:text="Güncelle"
+        android:textAppearance="?android:textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/editTextFoodName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bilgi"
+        android:layout_marginTop="16dp"
+        android:hint="Yeni Ürün Adı"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/editTextPortion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextFoodName"
+        android:layout_marginTop="16dp"
+        android:hint="Porsiyon"
+        android:inputType="text" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextPortion"
+        android:text="Güncelle"
+        android:layout_margin="5dp"
+        android:background="@drawable/rounded_button"
+        android:id="@+id/buttonUpdate"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonUpdate"
+        android:background="@drawable/rounded_button"
+        android:text="İptal"
+        android:id="@+id/buttonCancel"/>
+</RelativeLayout>

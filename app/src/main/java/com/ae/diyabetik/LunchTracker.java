@@ -37,7 +37,7 @@ public class LunchTracker extends AppCompatActivity {
 
         // Liste öğelerini göstermek için ArrayAdapter kullanın.
         ArrayAdapter<LunchTracker.FoodItem> adapter = new ArrayAdapter<>(this,
-                R.layout.list_item, R.id.food_name, items);
+                android.R.layout.simple_list_item_1, items);
         foodListLunch.setAdapter(adapter);
     }
 

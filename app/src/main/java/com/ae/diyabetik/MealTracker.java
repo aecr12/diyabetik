@@ -5,16 +5,25 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 public class MealTracker extends AppCompatActivity {
 
-    CardView kahvalti_karti;
-    CardView ogleYemegiKarti;
-    CardView aksamYemegiKarti;
-    CardView araOgunKarti;
+    private CardView kahvalti_karti;
+    private CardView ogleYemegiKarti;
+    private CardView aksamYemegiKarti;
+    private CardView araOgunKarti;
+    private ImageButton azalt_button;
+    private ImageButton arttir_button;
+    private TextView sayac_textview;
+    private int suSayaci=0;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +33,10 @@ public class MealTracker extends AppCompatActivity {
         ogleYemegiKarti = findViewById(R.id.ogle_yemegi_karti);
         aksamYemegiKarti=findViewById(R.id.aksam_yemegi_karti);
         araOgunKarti=findViewById(R.id.ara_ogun_karti);
+        azalt_button=findViewById(R.id.azalt_button);
+        arttir_button=findViewById(R.id.arttir_button);
+        sayac_textview=findViewById(R.id.sayac_textview);
+        sayac_textview.setText(String.valueOf(suSayaci));
         kahvalti_karti.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,6 +66,26 @@ public class MealTracker extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        azalt_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(suSayaci==0){
+                    Toast.makeText(MealTracker.this,"Nasıl negatif sayıda bardak su içebilirsiniz? Bence bardağa tükürdünüz",Toast.LENGTH_SHORT).show();
+                }else {
+                    suSayaci--;
+                    sayac_textview.setText(String.valueOf(suSayaci));
+                }
+
+            }
+        });
+
+        arttir_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                suSayaci++;
+                sayac_textview.setText(String.valueOf(suSayaci));
+            }
+        });
     }
     // geri butonu için menünün inflate edilmesi
     @Override
@@ -71,4 +104,5 @@ public class MealTracker extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

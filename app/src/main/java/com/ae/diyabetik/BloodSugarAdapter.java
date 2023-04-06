@@ -30,6 +30,8 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
     private Context context;
     EditText bloodSugarValueEditText;
     EditText dateEditText;
+
+
     public BloodSugarAdapter(ArrayList<BloodSugar> bloodSugarList, Context context) {
         this.context = context;
         this.bloodSugarList = bloodSugarList;
@@ -80,6 +82,7 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
                 context.startActivity(intent);
             }
         });
+
     }
 
     @Override
