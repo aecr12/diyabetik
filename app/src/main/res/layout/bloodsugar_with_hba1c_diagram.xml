@@ -4,38 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/relative"
     tools:context=".BloodSugarWithHBA1CDiagram">
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/textViewFeedback"
+        android:layout_above="@+id/layout"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="8dp"
         tools:ignore="MissingConstraints" />
-    <TextView
-        android:id="@+id/textViewFeedback"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="8dp"
-        android:background="#999"
-        android:gravity="center"
-        android:text="Feedback goes here"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textStyle="bold" />
 
-    <ImageButton
-        android:id="@+id/imageButtonPDF"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignBottom="@+id/textViewFeedback"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/textViewFeedback"
-        android:background="#fff"
-        android:src="@drawable/pdf_icon"
-        android:padding="10dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:id="@+id/layout"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/textViewFeedback"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dp"
+            android:background="#999"
+            android:gravity="center"
+            android:layout_weight="1.5"
+            android:text="Feedback goes here"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/imageButtonPDF"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="0.5"
+            android:layout_alignBottom="@+id/textViewFeedback"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/textViewFeedback"
+            android:background="#fff"
+            android:src="@drawable/pdf_icon"
+            android:padding="10dp" />
+    </LinearLayout>
+
 
 </RelativeLayout>

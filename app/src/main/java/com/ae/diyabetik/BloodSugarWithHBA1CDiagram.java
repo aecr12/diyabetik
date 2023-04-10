@@ -81,7 +81,7 @@ public class BloodSugarWithHBA1CDiagram extends AppCompatActivity {
 
         barArrayList.add(new BarEntry(0,constHba1c));
         barArrayList.add(new BarEntry(1,hba1c));
-        BarDataSet barDataSet = new BarDataSet(barArrayList, "Deneme");
+        BarDataSet barDataSet = new BarDataSet(barArrayList,"Değerler");
 
         BarData barData = new BarData(barDataSet);
         barData.setBarWidth((float) 0.5);
@@ -93,9 +93,9 @@ public class BloodSugarWithHBA1CDiagram extends AppCompatActivity {
         barChart.getDescription().setEnabled(true);
 
         if(hba1c>constHba1c){
-            textViewFeedback.setText("HbA1c değeriniz olması gereken değerden %"+calculateDevationFromThreshold(constHba1c,hba1c)+" daha fazla");
+            textViewFeedback.setText("HbA1c değeriniz ideal değerden %"+calculateDevationFromThreshold(constHba1c,hba1c)+" fazla.");
         }else{
-            textViewFeedback.setText("HbA1c değeriniz olması gereken aralıkta");
+            textViewFeedback.setText("HbA1c değeriniz olması gereken aralıkta.");
         }
 
         imageButtonPDF.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +108,7 @@ public class BloodSugarWithHBA1CDiagram extends AppCompatActivity {
 
     public float calculateDevationFromThreshold(float constHba1c, float hba1c){
         float surplus = hba1c-constHba1c;
-        return (surplus/hba1c)*100;
+        return ((surplus/hba1c)*100);
     }
 
     public void createPDF() {
