@@ -22,19 +22,10 @@
         android:hint="Yeni Ürün Adı"
         android:inputType="text" />
 
-    <EditText
-        android:id="@+id/editTextPortion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextFoodName"
-        android:layout_marginTop="16dp"
-        android:hint="Porsiyon"
-        android:inputType="text" />
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editTextPortion"
+        android:layout_below="@id/editTextFoodName"
         android:text="Güncelle"
         android:layout_margin="5dp"
         android:background="@drawable/rounded_button"

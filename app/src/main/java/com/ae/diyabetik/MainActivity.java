@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
+
     Toolbar toolbar;
 
 

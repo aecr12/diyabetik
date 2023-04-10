@@ -1,22 +1,32 @@
 package com.ae.diyabetik;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SnackTracker extends AppCompatActivity {
-    private EditText editTextSearchBar;
+
+    private EditText editTextSnack;
     private ImageView imageViewSnack;
-    private ListView listViewSnacks;
+    private RecyclerView foodListSnack;
+    private FloatingActionButton floatingActionButton;
+    private ArrayList<Food> snackItemList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,53 +34,53 @@ public class SnackTracker extends AppCompatActivity {
         setContentView(R.layout.snack_tracker);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        editTextSearchBar = findViewById(R.id.editTextSearchBar);
+        snackItemList = new ArrayList<>();
+        editTextSnack = findViewById(R.id.editTextSnack);
         imageViewSnack = findViewById(R.id.imageViewSnack);
-        listViewSnacks = findViewById(R.id.listViewSnacks);
+        foodListSnack = findViewById(R.id.foodListSnack);
+        floatingActionButton = findViewById(R.id.fab);
+        // RecyclerView'ı ayarla
+        foodListSnack.setLayoutManager(new LinearLayoutManager(this));
+        foodListSnack.setHasFixedSize(true);
+        FoodListAdapter adapter1 = new FoodListAdapter(snackItemList, this);
+        foodListSnack.setAdapter(adapter1);
+        // Kullanıcı girdi yapınca FAB görünür olacak, kullanıcı girsini takip etmek için textwatcherlar ekleniyor
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-        // ListView'i doldurmak için bir örnek öğeler listesi oluşturun.
-        List<SnackTracker.FoodItem> items = new ArrayList<>();
-        items.add(new SnackTracker.FoodItem("Egg", "1"));
-        items.add(new SnackTracker.FoodItem("Bread", "2 slices"));
-        items.add(new SnackTracker.FoodItem("Butter", "1 tablespoon"));
-        items.add(new SnackTracker.FoodItem("Cheese", "30 grams"));
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // editTextBreakfast ve editTextPortion doluysa FAB'ı göster
+                String foodName = editTextSnack.getText().toString().trim();
+                if (!foodName.isEmpty()) {
+                    floatingActionButton.show();
+                } else {
+                    floatingActionButton.hide();
+                }
+            }
 
-        // Liste öğelerini göstermek için ArrayAdapter kullanın.
-        ArrayAdapter<SnackTracker.FoodItem> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, items);
-        listViewSnacks.setAdapter(adapter);
-    }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
+        editTextSnack.addTextChangedListener(textWatcher);
+        // FABa tıklanınca yapılacaklar
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String foodName = editTextSnack.getText().toString();
 
-    // Özel bir FoodItem sınıfı oluşturun, böylece besin adı ve porsiyon miktarını birlikte tutabilirsiniz.
-    private static class FoodItem {
-        private String name;
-        private String portion;
-
-        public FoodItem(String name, String portion) {
-            this.name = name;
-            this.portion = portion;
-        }
-
-        @Override
-        public String toString() {
-            return name + " (" + portion + ")";
-        }
-    }
-    // geri butonu için menünün inflate edilmesi
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+                if (!foodName.isEmpty()) {
+                    Food food = new Food(foodName);
+                    snackItemList.add(food);
+                    adapter1.notifyDataSetChanged();
+                    editTextSnack.setText("");
+                    floatingActionButton.hide();
+                }
+            }
+        });
     }
 }
+
