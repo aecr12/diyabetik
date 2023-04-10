@@ -33,6 +33,7 @@
         android:id="@+id/imageButtonCalendar"
         android:layout_alignBottom="@id/editTextDate"
         android:layout_toEndOf="@id/editTextDate"
+
         android:background="@drawable/calendar"/>
 
     <Button
@@ -40,6 +41,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/buttonSave"
         android:background="@drawable/rounded_button"
+        android:layout_margin="8dp"
         android:layout_below="@id/imageButtonCalendar"
         android:text="KAYDET"/>
     <androidx.recyclerview.widget.RecyclerView

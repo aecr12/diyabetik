@@ -14,12 +14,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.ViewHolder> {
     private ArrayList<Food> list;
     private Context context;
     EditText editTextFoodName;
+    Calendar calendar = Calendar.getInstance();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    String currentDateTime = dateFormat.format(calendar.getTime());
 
     public FoodListAdapter(ArrayList<Food> list, Context context) {
         this.list = list;
@@ -35,6 +41,7 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Food food = list.get(position);
         holder.foodNameTextView.setText(food.getName());
+        holder.date.setText(currentDateTime);
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -49,9 +56,11 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.ViewHo
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView foodNameTextView;
+        private TextView date;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             foodNameTextView = itemView.findViewById(R.id.foodNameTextView);
+            date = itemView.findViewById(R.id.date);
         }
     }
 

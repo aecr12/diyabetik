@@ -28,11 +28,13 @@ public class BreakfastTracker extends AppCompatActivity {
         breakfastImage = findViewById(R.id.breakfast_image);
         foodListBreakfast = findViewById(R.id.foodListBreakfast);
         floatingActionButton = findViewById(R.id.fab);
+
         // RecyclerView'ı ayarla
         foodListBreakfast.setLayoutManager(new LinearLayoutManager(this));
         foodListBreakfast.setHasFixedSize(true);
         FoodListAdapter adapter1 = new FoodListAdapter(breakfastItemList,this);
         foodListBreakfast.setAdapter(adapter1);
+
         // Kullanıcı girdi yapınca FAB görünür olacak, kullanıcı girsini takip etmek için textwatcherlar ekleniyor
         TextWatcher textWatcher = new TextWatcher() {
             @Override
