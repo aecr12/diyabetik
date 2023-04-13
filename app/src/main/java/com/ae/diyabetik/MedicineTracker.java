@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.ae.DAO.MedicineDAO;
 import com.ae.Models.Medicine;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -47,6 +48,8 @@ public class MedicineTracker extends AppCompatActivity implements DatePickerDial
     FirebaseUser user = auth.getCurrentUser();
 
     String uid = user.getUid();
+
+    MedicineDAO medicineDAO = new MedicineDAO();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,13 +124,8 @@ public class MedicineTracker extends AppCompatActivity implements DatePickerDial
             return;
         }
         Medicine medicine = new Medicine(null, medicineName, takenTime); // id null olarak ayarlandı
-
-        DatabaseReference medicineRef = database.getReference("medications/"+uid).push(); // push() metodu kullanılarak yeni bir referans elde edilir
-        String medicineId = medicineRef.getKey(); // push() metodu ile oluşan yeni referansın key'i alınır ve medicineId'ye atanır
-        medicine.setId(medicineId); // Medicine nesnesinin id'si güncellenir
-
+        medicineDAO.create(medicine);
         medicineList.add(medicine);
-        medicineRef.setValue(medicine); // Medicine nesnesi push() metodu ile oluşturulan referansa kaydedilir
         medicineAdapter.notifyDataSetChanged();
 
         editTextMedicineName.setText("");
@@ -135,7 +133,8 @@ public class MedicineTracker extends AppCompatActivity implements DatePickerDial
     }
 
     private void loadMedicineData() {
-        DatabaseReference medicineRef = FirebaseDatabase.getInstance().getReference().child("medications").child(uid);
+        medicineDAO.read(medicineList,medicineAdapter);
+        /*DatabaseReference medicineRef = FirebaseDatabase.getInstance().getReference().child("medications").child(uid);
         medicineRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -157,7 +156,7 @@ public class MedicineTracker extends AppCompatActivity implements DatePickerDial
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        });*/
     }
 
 }

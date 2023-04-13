@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.ae.DAO.MedicineDAO;
 import com.ae.Models.Medicine;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +40,7 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.ViewHo
     EditText medicineNameEditText;
     EditText takenTimeEditText;
 
+    MedicineDAO medicineDAO = new MedicineDAO();
     public MedicineAdapter(ArrayList<Medicine> medicineList, Context context){
         this.context=context;
         this.medicineList=medicineList;
@@ -50,8 +52,7 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.ViewHo
             int position = viewHolder.getAdapterPosition();
             Medicine medicine = medicineList.get(position);
             String medicineId = medicine.getId();
-            DatabaseReference medicineRef = FirebaseDatabase.getInstance().getReference().child("medications").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(medicineId);
-            medicineRef.removeValue();
+            medicineDAO.delete(medicineId);
             medicineList.remove(position);
             notifyItemRemoved(position);
         }
@@ -174,10 +175,15 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.ViewHo
                 (int) (0.55 * Resources.getSystem().getDisplayMetrics().heightPixels));
     }
     private void updateMedicine(Medicine medicineToUpdate, int adapterPosition) {
+
         String medicineName = medicineNameEditText.getText().toString();
         String takenTime = takenTimeEditText.getText().toString();
+
         medicineToUpdate.setMedicineName(medicineName);
         medicineToUpdate.setTakenDate(takenTime);
+
+        medicineDAO.update(medicineToUpdate);
+
         notifyItemChanged(adapterPosition);
     }
 }

@@ -1,32 +1,27 @@
 package com.ae.Models;
 
+import java.util.ArrayList;
+
 public class BloodSugar {
-    private int id;
-    private int userId;
+    private String id;
     private int bloodSugarValue;
     private String date;
 
-    public BloodSugar(int id, int userId, int bloodSugarValue, String date) {
+    public BloodSugar() {
+    }
+
+    public BloodSugar(String id, int bloodSugarValue, String date) {
         this.id = id;
-        this.userId = userId;
         this.bloodSugarValue = bloodSugarValue;
         this.date = date;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public int getBloodSugarValue() {
