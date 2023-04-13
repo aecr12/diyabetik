@@ -1,27 +1,32 @@
-package com.ae.diyabetik;
-
-import java.util.ArrayList;
+package com.ae.Models;
 
 public class BloodSugar {
-    private String id;
+    private int id;
+    private int userId;
     private int bloodSugarValue;
     private String date;
 
-    public BloodSugar() {
-    }
-
-    public BloodSugar(String id, int bloodSugarValue, String date) {
+    public BloodSugar(int id, int userId, int bloodSugarValue, String date) {
         this.id = id;
+        this.userId = userId;
         this.bloodSugarValue = bloodSugarValue;
         this.date = date;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getBloodSugarValue() {

@@ -46,7 +46,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignTop="@+id/textViewFeedback"
             android:background="#fff"
-            android:src="@drawable/pdf_icon"
+            android:src="@drawable/ic_pdf1"
             android:padding="10dp" />
     </LinearLayout>
 

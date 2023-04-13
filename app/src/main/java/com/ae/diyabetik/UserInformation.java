@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class UserInformation extends AppCompatActivity {
 
     private TextView textViewTitle;
-    private EditText editTextHeight, editTextWeight, editTextWaist, editTextBloodSugar, editTextHbA1c, editTextSistolik, editTextDiyastolik;
+    private EditText editTextHeight, editTextWeight, editTextWaist, editTextBloodSugarValue, editTextHbA1cPercent, editTextSistolik, editTextDiyastolik;
     private Button buttonRegister;
 
     @Override
@@ -26,8 +26,8 @@ public class UserInformation extends AppCompatActivity {
         editTextHeight = findViewById(R.id.editTextHeight);
         editTextWeight = findViewById(R.id.editTextWeight);
         editTextWaist = findViewById(R.id.editTextWaist);
-        editTextBloodSugar = findViewById(R.id.editTextBloodSugar);
-        editTextHbA1c = findViewById(R.id.editTextHbA1c);
+        editTextBloodSugarValue = findViewById(R.id.editTextBloodSugarValue);
+        editTextHbA1cPercent = findViewById(R.id.editTextHbA1cPercent);
         editTextSistolik = findViewById(R.id.editTextSistolik);
         editTextDiyastolik = findViewById(R.id.editTextDiyastolik);
         buttonRegister = findViewById(R.id.buttonRegister);

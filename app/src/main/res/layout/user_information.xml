@@ -48,7 +48,7 @@
             android:textColorHint="#a6a6a6" />
 
         <EditText
-            android:id="@+id/editTextBloodSugar"
+            android:id="@+id/editTextBloodSugarValue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/editTextWaist"
@@ -58,10 +58,10 @@
             android:textColorHint="#a6a6a6" />
 
         <EditText
-            android:id="@+id/editTextHbA1c"
+            android:id="@+id/editTextHbA1cPercent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editTextBloodSugar"
+            android:layout_below="@id/editTextBloodSugarValue"
             android:layout_marginTop="16dp"
             android:hint="HbA1c Değeri (%)"
             android:inputType="numberDecimal"
@@ -71,7 +71,7 @@
             android:id="@+id/editTextSistolik"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editTextHbA1c"
+            android:layout_below="@id/editTextHbA1cPercent"
             android:layout_marginTop="16dp"
             android:hint="Sistolik Kan Basıncı/Tansiyon"
             android:inputType="numberDecimal"

@@ -2,7 +2,6 @@ package com.ae.diyabetik;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -13,9 +12,20 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -29,6 +39,11 @@ public class BloodSugarTracker extends AppCompatActivity implements DatePickerDi
     private BloodSugarAdapter bloodSugarAdapter;
     private ArrayList<BloodSugar> bloodSugarList;
 
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseUser user = auth.getCurrentUser();
+
+    String uid = user.getUid();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +59,10 @@ public class BloodSugarTracker extends AppCompatActivity implements DatePickerDi
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         bloodSugarList = new ArrayList<>();
-        bloodSugarAdapter = new BloodSugarAdapter(bloodSugarList,this);
+        bloodSugarAdapter = new BloodSugarAdapter(bloodSugarList, this);
         recyclerView.setAdapter(bloodSugarAdapter);
+
+        loadBloodSugarData();
 
         imageButtonCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +84,7 @@ public class BloodSugarTracker extends AppCompatActivity implements DatePickerDi
             }
         });
     }
+
     private void showDateTimePicker() {
 
         Calendar calendar = Calendar.getInstance();
@@ -102,24 +120,48 @@ public class BloodSugarTracker extends AppCompatActivity implements DatePickerDi
     private void saveBloodSugar() {
         String bloodSugarValue = editTextBloodSugarValue.getText().toString();
         String dateTime = editTextDate.getText().toString();
-        /*SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        Date date = null;
-        try {
-            date = format.parse(dateTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }*/
+
         if (TextUtils.isEmpty(bloodSugarValue) || TextUtils.isEmpty(dateTime)) {
             Toast.makeText(this, "Lütfen kan şekeri değerini ve tarihi giriniz.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        BloodSugar bloodSugar = new BloodSugar(Integer.parseInt(bloodSugarValue), dateTime);
+        BloodSugar bloodSugar = new BloodSugar(null, Integer.parseInt(bloodSugarValue), dateTime);
+        DatabaseReference bloodSugarRef = database.getReference("blood_sugar_data/" + uid).push(); // push() metodu kullanılarak yeni bir referans elde edilir.
+        String bloodSugarId = bloodSugarRef.getKey(); // push() metodu ile oluşan yeni referansın key'i alınır ve medicineId'ye atanır.
+
+        bloodSugar.setId(bloodSugarId);
         bloodSugarList.add(bloodSugar);
+        bloodSugarRef.setValue(bloodSugar);
         bloodSugarAdapter.notifyDataSetChanged();
 
         editTextBloodSugarValue.setText("");
         editTextDate.setText("");
     }
 
+    private void loadBloodSugarData(){
+        DatabaseReference bloodSugarRef = FirebaseDatabase.getInstance().getReference().child("blood_sugar_data").child(uid);
+        bloodSugarRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    ArrayList<BloodSugar> bloodSugars = new ArrayList<>();
+                    for (DataSnapshot bloodSugarSnapshot : snapshot.getChildren()) {
+                        String bloodSugarId = bloodSugarSnapshot.getKey(); // Push Id'yi al
+                        BloodSugar bloodSugar = bloodSugarSnapshot.getValue(BloodSugar.class); // Verileri Medicine nesnesine çevir
+                        bloodSugar.setId(bloodSugarId); // Push Id'yi Medicine nesnesine ekle
+                        bloodSugars.add(bloodSugar);
+                    }
+                    bloodSugarList.clear();
+                    bloodSugarList.addAll(bloodSugars);
+                    bloodSugarAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 }

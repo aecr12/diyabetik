@@ -20,6 +20,11 @@ import android.widget.TimePicker;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -37,11 +42,14 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
         this.bloodSugarList = bloodSugarList;
     }
 
-    // swipe to delete işlemi
     private final ItemTouchHelper.Callback swipeToDeleteCallback = new SwipeToDeleteCallback() {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
+            BloodSugar bloodSugar = bloodSugarList.get(position);
+            String bloodSugarId = bloodSugar.getId();
+            DatabaseReference blood_sugar_data_ref = FirebaseDatabase.getInstance().getReference().child("blood_sugar_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(bloodSugarId);
+            blood_sugar_data_ref.removeValue();
             bloodSugarList.remove(position);
             notifyItemRemoved(position);
         }

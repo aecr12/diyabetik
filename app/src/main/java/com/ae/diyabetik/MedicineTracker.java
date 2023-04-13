@@ -1,47 +1,35 @@
 package com.ae.diyabetik;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
-import android.view.GestureDetector;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
+import com.ae.Models.Medicine;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Map;
 
 public class MedicineTracker extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
@@ -54,6 +42,11 @@ public class MedicineTracker extends AppCompatActivity implements DatePickerDial
     private MedicineAdapter medicineAdapter;
     private ArrayList<Medicine> medicineList;
 
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseUser user = auth.getCurrentUser();
+
+    String uid = user.getUid();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +64,8 @@ public class MedicineTracker extends AppCompatActivity implements DatePickerDial
         medicineList = new ArrayList<>();
         medicineAdapter = new MedicineAdapter(medicineList,this);
         recyclerView.setAdapter(medicineAdapter);
+
+        loadMedicineData();
 
         imageButtonCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,12 +120,44 @@ public class MedicineTracker extends AppCompatActivity implements DatePickerDial
             Toast.makeText(this, "Lütfen ilaç adı ve tarihi giriniz.", Toast.LENGTH_SHORT).show();
             return;
         }
+        Medicine medicine = new Medicine(null, medicineName, takenTime); // id null olarak ayarlandı
 
-        Medicine medicine = new Medicine(medicineName, takenTime);
+        DatabaseReference medicineRef = database.getReference("medications/"+uid).push(); // push() metodu kullanılarak yeni bir referans elde edilir
+        String medicineId = medicineRef.getKey(); // push() metodu ile oluşan yeni referansın key'i alınır ve medicineId'ye atanır
+        medicine.setId(medicineId); // Medicine nesnesinin id'si güncellenir
+
         medicineList.add(medicine);
+        medicineRef.setValue(medicine); // Medicine nesnesi push() metodu ile oluşturulan referansa kaydedilir
         medicineAdapter.notifyDataSetChanged();
 
         editTextMedicineName.setText("");
         editTextTakenTime.setText("");
     }
+
+    private void loadMedicineData() {
+        DatabaseReference medicineRef = FirebaseDatabase.getInstance().getReference().child("medications").child(uid);
+        medicineRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    ArrayList<Medicine> medicines = new ArrayList<>();
+                    for (DataSnapshot medicineSnapshot : snapshot.getChildren()) {
+                        String medicineId = medicineSnapshot.getKey(); // Push Id'yi al
+                        Medicine medicine = medicineSnapshot.getValue(Medicine.class); // Verileri Medicine nesnesine çevir
+                        medicine.setId(medicineId); // Push Id'yi Medicine nesnesine ekle
+                        medicines.add(medicine);
+                    }
+                    medicineList.clear();
+                    medicineList.addAll(medicines);
+                    medicineAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 }

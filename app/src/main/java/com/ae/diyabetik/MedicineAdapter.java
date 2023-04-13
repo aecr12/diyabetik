@@ -22,6 +22,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import com.ae.Models.Medicine;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -42,6 +48,10 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.ViewHo
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
+            Medicine medicine = medicineList.get(position);
+            String medicineId = medicine.getId();
+            DatabaseReference medicineRef = FirebaseDatabase.getInstance().getReference().child("medications").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(medicineId);
+            medicineRef.removeValue();
             medicineList.remove(position);
             notifyItemRemoved(position);
         }

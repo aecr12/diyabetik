@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "811713593939",
+    "project_id": "diyabetik-82d33",
+    "storage_bucket": "diyabetik-82d33.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:811713593939:android:e2bec67082ef70784b3ca6",
+        "android_client_info": {
+          "package_name": "com.ae.diyabetik"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "811713593939-cjm8q086fjaouse90rm63e0404f8dhss.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAx25XiMA1zmPMX567le2vLH3r763vhfd4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "811713593939-cjm8q086fjaouse90rm63e0404f8dhss.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
