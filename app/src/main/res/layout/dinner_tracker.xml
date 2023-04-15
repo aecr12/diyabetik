@@ -20,7 +20,7 @@
         android:src="@drawable/ic_lbreakfast" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/foodListDinner"
+        android:id="@+id/recyclerView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/linearLayout"
@@ -60,5 +60,5 @@
         android:layout_marginBottom="16dp"
         android:contentDescription="Kaydet"
         android:src="@drawable/ic_tick"
-        android:visibility="invisible" />
+         />
 </RelativeLayout>

@@ -1,76 +1,71 @@
 package com.ae.diyabetik;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.ae.DAO.BreakfastDAO;
+import com.ae.Models.Breakfast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class BreakfastTracker extends AppCompatActivity {
-    private EditText editTextBreakfast;
-    private ImageView breakfastImage;
-    private RecyclerView foodListBreakfast;
-    private FloatingActionButton floatingActionButton;
-    private ArrayList<Food> breakfastItemList;
+    ImageView imageViewBreakfast;
+    RecyclerView recyclerView1;
+    EditText editTextBreakfast;
+    FloatingActionButton fab;
+    private ArrayList<Breakfast> breakfastList;
+    BreakfastAdapter breakfastAdapter;
+    BreakfastDAO breakfastDAO = new BreakfastDAO();
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.breakfast_tracker);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        breakfastItemList = new ArrayList<>();
+        imageViewBreakfast = findViewById(R.id.imageViewBreakfast);
+        recyclerView1 = findViewById(R.id.recyclerView1);
         editTextBreakfast = findViewById(R.id.editTextBreakfast);
-        breakfastImage = findViewById(R.id.breakfast_image);
-        foodListBreakfast = findViewById(R.id.foodListBreakfast);
-        floatingActionButton = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
+        breakfastList = new ArrayList<>();
+        breakfastAdapter = new BreakfastAdapter(breakfastList,this);
+        recyclerView1.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView1.setAdapter(breakfastAdapter);
 
-        // RecyclerView'ı ayarla
-        foodListBreakfast.setLayoutManager(new LinearLayoutManager(this));
-        foodListBreakfast.setHasFixedSize(true);
-        FoodListAdapter adapter1 = new FoodListAdapter(breakfastItemList,this);
-        foodListBreakfast.setAdapter(adapter1);
+        loadBreakfastData();
 
-        // Kullanıcı girdi yapınca FAB görünür olacak, kullanıcı girsini takip etmek için textwatcherlar ekleniyor
-        TextWatcher textWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // editTextBreakfast ve editTextPortion doluysa FAB'ı göster
-                String foodName = editTextBreakfast.getText().toString().trim();
-                if (!foodName.isEmpty()) {
-                    floatingActionButton.show();
-                } else {
-                    floatingActionButton.hide();
-                }
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        };
-        editTextBreakfast.addTextChangedListener(textWatcher);
-        // FABa tıklanınca yapılacaklar
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String foodName = editTextBreakfast.getText().toString();
-
-                if (!foodName.isEmpty()) {
-                    Food food = new Food(foodName);
-                    breakfastItemList.add(food);
-                    adapter1.notifyDataSetChanged();
-                    editTextBreakfast.setText("");
-                    floatingActionButton.hide();
-                }
+                saveBreakfast();
             }
         });
     }
+    private void saveBreakfast(){
+        String breakfastItemName = editTextBreakfast.getText().toString();
+        if (TextUtils.isEmpty(breakfastItemName)){
+            Toast.makeText(BreakfastTracker.this,"Lütfen bir değer giriniz",Toast.LENGTH_LONG);
+        }
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        String currentDateTime = dateFormat.format(calendar.getTime());
+        Breakfast breakfast = new Breakfast(null,breakfastItemName,currentDateTime);
+        breakfastDAO.create(breakfast);
+        breakfastList.add(breakfast);
+        breakfastAdapter.notifyDataSetChanged();
+        editTextBreakfast.setText("");
+    }
+    private void loadBreakfastData(){
+        breakfastDAO.read(breakfastList,breakfastAdapter);
+    }
 }
-
-

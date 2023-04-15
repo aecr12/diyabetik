@@ -13,22 +13,12 @@ import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.ae.DAO.MedicineDAO;
 import com.ae.Models.Medicine;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -42,12 +32,6 @@ public class MedicineTracker extends AppCompatActivity implements DatePickerDial
     private RecyclerView recyclerView;
     private MedicineAdapter medicineAdapter;
     private ArrayList<Medicine> medicineList;
-
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    FirebaseAuth auth = FirebaseAuth.getInstance();
-    FirebaseUser user = auth.getCurrentUser();
-
-    String uid = user.getUid();
 
     MedicineDAO medicineDAO = new MedicineDAO();
     @Override
@@ -134,29 +118,7 @@ public class MedicineTracker extends AppCompatActivity implements DatePickerDial
 
     private void loadMedicineData() {
         medicineDAO.read(medicineList,medicineAdapter);
-        /*DatabaseReference medicineRef = FirebaseDatabase.getInstance().getReference().child("medications").child(uid);
-        medicineRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    ArrayList<Medicine> medicines = new ArrayList<>();
-                    for (DataSnapshot medicineSnapshot : snapshot.getChildren()) {
-                        String medicineId = medicineSnapshot.getKey(); // Push Id'yi al
-                        Medicine medicine = medicineSnapshot.getValue(Medicine.class); // Verileri Medicine nesnesine çevir
-                        medicine.setId(medicineId); // Push Id'yi Medicine nesnesine ekle
-                        medicines.add(medicine);
-                    }
-                    medicineList.clear();
-                    medicineList.addAll(medicines);
-                    medicineAdapter.notifyDataSetChanged();
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });*/
     }
 
 }

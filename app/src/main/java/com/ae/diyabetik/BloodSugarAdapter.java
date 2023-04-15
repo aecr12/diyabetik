@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ae.DAO.BloodSugarDAO;
 import com.ae.Models.BloodSugar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -37,7 +38,7 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
     EditText bloodSugarValueEditText;
     EditText dateEditText;
 
-
+    BloodSugarDAO bloodSugarDAO = new BloodSugarDAO();
     public BloodSugarAdapter(ArrayList<BloodSugar> bloodSugarList, Context context) {
         this.context = context;
         this.bloodSugarList = bloodSugarList;
@@ -46,11 +47,11 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
     private final ItemTouchHelper.Callback swipeToDeleteCallback = new SwipeToDeleteCallback() {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
             int position = viewHolder.getAdapterPosition();
             BloodSugar bloodSugar = bloodSugarList.get(position);
             String bloodSugarId = bloodSugar.getId();
-            DatabaseReference blood_sugar_data_ref = FirebaseDatabase.getInstance().getReference().child("blood_sugar_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(bloodSugarId);
-            blood_sugar_data_ref.removeValue();
+            bloodSugarDAO.delete(bloodSugarId);
             bloodSugarList.remove(position);
             notifyItemRemoved(position);
         }
@@ -183,10 +184,14 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
     }
 
     private void updateBloodSugar(BloodSugar bloodSugarToUpdate, int adapterPosition) {
+
         String bloodSugarValue = bloodSugarValueEditText.getText().toString();
         String date = dateEditText.getText().toString();
+
         bloodSugarToUpdate.setBloodSugarValue(Integer.parseInt(bloodSugarValue));
         bloodSugarToUpdate.setDate(date);
+
+        bloodSugarDAO.update(bloodSugarToUpdate);
         notifyItemChanged(adapterPosition);
     }
 }
