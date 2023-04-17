@@ -12,7 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DinnerDAO implements IDAO<Dinner>{
+public class DinnerDAO implements IDAOforRecyclerViewClasses<Dinner> {
 
     String foodId;
     ArrayList<Dinner> dinnerArrayList;

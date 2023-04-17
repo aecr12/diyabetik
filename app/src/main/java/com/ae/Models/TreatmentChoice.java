@@ -1,37 +1,65 @@
 package com.ae.Models;
 
-public class TreatmentChoice {
-    private int id;
-    private int user_id;
-    private String treatmentChoice;
+import java.util.HashMap;
+import java.util.Map;
 
-    public TreatmentChoice(int id, int user_id, String treatmentChoice) {
-        this.id = id;
-        this.user_id = user_id;
-        this.treatmentChoice = treatmentChoice;
+public class TreatmentChoice {
+    String id;
+    private boolean insulin;
+    private boolean pump;
+    private boolean oralAntidiabetic;
+    private boolean insulinAntidiabetic;
+
+    public TreatmentChoice() {
     }
 
-    public int getId() {
+    public TreatmentChoice(String id, boolean insulin, boolean pump, boolean oralAntidiabetic, boolean insulinAntidiabetic) {
+        this.id = id;
+        this.insulin = insulin;
+        this.pump = pump;
+        this.oralAntidiabetic = oralAntidiabetic;
+        this.insulinAntidiabetic = insulinAntidiabetic;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public boolean isInsulin() {
+        return insulin;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setInsulin(boolean insulin) {
+        this.insulin = insulin;
     }
 
-    public String getTreatmentChoice() {
-        return treatmentChoice;
+    public boolean isPump() {
+        return pump;
     }
 
-    public void setTreatmentChoice(String treatmentChoice) {
-        this.treatmentChoice = treatmentChoice;
+    public void setPump(boolean pump) {
+        this.pump = pump;
     }
+
+    public boolean isOralAntidiabetic() {
+        return oralAntidiabetic;
+    }
+
+    public void setOralAntidiabetic(boolean oralAntidiabetic) {
+        this.oralAntidiabetic = oralAntidiabetic;
+    }
+
+    public boolean isInsulinAntidiabetic() {
+        return insulinAntidiabetic;
+    }
+
+    public void setInsulinAntidiabetic(boolean insulinAntidiabetic) {
+        this.insulinAntidiabetic = insulinAntidiabetic;
+    }
+
+
 }

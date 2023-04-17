@@ -3,7 +3,6 @@ package com.ae.DAO;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ae.Models.Breakfast;
 import com.ae.Models.Lunch;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -13,7 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LunchDAO implements IDAO<Lunch>{
+public class LunchDAO implements IDAOforRecyclerViewClasses<Lunch> {
 
     String foodId;
     ArrayList<Lunch> lunchArrayList;

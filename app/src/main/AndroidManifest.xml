@@ -48,8 +48,8 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".TreatmentChoice" />
-        <activity android:name=".UserInformation" />
+        <activity android:name=".TreatmentChoiceTracking" />
+        <activity android:name=".UserInformationTracking" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

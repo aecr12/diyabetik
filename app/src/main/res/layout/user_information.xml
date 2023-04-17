@@ -1,100 +1,164 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     android:padding="16dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
 
         <TextView
             android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lütfen aşağıdaki alanları eksiksiz doldurun"
+            android:text="Kişisel Bilgiler"
             android:textColor="#000000"
             android:textSize="16dp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/editTextHeight"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/heightTextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/textViewTitle"
-            android:layout_marginTop="24dp"
             android:hint="Boy (cm)"
-            android:inputType="numberDecimal"
-            android:textColorHint="#a6a6a6" />
+            app:endIconMode="clear_text">
 
-        <EditText
-            android:id="@+id/editTextWeight"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextHeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/weightTextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editTextHeight"
-            android:layout_marginTop="16dp"
+            android:layout_below="@id/heightTextInputLayout"
             android:hint="Kilo (kg)"
-            android:inputType="numberDecimal"
-            android:textColorHint="#a6a6a6" />
+            app:endIconMode="clear_text">
 
-        <EditText
-            android:id="@+id/editTextWaist"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextWeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/waistTextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editTextWeight"
-            android:layout_marginTop="16dp"
+            android:layout_below="@id/weightTextInputLayout"
             android:hint="Bel Çevresi (cm)"
-            android:inputType="numberDecimal"
-            android:textColorHint="#a6a6a6" />
+            app:endIconMode="clear_text">
 
-        <EditText
-            android:id="@+id/editTextBloodSugarValue"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextWaist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/bloodSugarValueTextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editTextWaist"
-            android:layout_marginTop="16dp"
+            android:layout_below="@id/waistTextInputLayout"
             android:hint="Son Ölçülen Kan Şekeri Değeri (mg/dL)"
-            android:inputType="numberDecimal"
-            android:textColorHint="#a6a6a6" />
+            app:endIconMode="clear_text">
 
-        <EditText
-            android:id="@+id/editTextHbA1cPercent"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextBloodSugarValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/hbA1cPercentTextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editTextBloodSugarValue"
-            android:layout_marginTop="16dp"
+            android:layout_below="@id/bloodSugarValueTextInputLayout"
             android:hint="HbA1c Değeri (%)"
-            android:inputType="numberDecimal"
-            android:textColorHint="#a6a6a6" />
+            app:endIconMode="clear_text">
 
-        <EditText
-            android:id="@+id/editTextSistolik"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextHbA1cPercent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sistolikTextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editTextHbA1cPercent"
-            android:layout_marginTop="16dp"
+            android:layout_below="@id/hbA1cPercentTextInputLayout"
             android:hint="Sistolik Kan Basıncı/Tansiyon"
-            android:inputType="numberDecimal"
-            android:textColorHint="#a6a6a6" />
+            app:endIconMode="clear_text">
 
-        <EditText
-            android:id="@+id/editTextDiyastolik"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextSistolik"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/editTextDiyastolikTextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editTextSistolik"
-            android:layout_marginTop="16dp"
+            android:layout_below="@id/sistolikTextInputLayout"
             android:hint="Diyastolik Kan Basıncı/Tansiyon"
-            android:inputType="numberDecimal"
-            android:textColorHint="#a6a6a6" />
+            app:endIconMode="clear_text">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextDiyastolik"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/buttonRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editTextDiyastolik"
+            android:layout_below="@id/editTextDiyastolikTextInputLayout"
             android:layout_marginTop="32dp"
             android:background="@drawable/rounded_button"
             android:text="Kaydet"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:id="@+id/buttonUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editTextDiyastolikTextInputLayout"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/rounded_button"
+            android:text="Güncelle"
+            android:visibility="gone"
             android:textColor="#ffffff" />
     </RelativeLayout>
 </ScrollView>

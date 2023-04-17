@@ -80,6 +80,7 @@ public class DinnerTracker extends AppCompatActivity {
 
     private void loadDinnerData() {
         dinnerDAO.read(dinnerList, dinnerAdapter);
+
     }
 
 }

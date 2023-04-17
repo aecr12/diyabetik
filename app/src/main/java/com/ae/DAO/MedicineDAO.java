@@ -12,7 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MedicineDAO implements IDAO<Medicine>{
+public class MedicineDAO implements IDAOforRecyclerViewClasses<Medicine> {
 
     private String medicineId;
     private ArrayList<Medicine> medicineArrayList;

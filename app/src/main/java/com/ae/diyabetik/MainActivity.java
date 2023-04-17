@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     case R.id.nav_treatment_choices:
-                        intent = new Intent(MainActivity.this,TreatmentChoice.class);
+                        intent = new Intent(MainActivity.this, TreatmentChoiceTracking.class);
                         startActivity(intent);
                         break;
                     case R.id.nav_meal_tracker:
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         image1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent1 = new Intent(MainActivity.this,UserInformation.class);
+                Intent intent1 = new Intent(MainActivity.this, UserInformationTracking.class);
                 startActivity(intent1);
             }
         });

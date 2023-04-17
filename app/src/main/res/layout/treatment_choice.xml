@@ -25,7 +25,8 @@
             android:text="İnsülin"
             android:textSize="16sp"
             android:textColor="#000000"
-            android:buttonTint="@color/black" />
+            android:buttonTint="@color/black"
+            android:checked="false" />
 
         <CheckBox
             android:id="@+id/checkPump"
@@ -35,7 +36,8 @@
             android:text="Pompa"
             android:textSize="16sp"
             android:textColor="#000000"
-            android:buttonTint="@color/black" />
+            android:buttonTint="@color/black"
+            android:checked="false"/>
 
         <CheckBox
             android:id="@+id/checkOralAntidiabetic"
@@ -45,7 +47,8 @@
             android:text="Oral Antidiyabetik İlaç"
             android:textSize="16sp"
             android:textColor="#000000"
-            android:buttonTint="@color/black" />
+            android:buttonTint="@color/black"
+            android:checked="false"/>
 
         <CheckBox
             android:id="@+id/checkInsulinAntidiabetic"
@@ -55,7 +58,8 @@
             android:text="İnsülin ve Oral Antidiyabetik İlaç"
             android:textSize="16sp"
             android:textColor="#000000"
-            android:buttonTint="@color/black" />
+            android:buttonTint="@color/black"
+            android:checked="false"/>
 
         <Button
             android:id="@+id/buttonRegister"
@@ -69,6 +73,20 @@
             android:layout_marginTop="20dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/buttonUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/checkInsulinAntidiabetic"
+            android:text="Güncelle"
+            android:textSize="16dp"
+            android:textColor="#ffffff"
+            android:background="@drawable/rounded_button"
+            android:layout_marginTop="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 

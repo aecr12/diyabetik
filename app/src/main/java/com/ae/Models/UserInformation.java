@@ -1,8 +1,7 @@
 package com.ae.Models;
 
 public class UserInformation {
-    private int id;
-    private int userId;
+    private String id;
     private String height;
     private String weight;
     private String waist;
@@ -11,9 +10,11 @@ public class UserInformation {
     private String sistolik;
     private String diyastolik;
 
-    public UserInformation(int id, int userId, String height, String weight, String waist, String bloodSugarValue, String hbA1cPercent, String sistolik, String diyastolik) {
+    public UserInformation() {
+    }
+
+    public UserInformation(String id, String height, String weight, String waist, String bloodSugarValue, String hbA1cPercent, String sistolik, String diyastolik) {
         this.id = id;
-        this.userId = userId;
         this.height = height;
         this.weight = weight;
         this.waist = waist;
@@ -23,21 +24,14 @@ public class UserInformation {
         this.diyastolik = diyastolik;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 
     public String getHeight() {
         return height;
