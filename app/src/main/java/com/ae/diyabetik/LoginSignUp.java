@@ -1,18 +1,44 @@
 package com.ae.diyabetik;
 
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.identity.BeginSignInRequest;
+import com.google.android.gms.auth.api.identity.BeginSignInResult;
+import com.google.android.gms.auth.api.identity.Identity;
+import com.google.android.gms.auth.api.identity.SignInClient;
+import com.google.android.gms.auth.api.identity.SignInCredential;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginSignUp extends AppCompatActivity {
     TextView textViewSignUp;
@@ -22,6 +48,10 @@ public class LoginSignUp extends AppCompatActivity {
     EditText editTextEmail;
     EditText editTextPassword;
     private String uid;
+    GoogleSignInClient googleSignInClient;
+    FirebaseAuth firebaseAuth;
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference dbRef = firebaseDatabase.getReference("users");
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +62,14 @@ public class LoginSignUp extends AppCompatActivity {
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
+        //System.out.println("kullanıcı: " + mAuth.getCurrentUser().getUid());
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("811713593939-3t5k4k822u98lld2fb0n7iccjolp45pf.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+
+        // Initialize sign in client
+        googleSignInClient = GoogleSignIn.getClient(LoginSignUp.this, googleSignInOptions);
 
         buttonLogin = findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
@@ -45,10 +83,10 @@ public class LoginSignUp extends AppCompatActivity {
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 uid = user.getUid();
 
-                                Intent intent = new Intent(LoginSignUp.this,MainActivity.class);
+                                Intent intent = new Intent(LoginSignUp.this, MainActivity.class);
                                 startActivity(intent);
                             } else {
-                                Toast.makeText(LoginSignUp.this,"Giriş işlemi başarısız.",Toast.LENGTH_LONG).show();
+                                Toast.makeText(LoginSignUp.this, "Giriş işlemi başarısız.", Toast.LENGTH_LONG).show();
                             }
                         });
             }
@@ -57,7 +95,10 @@ public class LoginSignUp extends AppCompatActivity {
         buttonGoogleSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                // Initialize sign in intent
+                Intent intent = googleSignInClient.getSignInIntent();
+                // Start activity for result
+                startActivityForResult(intent, 100);
             }
         });
         buttonAppleSigin = findViewById(R.id.buttonAppleSignIn);
@@ -73,10 +114,70 @@ public class LoginSignUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(LoginSignUp.this,
-                        "Giriş işlemi başarılı. Ana sayfaya yönlendiriliyorsunuz",Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(LoginSignUp.this,Signup.class);
+                        "Kayıt işlemi başarılı. Giriş sayfasına yönlendiriliyorsunuz", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(LoginSignUp.this, Signup.class);
                 startActivity(intent);
             }
         });
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        if (firebaseUser != null) {
+            // When user already sign in redirect to profile activity
+            startActivity(new Intent(LoginSignUp.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Check condition
+        if (requestCode == 100) {
+            // When request code is equal to 100 initialize task
+            Task<GoogleSignInAccount> signInAccountTask = GoogleSignIn.getSignedInAccountFromIntent(data);
+            // check condition
+            if (signInAccountTask.isSuccessful()) {
+                // When google sign in successful initialize string
+                String s = "Google sign in successful";
+                // Display Toast
+                displayToast(s);
+                // Initialize sign in account
+                try {
+                    // Initialize sign in account
+                    GoogleSignInAccount googleSignInAccount = signInAccountTask.getResult(ApiException.class);
+                    // Check condition
+                    if (googleSignInAccount != null) {
+                        // When sign in account is not equal to null initialize auth credential
+                        AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
+                        // Check credential
+                        firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                // Check condition
+                                if (task.isSuccessful()) {
+                                    String name = googleSignInAccount.getDisplayName();
+                                    dbRef.child(task.getResult().getUser().getUid()).child("id").setValue(task.getResult().getUser().getUid());
+                                    dbRef.child(task.getResult().getUser().getUid()).child("name").setValue(name);
+                                    dbRef.child(task.getResult().getUser().getUid()).child("mail").setValue(task.getResult().getUser().getEmail());
+                                    dbRef.child(task.getResult().getUser().getUid()).child("password").setValue(task.getResult().getUser().getUid()+name);
+                                    // When task is successful redirect to profile activity display Toast
+                                    startActivity(new Intent(LoginSignUp.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    displayToast("Firebase authentication successful");
+                                } else {
+                                    // When task is unsuccessful display Toast
+                                    displayToast("Authentication Failed :" + task.getException().getMessage());
+                                }
+                            }
+                        });
+                    }
+                } catch (ApiException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void displayToast(String s) {
+        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
     }
 }
+
+

@@ -1,7 +1,10 @@
 package com.ae.diyabetik;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,7 +35,7 @@ public class BreakfastTracker extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.breakfast_tracker);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         imageViewBreakfast = findViewById(R.id.imageViewBreakfast);
         recyclerView1 = findViewById(R.id.recyclerView1);
         editTextBreakfast = findViewById(R.id.editTextBreakfast);
@@ -68,4 +71,5 @@ public class BreakfastTracker extends AppCompatActivity {
     private void loadBreakfastData(){
         breakfastDAO.read(breakfastList,breakfastAdapter);
     }
+
 }

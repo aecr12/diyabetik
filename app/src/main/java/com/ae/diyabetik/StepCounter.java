@@ -8,16 +8,15 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,6 +43,7 @@ public class StepCounter extends AppCompatActivity implements SensorEventListene
     private final static float burntCaloriesPerSecond = 0.04f;
     private final static float meanStepLengthM = 0.8f;
 
+
     private long startTime;
     private long elapsedTime;
     private Timer timer;
@@ -55,12 +55,6 @@ public class StepCounter extends AppCompatActivity implements SensorEventListene
 
     // float verilerde işlem yaparken virgülden sonra kaç hane kullanılacak
     DecimalFormat df = new DecimalFormat("#,##");
-
-    // kullanıcı verilerini tutmak için arraylist
-    ArrayList<Float> burntCaloriesArrayList;
-    ArrayList<Float> stepCountsArrayList;
-    ArrayList<Float> caloriesArrayList;
-    ArrayList<Float> timeArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,16 +129,6 @@ public class StepCounter extends AppCompatActivity implements SensorEventListene
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-    }
     // sensör verisi değiştikçe textviewlerin güncellenmesi
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -255,5 +239,22 @@ public class StepCounter extends AppCompatActivity implements SensorEventListene
         hours=0;
         time = String.format("%02d:%02d:%02d", hours, minutes, seconds);
         textViewTime.setText("Geçen Süre: " + time);
+    }
+    // geri butonu için menünün inflate edilmesi
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

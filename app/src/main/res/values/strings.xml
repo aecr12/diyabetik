@@ -20,4 +20,5 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="web_client_id">811713593939-3t5k4k822u98lld2fb0n7iccjolp45pf.apps.googleusercontent.com</string>
 </resources>

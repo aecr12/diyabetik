@@ -18,11 +18,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Signup extends AppCompatActivity {
     ImageView imageViewLogo;
     EditText editTextFullname, editTextEmail, editTextPassword;
     Button buttonRegister;
+    List<User> userList;
 
     boolean isEmpty(EditText text) {
         CharSequence str = text.getText().toString();
@@ -33,6 +37,7 @@ public class Signup extends AppCompatActivity {
         CharSequence email = text.getText().toString();
         return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches());
     }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,46 +48,42 @@ public class Signup extends AppCompatActivity {
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
         buttonRegister = findViewById(R.id.buttonRegister);
+        userList = new ArrayList<>();
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference dbRef = firebaseDatabase.getReference("users");
 
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isEmpty(editTextEmail) || isEmpty(editTextFullname) || isEmpty(editTextPassword)){
+                if (isEmpty(editTextEmail) || isEmpty(editTextFullname) || isEmpty(editTextPassword)) {
                     Toast.makeText(Signup.this, "Lütfen bütün alanları eksiksiz doldurun.", Toast.LENGTH_LONG).show();
                 }
-                if(isEmail(editTextEmail)==false){
+                if (isEmail(editTextEmail) == false) {
                     editTextEmail.setError("Geçerli bir mail adresi giriniz");
                     return;
                 }
                 String adSoyad = editTextFullname.getText().toString();
                 String mail = editTextEmail.getText().toString();
                 String password = editTextPassword.getText().toString();
-                User user = new User(adSoyad,mail,password);
+                User user = new User(null,adSoyad, mail, password);
 
                 mAuth.createUserWithEmailAndPassword(user.getMail(), user.getPassword())
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-
                                 String uid = task.getResult().getUser().getUid();
-
+                                dbRef.child(uid).child("id").setValue(uid);
                                 dbRef.child(uid).child("name").setValue(adSoyad);
                                 dbRef.child(uid).child("mail").setValue(mail);
                                 dbRef.child(uid).child("password").setValue(password);
-
-                                Toast.makeText(Signup.this,"Kaydınız başarı ile gerçekleşti," +
+                                Toast.makeText(Signup.this, "Kaydınız başarıyla gerçekleşti," +
                                         " giriş sayfasına yönlendiriliyorsunuz.", Toast.LENGTH_LONG).show();
 
                                 Intent intent = new Intent(Signup.this, LoginSignUp.class);
                                 startActivity(intent);
                             } else {
-                                Toast.makeText(Signup.this,"Zaten kaydolmuşun orospu çocu", Toast.LENGTH_LONG).show();
+                                Toast.makeText(Signup.this, "Zaten kaydolmuşun orospu çocu", Toast.LENGTH_LONG).show();
                             }
                         });
-
-
-
             }
         });
 

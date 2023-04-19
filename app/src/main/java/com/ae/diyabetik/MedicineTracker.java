@@ -5,6 +5,8 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -19,10 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ae.DAO.MedicineDAO;
 import com.ae.Models.Medicine;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class MedicineTracker extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
+public class MedicineTracker extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private EditText editTextMedicineName;
     private EditText editTextTakenTime;
@@ -34,6 +37,7 @@ public class MedicineTracker extends AppCompatActivity implements DatePickerDial
     private ArrayList<Medicine> medicineList;
 
     MedicineDAO medicineDAO = new MedicineDAO();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +53,7 @@ public class MedicineTracker extends AppCompatActivity implements DatePickerDial
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         medicineList = new ArrayList<>();
-        medicineAdapter = new MedicineAdapter(medicineList,this);
+        medicineAdapter = new MedicineAdapter(medicineList, this);
         recyclerView.setAdapter(medicineAdapter);
 
         loadMedicineData();
@@ -67,6 +71,7 @@ public class MedicineTracker extends AppCompatActivity implements DatePickerDial
             }
         });
     }
+
     private void showDateTimePicker() {
 
         Calendar calendar = Calendar.getInstance();
@@ -117,8 +122,25 @@ public class MedicineTracker extends AppCompatActivity implements DatePickerDial
     }
 
     private void loadMedicineData() {
-        medicineDAO.read(medicineList,medicineAdapter);
+        medicineDAO.read(medicineList, medicineAdapter);
 
     }
 
+    // geri butonu için menünün inflate edilmesi
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

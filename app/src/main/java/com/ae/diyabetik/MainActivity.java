@@ -12,7 +12,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ae.DAO.IDAO;
+import com.ae.Models.User;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
         // toolbar
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Diyabetik");
@@ -45,9 +51,8 @@ public class MainActivity extends AppCompatActivity {
         ImageView userPhoto = headerView.findViewById(R.id.user_photo);
         TextView userName = headerView.findViewById(R.id.user_name);
 
-        // Kullanıcı fotoğrafını ve adını burada değiştirin
+        // Kullanıcı fotoğrafını ve adını burada değiştirecek
         userPhoto.setImageResource(R.drawable.app_logo);
-        userName.setText("John Doe");
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -78,9 +83,7 @@ public class MainActivity extends AppCompatActivity {
                         intent = new Intent(MainActivity.this,LoginSignUp.class);
                         startActivity(intent);
                         break;
-
                 }
-
                 return true;
             }
         });

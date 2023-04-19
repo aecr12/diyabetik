@@ -55,6 +55,7 @@
             android:text="Giriş Yap"
             android:textColor="@android:color/white" />
 
+
         <Button
             android:id="@+id/buttonGoogleSignIn"
             android:layout_width="match_parent"

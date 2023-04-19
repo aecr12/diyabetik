@@ -5,6 +5,8 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -39,6 +41,7 @@ public class BloodSugarTracker extends AppCompatActivity implements DatePickerDi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.blood_sugar_tracker);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         editTextBloodSugarValue = findViewById(R.id.editTextBloodSugarValue);
         editTextDate = findViewById(R.id.editTextDate);
@@ -128,5 +131,23 @@ public class BloodSugarTracker extends AppCompatActivity implements DatePickerDi
 
     private void loadBloodSugarData(){
         bloodSugarDAO.read(bloodSugarList,bloodSugarAdapter);
+    }
+
+    // geri butonu için menünün inflate edilmesi
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

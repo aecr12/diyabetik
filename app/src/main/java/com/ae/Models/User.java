@@ -5,12 +5,13 @@ public class User {
     private String adSoyad;
     private String mail;
     private String password;
-    private long id;
+    private String id;
 
     public User() {
     }
 
-    public User(String adSoyad, String mail, String password) {
+    public User(String id, String adSoyad, String mail, String password) {
+        this.id = id;
         this.adSoyad = adSoyad;
         this.mail = mail;
         this.password = password;
@@ -41,11 +42,11 @@ public class User {
         this.password = password;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 }

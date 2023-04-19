@@ -87,6 +87,8 @@ public class MealTracker extends AppCompatActivity {
             }
         });
     }
+
+
     // geri butonu için menünün inflate edilmesi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
