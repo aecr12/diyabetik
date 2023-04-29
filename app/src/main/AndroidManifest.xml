@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -12,7 +13,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -34,6 +37,12 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
+        <service
+            android:name=".StepCounterService"
+            android:enabled="true"
+            android:exported="true"
+            android:foregroundServiceType="dataSync" />
 
         <activity
             android:name=".LoginSignUp"
@@ -58,7 +67,7 @@
         </activity>
         <activity android:name=".MedicineTracker" />
         <activity android:name=".Signup" />
-        <activity android:name=".StepCounter" />
+        <activity android:name=".StepCounterActivity" />
         <activity android:name=".MealTracker" />
         <activity android:name=".LunchTracker" />
         <activity android:name=".DinnerTracker" />
@@ -67,6 +76,15 @@
         <activity android:name=".BloodSugarWithHBA1CDiagram"/>
         <activity android:name=".BloodSugarTracker"/>
         <activity android:name=".BreakfastTracker"/>
+
+        <receiver
+            android:name="com.ae.Receivers.StepCountReceiver"
+            android:exported="false">
+            <intent-filter>
+<!--                <data android:scheme="content" android:host="com.ae" android:path="/step_count" />-->
+                <action android:name="step_count_changed"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

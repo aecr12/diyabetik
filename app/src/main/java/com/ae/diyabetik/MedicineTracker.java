@@ -19,11 +19,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ae.DAO.InformationCallback;
 import com.ae.DAO.MedicineDAO;
 import com.ae.Models.Medicine;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class MedicineTracker extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
@@ -122,7 +124,17 @@ public class MedicineTracker extends AppCompatActivity implements DatePickerDial
     }
 
     private void loadMedicineData() {
-        medicineDAO.read(medicineList, medicineAdapter);
+        medicineDAO.read(medicineList, new InformationCallback() {
+            @Override
+            public void onInformationLoaded(List informationList) {
+                medicineAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onInformationNotLoaded() {
+
+            }
+        });
 
     }
 

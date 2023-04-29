@@ -3,6 +3,7 @@ package com.ae.DAO;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ae.Models.Breakfast;
 import com.ae.Models.Lunch;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -12,10 +13,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LunchDAO implements IDAOforRecyclerViewClasses<Lunch> {
+public class LunchDAO implements IDAO<Lunch> {
 
     String foodId;
-    ArrayList<Lunch> lunchArrayList;
 
     @Override
     public String create(Lunch lunch) {
@@ -27,22 +27,19 @@ public class LunchDAO implements IDAOforRecyclerViewClasses<Lunch> {
     }
 
     @Override
-    public List<Lunch> read(List<Lunch> lunchList, RecyclerView.Adapter adapter) {
+    public List<Lunch> read(List<Lunch> lunchList, InformationCallback informationCallback) {
         DatabaseReference databaseReference = database.getReference().child("meals").child("lunch_data").child(uid);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    lunchArrayList = new ArrayList<>();
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         foodId = dataSnapshot.getKey();
                         Lunch lunch = dataSnapshot.getValue(Lunch.class);
                         lunch.setId(foodId);
-                        lunchArrayList.add(lunch);
+                        lunchList.add(lunch);
                     }
-                    lunchList.clear();
-                    lunchList.addAll(lunchArrayList);
-                    adapter.notifyDataSetChanged();
+                    informationCallback.onInformationLoaded(lunchList);
                 }
             }
 
@@ -53,6 +50,7 @@ public class LunchDAO implements IDAOforRecyclerViewClasses<Lunch> {
         });
         return lunchList;
     }
+
 
     @Override
     public void update(Lunch lunch) {

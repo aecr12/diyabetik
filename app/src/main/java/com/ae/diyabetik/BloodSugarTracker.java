@@ -20,10 +20,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ae.DAO.BloodSugarDAO;
+import com.ae.DAO.InformationCallback;
 import com.ae.Models.BloodSugar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class BloodSugarTracker extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private EditText editTextBloodSugarValue;
@@ -130,7 +132,18 @@ public class BloodSugarTracker extends AppCompatActivity implements DatePickerDi
     }
 
     private void loadBloodSugarData(){
-        bloodSugarDAO.read(bloodSugarList,bloodSugarAdapter);
+        bloodSugarDAO.read(bloodSugarList, new InformationCallback() {
+            @Override
+            public void onInformationLoaded(List informationList) {
+                System.out.println("İçerik: "+ bloodSugarList.get(0).getBloodSugarValue());
+                bloodSugarAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onInformationNotLoaded() {
+
+            }
+        });
     }
 
     // geri butonu için menünün inflate edilmesi

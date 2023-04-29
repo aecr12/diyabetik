@@ -14,16 +14,6 @@ public class UserInformationDAO implements IDAO<UserInformation> {
 
     String userInformationId;
 
-    public String getUserInformationId() {
-        return userInformationId;
-    }
-
-    public void setUserInformationId(String userInformationId) {
-        this.userInformationId = userInformationId;
-    }
-
-
-
     @Override
     public String create(UserInformation userInformation) {
         DatabaseReference dbReference = database.getReference("user_informations/" + uid);

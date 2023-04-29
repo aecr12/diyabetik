@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ae.Models.Dinner;
+import com.ae.Models.Lunch;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -12,7 +13,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DinnerDAO implements IDAOforRecyclerViewClasses<Dinner> {
+public class DinnerDAO implements IDAO<Dinner> {
 
     String foodId;
     ArrayList<Dinner> dinnerArrayList;
@@ -27,22 +28,19 @@ public class DinnerDAO implements IDAOforRecyclerViewClasses<Dinner> {
     }
 
     @Override
-    public List<Dinner> read(List<Dinner> dinnerList, RecyclerView.Adapter adapter) {
+    public List<Dinner> read(List<Dinner> dinnerList, InformationCallback informationCallback) {
         DatabaseReference databaseReference = database.getReference().child("meals").child("dinner_data").child(uid);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    dinnerArrayList = new ArrayList<>();
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         foodId = dataSnapshot.getKey();
                         Dinner dinner = dataSnapshot.getValue(Dinner.class);
                         dinner.setId(foodId);
-                        dinnerArrayList.add(dinner);
+                        dinnerList.add(dinner);
                     }
-                    dinnerList.clear();
-                    dinnerList.addAll(dinnerArrayList);
-                    adapter.notifyDataSetChanged();
+                    informationCallback.onInformationLoaded(dinnerList);
                 }
             }
 
@@ -53,6 +51,8 @@ public class DinnerDAO implements IDAOforRecyclerViewClasses<Dinner> {
         });
         return dinnerList;
     }
+
+
 
     @Override
     public void update(Dinner dinner) {

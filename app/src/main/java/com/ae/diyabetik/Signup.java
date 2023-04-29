@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ae.DAO.UserDAO;
 import com.ae.Models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +28,7 @@ public class Signup extends AppCompatActivity {
     EditText editTextFullname, editTextEmail, editTextPassword;
     Button buttonRegister;
     List<User> userList;
-
+    UserDAO userDAO = new UserDAO();
     boolean isEmpty(EditText text) {
         CharSequence str = text.getText().toString();
         return TextUtils.isEmpty(str);
@@ -49,8 +50,6 @@ public class Signup extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPassword);
         buttonRegister = findViewById(R.id.buttonRegister);
         userList = new ArrayList<>();
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference dbRef = firebaseDatabase.getReference("users");
 
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,11 +69,7 @@ public class Signup extends AppCompatActivity {
                 mAuth.createUserWithEmailAndPassword(user.getMail(), user.getPassword())
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                String uid = task.getResult().getUser().getUid();
-                                dbRef.child(uid).child("id").setValue(uid);
-                                dbRef.child(uid).child("name").setValue(adSoyad);
-                                dbRef.child(uid).child("mail").setValue(mail);
-                                dbRef.child(uid).child("password").setValue(password);
+                                userDAO.create(user);
                                 Toast.makeText(Signup.this, "Kaydınız başarıyla gerçekleşti," +
                                         " giriş sayfasına yönlendiriliyorsunuz.", Toast.LENGTH_LONG).show();
 

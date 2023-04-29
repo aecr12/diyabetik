@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ae.DAO.DinnerDAO;
+import com.ae.DAO.InformationCallback;
 import com.ae.DAO.LunchDAO;
 import com.ae.Models.Dinner;
 import com.ae.Models.Lunch;
@@ -79,7 +80,17 @@ public class DinnerTracker extends AppCompatActivity {
     }
 
     private void loadDinnerData() {
-        dinnerDAO.read(dinnerList, dinnerAdapter);
+        dinnerDAO.read(dinnerList, new InformationCallback() {
+            @Override
+            public void onInformationLoaded(List informationList) {
+                dinnerAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onInformationNotLoaded() {
+
+            }
+        });
 
     }
 

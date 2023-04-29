@@ -16,12 +16,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ae.DAO.BreakfastDAO;
+import com.ae.DAO.InformationCallback;
 import com.ae.Models.Breakfast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class BreakfastTracker extends AppCompatActivity {
     ImageView imageViewBreakfast;
@@ -69,7 +71,17 @@ public class BreakfastTracker extends AppCompatActivity {
         editTextBreakfast.setText("");
     }
     private void loadBreakfastData(){
-        breakfastDAO.read(breakfastList,breakfastAdapter);
+        breakfastDAO.read(breakfastList, new InformationCallback() {
+            @Override
+            public void onInformationLoaded(List informationList) {
+                breakfastAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onInformationNotLoaded() {
+
+            }
+        });
     }
 
 }

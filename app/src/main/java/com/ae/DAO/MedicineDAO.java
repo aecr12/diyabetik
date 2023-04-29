@@ -3,6 +3,7 @@ package com.ae.DAO;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ae.Models.BloodSugar;
 import com.ae.Models.Medicine;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -12,7 +13,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MedicineDAO implements IDAOforRecyclerViewClasses<Medicine> {
+public class MedicineDAO implements IDAO<Medicine> {
 
     private String medicineId;
     private ArrayList<Medicine> medicineArrayList;
@@ -27,22 +28,19 @@ public class MedicineDAO implements IDAOforRecyclerViewClasses<Medicine> {
     }
 
     @Override
-    public List<Medicine> read(List<Medicine> medicineList, RecyclerView.Adapter adapter) {
+    public List<Medicine> read(List<Medicine> medicineList, InformationCallback informationCallback) {
         DatabaseReference databaseReference = database.getReference().child("medications").child(uid);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    medicineArrayList = new ArrayList<>();
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         medicineId = dataSnapshot.getKey();
                         Medicine medicine = dataSnapshot.getValue(Medicine.class);
                         medicine.setId(medicineId);
-                        medicineArrayList.add(medicine);
+                        medicineList.add(medicine);
                     }
-                    medicineList.clear();
-                    medicineList.addAll(medicineArrayList);
-                    adapter.notifyDataSetChanged();
+                    informationCallback.onInformationLoaded(medicineList);
                 }
             }
 

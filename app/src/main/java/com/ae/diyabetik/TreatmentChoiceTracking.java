@@ -131,6 +131,11 @@ public class TreatmentChoiceTracking extends AppCompatActivity {
                 buttonRegister.setVisibility(View.GONE);
                 buttonUpdate.setVisibility(View.VISIBLE);
             }
+
+            @Override
+            public void onInformationNotLoaded() {
+
+            }
         });
     }
 

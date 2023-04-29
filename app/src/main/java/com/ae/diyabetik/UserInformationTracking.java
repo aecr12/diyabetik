@@ -203,6 +203,11 @@ public class UserInformationTracking extends AppCompatActivity {
                     buttonUpdate.setVisibility(View.VISIBLE);
                 }
             }
+
+            @Override
+            public void onInformationNotLoaded() {
+
+            }
         });
     }
 

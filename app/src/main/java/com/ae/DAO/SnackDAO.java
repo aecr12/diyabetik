@@ -3,6 +3,7 @@ package com.ae.DAO;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ae.Models.Dinner;
 import com.ae.Models.Snack;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -12,7 +13,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SnackDAO implements IDAOforRecyclerViewClasses<Snack> {
+public class SnackDAO implements IDAO<Snack> {
 
     String foodId;
     ArrayList<Snack> snackArrayList;
@@ -27,22 +28,19 @@ public class SnackDAO implements IDAOforRecyclerViewClasses<Snack> {
     }
 
     @Override
-    public List<Snack> read(List<Snack> snackList, RecyclerView.Adapter adapter) {
+    public List<Snack> read(List<Snack> snackList, InformationCallback informationCallback) {
         DatabaseReference databaseReference = database.getReference().child("meals").child("snack_data").child(uid);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    snackArrayList = new ArrayList<>();
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         foodId = dataSnapshot.getKey();
                         Snack snack = dataSnapshot.getValue(Snack.class);
                         snack.setId(foodId);
-                        snackArrayList.add(snack);
+                        snackList.add(snack);
                     }
-                    snackList.clear();
-                    snackList.addAll(snackArrayList);
-                    adapter.notifyDataSetChanged();
+                    informationCallback.onInformationLoaded(snackArrayList);
                 }
             }
 
@@ -53,6 +51,7 @@ public class SnackDAO implements IDAOforRecyclerViewClasses<Snack> {
         });
         return snackList;
     }
+
 
     @Override
     public void update(Snack snack) {

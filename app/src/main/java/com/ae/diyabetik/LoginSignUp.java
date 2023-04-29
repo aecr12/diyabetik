@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ae.DAO.UserDAO;
+import com.ae.Models.User;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.BeginSignInResult;
@@ -52,6 +54,7 @@ public class LoginSignUp extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference dbRef = firebaseDatabase.getReference("users");
+    UserDAO userDAO = new UserDAO();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,11 +156,17 @@ public class LoginSignUp extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 // Check condition
                                 if (task.isSuccessful()) {
+                                    User user = new User();
                                     String name = googleSignInAccount.getDisplayName();
-                                    dbRef.child(task.getResult().getUser().getUid()).child("id").setValue(task.getResult().getUser().getUid());
+                                    user.setId(task.getResult().getUser().getUid());
+                                    user.setMail(task.getResult().getUser().getEmail());
+                                    user.setPassword(task.getResult().getUser().getUid()+name);
+                                    user.setAdSoyad(name);
+                                    /*dbRef.child(task.getResult().getUser().getUid()).child("id").setValue(task.getResult().getUser().getUid());
                                     dbRef.child(task.getResult().getUser().getUid()).child("name").setValue(name);
                                     dbRef.child(task.getResult().getUser().getUid()).child("mail").setValue(task.getResult().getUser().getEmail());
-                                    dbRef.child(task.getResult().getUser().getUid()).child("password").setValue(task.getResult().getUser().getUid()+name);
+                                    dbRef.child(task.getResult().getUser().getUid()).child("password").setValue(task.getResult().getUser().getUid()+name);*/
+                                    userDAO.create(user);
                                     // When task is successful redirect to profile activity display Toast
                                     startActivity(new Intent(LoginSignUp.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     displayToast("Firebase authentication successful");

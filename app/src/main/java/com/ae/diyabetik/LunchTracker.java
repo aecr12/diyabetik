@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ae.DAO.InformationCallback;
 import com.ae.DAO.LunchDAO;
 import com.ae.Models.Lunch;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -23,6 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class LunchTracker extends AppCompatActivity {
     ImageView imageViewLunch;
@@ -74,7 +76,17 @@ public class LunchTracker extends AppCompatActivity {
     }
 
     private void loadLunchData() {
-        lunchDAO.read(lunchList, lunchAdapter);
+        lunchDAO.read(lunchList, new InformationCallback() {
+            @Override
+            public void onInformationLoaded(List informationList) {
+                lunchAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onInformationNotLoaded() {
+
+            }
+        });
     }
 
 }

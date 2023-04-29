@@ -15,6 +15,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.ae.DAO.InformationCallback;
 import com.ae.DAO.SnackDAO;
 import com.ae.Models.Snack;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -75,7 +77,17 @@ public class SnackTracker extends AppCompatActivity {
     }
 
     private void loadSnackData() {
-        snackDAO.read(snackList, snackAdapter);
+        snackDAO.read(snackList, new InformationCallback() {
+            @Override
+            public void onInformationLoaded(List informationList) {
+                snackAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onInformationNotLoaded() {
+
+            }
+        });
     }
 
 }
