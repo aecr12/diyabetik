@@ -16,6 +16,8 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -72,10 +74,10 @@
         <activity android:name=".LunchTracker" />
         <activity android:name=".DinnerTracker" />
         <activity android:name=".SnackTracker" />
-        <activity android:name=".DiabetesManual" />
         <activity android:name=".BloodSugarWithHBA1CDiagram"/>
         <activity android:name=".BloodSugarTracker"/>
         <activity android:name=".BreakfastTracker"/>
+        <activity android:name=".DiabetesBook"/>
 
         <receiver
             android:name="com.ae.Receivers.StepCountReceiver"

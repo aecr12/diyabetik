@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         image4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent1 = new Intent(MainActivity.this,DiabetesManual.class);
+                Intent intent1 = new Intent(MainActivity.this,DiabetesBook.class);
                 startActivity(intent1);
             }
         });
