@@ -14,6 +14,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.ae.DAO.InformationCallback;
+import com.ae.DAO.WaterDAO;
+import com.ae.Models.Water;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MealTracker extends AppCompatActivity {
 
     private CardView kahvalti_karti;
@@ -23,7 +30,10 @@ public class MealTracker extends AppCompatActivity {
     private ImageButton azalt_button;
     private ImageButton arttir_button;
     private TextView sayac_textview;
-    private int suSayaci=0;
+    private int suSayaci;
+    WaterDAO waterDAO = new WaterDAO();
+    List<Water> waterList = new ArrayList<>();
+    private boolean isLoaded = false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +46,20 @@ public class MealTracker extends AppCompatActivity {
         azalt_button=findViewById(R.id.azalt_button);
         arttir_button=findViewById(R.id.arttir_button);
         sayac_textview=findViewById(R.id.sayac_textview);
-        sayac_textview.setText(String.valueOf(suSayaci));
+
+        waterDAO.read(waterList, new InformationCallback() {
+            @Override
+            public void onInformationLoaded(List informationList) {
+            suSayaci = waterList.get(0).getGlassesCount();
+            sayac_textview.setText(String.valueOf(suSayaci));
+            }
+
+            @Override
+            public void onInformationNotLoaded() {
+            suSayaci = 0;
+            }
+        });
+
         kahvalti_karti.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,6 +97,10 @@ public class MealTracker extends AppCompatActivity {
                 }else {
                     suSayaci--;
                     sayac_textview.setText(String.valueOf(suSayaci));
+                    loadWaterCount();
+                    if (isLoaded == true){
+                        updateWaterCount(suSayaci);
+                    }
                 }
 
             }
@@ -84,6 +111,13 @@ public class MealTracker extends AppCompatActivity {
             public void onClick(View v) {
                 suSayaci++;
                 sayac_textview.setText(String.valueOf(suSayaci));
+                loadWaterCount();
+                if (isLoaded == true){
+                    updateWaterCount(suSayaci);
+                }else {
+                    saveWaterCount(suSayaci);
+                }
+
             }
         });
     }
@@ -107,4 +141,25 @@ public class MealTracker extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void saveWaterCount(int waterCount){
+        Water water = new Water(null,waterCount);
+        waterDAO.create(water);
+    }
+    private void updateWaterCount(int waterCount){
+        Water waterToUpdate = new Water(waterList.get(0).getId(),waterCount);
+        waterDAO.update(waterToUpdate);
+    }
+    private void loadWaterCount(){
+        waterDAO.read(waterList, new InformationCallback() {
+            @Override
+            public void onInformationLoaded(List informationList) {
+                isLoaded = true;
+            }
+
+            @Override
+            public void onInformationNotLoaded() {
+
+            }
+        });
+    }
 }
