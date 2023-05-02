@@ -84,4 +84,29 @@ public class StepCounterDAO implements IDAO<StepCounter> {
     public void delete(String id) {
 
     }
+    public List<StepCounter> getByDate(List<StepCounter> stepCounterList, String dateString, InformationCallback informationCallback){
+        DatabaseReference databaseReference = database.getReference().child("step_counter_data").child(uid).child(dateString);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        stepCounterId = dataSnapshot.getKey();
+                        StepCounter stepCounter = dataSnapshot.getValue(StepCounter.class);
+                        stepCounter.setId(stepCounterId);
+                        stepCounterList.add(stepCounter);
+                    }
+                    informationCallback.onInformationLoaded(stepCounterList);
+                }else {
+                    informationCallback.onInformationNotLoaded();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        return stepCounterList;
+    }
 }

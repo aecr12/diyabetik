@@ -162,10 +162,6 @@ public class LoginSignUp extends AppCompatActivity {
                                     user.setMail(task.getResult().getUser().getEmail());
                                     user.setPassword(task.getResult().getUser().getUid()+name);
                                     user.setAdSoyad(name);
-                                    /*dbRef.child(task.getResult().getUser().getUid()).child("id").setValue(task.getResult().getUser().getUid());
-                                    dbRef.child(task.getResult().getUser().getUid()).child("name").setValue(name);
-                                    dbRef.child(task.getResult().getUser().getUid()).child("mail").setValue(task.getResult().getUser().getEmail());
-                                    dbRef.child(task.getResult().getUser().getUid()).child("password").setValue(task.getResult().getUser().getUid()+name);*/
                                     userDAO.create(user);
                                     // When task is successful redirect to profile activity display Toast
                                     startActivity(new Intent(LoginSignUp.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -186,6 +182,11 @@ public class LoginSignUp extends AppCompatActivity {
 
     private void displayToast(String s) {
         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
 

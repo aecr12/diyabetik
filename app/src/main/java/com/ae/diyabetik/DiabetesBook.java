@@ -1,5 +1,6 @@
 package com.ae.diyabetik;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfDocument;
 import android.graphics.pdf.PdfRenderer;
@@ -120,7 +121,9 @@ public class DiabetesBook extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        textToSpeech.shutdown();
+        if (isTextToSpeechRunning){
+            textToSpeech.shutdown();
+        }
     }
 
     // geri butonu için menünün inflate edilmesi
@@ -135,7 +138,9 @@ public class DiabetesBook extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            onBackPressed();
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

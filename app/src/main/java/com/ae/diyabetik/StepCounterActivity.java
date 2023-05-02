@@ -1,14 +1,20 @@
 package com.ae.diyabetik;
 
 import android.app.ActivityManager;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,9 +30,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
-public class StepCounterActivity extends AppCompatActivity {
+public class StepCounterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private TextView stepCountTextView;
     private Button startButton;
@@ -36,12 +43,21 @@ public class StepCounterActivity extends AppCompatActivity {
     private SimpleDateFormat simpleDateFormat;
     private Date currentDate;
     private TextView textViewDate;
-    StepCounterDAO stepCounterDAO = new StepCounterDAO();
-    List<StepCounter> stepCounterList = new ArrayList<>();
+    private StepCounterDAO stepCounterDAO = new StepCounterDAO();
+    private List<StepCounter> stepCounterList = new ArrayList<>();
+    private List<StepCounter> stepCounterList2 = new ArrayList<>();
+    private ImageButton imageButtonCalendar;
+    private int year, month, day;
+    private String selectedDate;
+    private String monthString;
+    private String dayString;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.step_counter);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        imageButtonCalendar = findViewById(R.id.imageButtonCalendar);
         textViewDate = findViewById(R.id.textViewDate);
         simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         currentDate = new Date();
@@ -99,6 +115,12 @@ public class StepCounterActivity extends AppCompatActivity {
             stopButton.setEnabled(false);
             startButton.setEnabled(true);
         }
+        imageButtonCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDateTimePicker();
+            }
+        });
     }
 
     // Start the foreground service that detects steps
@@ -127,6 +149,70 @@ public class StepCounterActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("isRunning", isRunning);
+    }
+
+    private void showDateTimePicker(){
+        Calendar calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, day);
+        datePickerDialog.show();
+    }
+
+    private void showByDate(){
+        stepCounterDAO.getByDate(stepCounterList2, selectedDate, new InformationCallback() {
+            @Override
+            public void onInformationLoaded(List informationList) {
+                Toast.makeText(StepCounterActivity.this,"Bulundu: "+ stepCounterList2.get(0).getStepCount(),Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onInformationNotLoaded() {
+                Toast.makeText(StepCounterActivity.this,"Seçtiğiniz tarihe uygun kayıt bulunamadı" ,Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        this.year = year;
+        this.month = month;
+        month = month +1;
+        this.day = dayOfMonth;
+        if (month<=9){
+            monthString = "0"+month;
+        }else {
+            monthString = String.valueOf(month);
+        }
+        if (dayOfMonth<=9){
+            dayString = "0"+dayOfMonth;
+        }else {
+            dayString = String.valueOf(dayOfMonth);
+        }
+        selectedDate = dayString+"-"+monthString+"-"+year;
+        Toast.makeText(StepCounterActivity.this,selectedDate,Toast.LENGTH_LONG).show();
+        showByDate();
+    }
+
+    // geri butonu için menünün inflate edilmesi
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
