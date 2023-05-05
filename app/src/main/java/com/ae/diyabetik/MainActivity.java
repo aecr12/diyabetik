@@ -1,118 +1,205 @@
 package com.ae.diyabetik;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.material.navigation.NavigationView;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+
+import com.ae.DAO.InformationCallback;
+import com.ae.DAO.UserInformationDAO;
+import com.ae.Models.UserInformation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    Toolbar toolbar;
+    private CardView cardViewPersonalInformations, cardViewTension, cardViewPedometer, cardViewBloodSugarTracker, cardViewMedications, cardViewMealTracker,
+            cardViewTreatmentChoices;
+    private ImageView imageViewPersonalInformations, imageViewTension, imageViewPedometer, imageViewBloodSugarNotes, imageViewMedications, imageViewMeals,
+            imageViewTreatments;
+    private TextView textViewPersonalInformations, textViewTension, textViewPedometer, textViewBloodSugarNotes, textViewMedications, textViewMeals,
+            textViewTreatmens, textViewHeight, textViewWeight, textViewWaist, textViewHbA1c;
+    private FloatingActionButton fab, fabDiabetesBook, fabHospital, fabPharmacy;
+    private Intent intent;
+    private boolean isOpen = false;
+    private Animation anim1, anim2, anim3, anim4;
+    private UserInformationDAO userInformationDAO = new UserInformationDAO();
+    private List<UserInformation> userInformationList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // toolbar
-        toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Diyabetik");
-        setSupportActionBar(toolbar);
 
-        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
-                this,
-                drawerLayout,
-                toolbar,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close
-        );
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            System.out.println("Fetching FCM registration token failed");
+                            return;
+                        }
 
-        NavigationView navigationView = findViewById(R.id.navigation_view);
-        View headerView = navigationView.getHeaderView(0);
-        ImageView userPhoto = headerView.findViewById(R.id.user_photo);
-        TextView userName = headerView.findViewById(R.id.user_name);
+                        // Get new FCM registration token
+                        String token = task.getResult();
 
-        // Kullanıcı fotoğrafını ve adını burada değiştirecek
-        userPhoto.setImageResource(R.drawable.app_logo);
+                        // Log and toast
+                        System.out.println(token);
+                        Toast.makeText(MainActivity.this,"Device reg. token: "+ token, Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        cardViewPersonalInformations = findViewById(R.id.cardViewPersonalInformations);
+        cardViewTension = findViewById(R.id.cardViewTension);
+        cardViewPedometer = findViewById(R.id.cardViewPedometer);
+        cardViewBloodSugarTracker = findViewById(R.id.cardViewBloodSugarTracker);
+        cardViewMedications = findViewById(R.id.cardViewMedications);
+        cardViewMealTracker = findViewById(R.id.cardViewMealTracker);
+        cardViewTreatmentChoices = findViewById(R.id.cardViewTreatmentChoices);
+
+        imageViewPersonalInformations = findViewById(R.id.imageViewPersonalInformations);
+        imageViewTension = findViewById(R.id.imageViewTension);
+        imageViewPedometer = findViewById(R.id.imageViewPedometer);
+        imageViewBloodSugarNotes = findViewById(R.id.imageViewBSugarNotes);
+        imageViewMedications = findViewById(R.id.imageViewMedications);
+        imageViewMeals = findViewById(R.id.imageViewMeals);
+        imageViewTreatments = findViewById(R.id.imageViewTreatments);
+
+        textViewPersonalInformations = findViewById(R.id.textViewPersonalInformations);
+        textViewTension = findViewById(R.id.textViewTension);
+        textViewPedometer = findViewById(R.id.textViewPedometer);
+        textViewBloodSugarNotes = findViewById(R.id.textViewBSugarNotes);
+        textViewMedications = findViewById(R.id.textViewMedications);
+        textViewMeals = findViewById(R.id.textViewMeals);
+        textViewTreatmens = findViewById(R.id.textViewTreatments);
+        textViewHeight = findViewById(R.id.textViewHeight);
+        textViewWeight = findViewById(R.id.textViewWeight);
+        textViewWaist = findViewById(R.id.textViewWaist);
+        textViewHbA1c = findViewById(R.id.textViewHba1c);
+
+        fab = findViewById(R.id.fab);
+        fabDiabetesBook = findViewById(R.id.fabDiabetesBook);
+        fabHospital = findViewById(R.id.fabHospital);
+        fabPharmacy = findViewById(R.id.fabPharmacy);
+
+        anim1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim1); //open
+        anim2 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim2); //close
+        anim3 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim2); //clock
+        anim4 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim4); //anticlock
+
+        userInformationList = new ArrayList<>();
+        cardViewTension.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                int id = menuItem.getItemId();
-                Intent intent;
-                switch (id) {
-                    case R.id.nav_home:
-                        intent = new Intent(MainActivity.this, Signup.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.nav_treatment_choices:
-                        intent = new Intent(MainActivity.this, TreatmentChoiceTracking.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.nav_meal_tracker:
-                        intent = new Intent(MainActivity.this,MealTracker.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.nav_medicine_tracker:
-                        intent = new Intent(MainActivity.this,MedicineTracker.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.nav_pharmacy:
-                        // En yakın eczaneyi bulmak için yapılacak işlemler
-                        break;
-                    case R.id.nav_hospital:
-                        intent = new Intent(MainActivity.this,LoginSignUp.class);
-                        startActivity(intent);
-                        break;
+            public void onClick(View v) {
+                intent = new Intent(MainActivity.this, TensionTracker.class);
+                startActivity(intent);
+            }
+        });
+        cardViewPedometer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(MainActivity.this, StepCounterActivity.class);
+                startActivity(intent);
+            }
+        });
+        cardViewBloodSugarTracker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(MainActivity.this, BloodSugarTracker.class);
+                startActivity(intent);
+            }
+        });
+        cardViewMedications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(MainActivity.this, MedicineTracker.class);
+                startActivity(intent);
+            }
+        });
+        cardViewMealTracker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(MainActivity.this, MealTracker.class);
+                startActivity(intent);
+            }
+        });
+        cardViewTreatmentChoices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(MainActivity.this, TreatmentChoiceTracking.class);
+                startActivity(intent);
+            }
+        });
+        cardViewPersonalInformations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(MainActivity.this,UserInformationTracking.class);
+                startActivity(intent);
+            }
+        });
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isOpen) {
+                    fabHospital.startAnimation(anim2);
+                    fabDiabetesBook.startAnimation(anim2);
+                    fabPharmacy.startAnimation(anim2);
+                    fab.startAnimation(anim4);
+                    isOpen=false;
+                } else {
+                    fabHospital.startAnimation(anim1);
+                    fabHospital.setClickable(true);
+                    fabDiabetesBook.startAnimation(anim1);
+                    fabDiabetesBook.setClickable(true);
+                    fabPharmacy.startAnimation(anim1);
+                    fabPharmacy.setClickable(true);
+                    fab.startAnimation(anim3);
+                    isOpen = true;
                 }
-                return true;
             }
         });
 
-        ImageView image1 = findViewById(R.id.image_1);
-        image1.setOnClickListener(new View.OnClickListener() {
+        fabDiabetesBook.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent1 = new Intent(MainActivity.this, UserInformationTracking.class);
-                startActivity(intent1);
+            public void onClick(View v) {
+                intent = new Intent(MainActivity.this,DiabetesBook.class);
+                startActivity(intent);
             }
         });
 
-        ImageView image3 = findViewById(R.id.image_3);
-        image3.setOnClickListener(new View.OnClickListener() {
+        userInformationDAO.read(userInformationList, new InformationCallback() {
             @Override
-            public void onClick(View view) {
-                Intent intent1 = new Intent(MainActivity.this,BloodSugarTracker.class);
-                startActivity(intent1);
+            public void onInformationLoaded(List informationList) {
+                textViewHeight.setText("Boy: "+userInformationList.get(0).getHeight() + " cm");
+                textViewWeight.setText("Kilo: "+ userInformationList.get(0).getWeight()+ " kg" );
+                textViewWaist.setText("Bel çevresi: "+ userInformationList.get(0).getWaist()+ " cm");
+                textViewHbA1c.setText("HbA1c Değeri: "+ userInformationList.get(0).getHbA1cPercent()+ " %");
             }
-        });
 
-        ImageView image2 = findViewById(R.id.image_2);
-        image2.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent1 = new Intent(MainActivity.this, StepCounterActivity.class);
-                startActivity(intent1);
-            }
-        });
-
-        ImageView image4 = findViewById(R.id.image_4);
-        image4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent1 = new Intent(MainActivity.this,DiabetesBook.class);
-                startActivity(intent1);
+            public void onInformationNotLoaded() {
+                textViewHeight.setText("Boy: Henüz bir değer girmediniz. ");
+                textViewWeight.setText("Kilo: Henüz bir değer girmediniz" );
+                textViewWaist.setText("Bel çevresi: Henüz bir değer girmediniz.");
+                textViewHbA1c.setText("HbA1c Değeri: Hneüz bir değer girmediniz");
             }
         });
     }
@@ -122,4 +209,5 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
         moveTaskToBack(true);
     }
+
 }

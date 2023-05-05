@@ -24,7 +24,7 @@ import java.util.List;
 public class UserInformationTracking extends AppCompatActivity {
 
     private TextView textViewTitle;
-    private EditText editTextHeight, editTextWeight, editTextWaist, editTextBloodSugarValue, editTextHbA1cPercent, editTextSistolik, editTextDiyastolik;
+    private EditText editTextHeight, editTextWeight, editTextWaist, editTextHbA1cPercent;
     private Button buttonRegister;
     private Button buttonUpdate;
     private List<UserInformation> userInformationList;
@@ -101,10 +101,7 @@ public class UserInformationTracking extends AppCompatActivity {
         editTextHeight = findViewById(R.id.editTextHeight);
         editTextWeight = findViewById(R.id.editTextWeight);
         editTextWaist = findViewById(R.id.editTextWaist);
-        editTextBloodSugarValue = findViewById(R.id.editTextBloodSugarValue);
         editTextHbA1cPercent = findViewById(R.id.editTextHbA1cPercent);
-        editTextSistolik = findViewById(R.id.editTextSistolik);
-        editTextDiyastolik = findViewById(R.id.editTextDiyastolik);
         buttonRegister = findViewById(R.id.buttonRegister);
         buttonUpdate = findViewById(R.id.buttonUpdate);
 
@@ -112,16 +109,13 @@ public class UserInformationTracking extends AppCompatActivity {
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isEmpty(editTextHeight) || isEmpty(editTextWeight) || isEmpty(editTextWaist) || isEmpty(editTextDiyastolik) || isEmpty(editTextSistolik) || isEmpty(editTextBloodSugarValue) || isEmpty(editTextHbA1cPercent)) {
+                if (isEmpty(editTextHeight) || isEmpty(editTextWeight) || isEmpty(editTextWaist)  || isEmpty(editTextHbA1cPercent)) {
                     Toast.makeText(UserInformationTracking.this, "Tüm alanları eksiksiz doldurunuz.", Toast.LENGTH_LONG).show();
                     return;
                 }
                 isLegalHeight(editTextHeight);
                 isLegalWeight(editTextWeight);
                 isLegalWaist(editTextWaist);
-                isLegalDiyastolik(editTextDiyastolik);
-                isLegalSistolik(editTextSistolik);
-                isLegalBloodSugarValue(editTextBloodSugarValue);
                 isLegalHbA1cPercent(editTextHbA1cPercent);
                 saveUserInformation();
                 Toast.makeText(UserInformationTracking.this, "Bilgileriniz başarıyla kaydedildi", Toast.LENGTH_LONG);
@@ -168,12 +162,9 @@ public class UserInformationTracking extends AppCompatActivity {
         String height = editTextHeight.getText().toString();
         String weight = editTextWeight.getText().toString();
         String waist = editTextWaist.getText().toString();
-        String bloodSugarValue = editTextBloodSugarValue.getText().toString();
         String hbA1c = editTextHbA1cPercent.getText().toString();
-        String sistolik = editTextSistolik.getText().toString();
-        String diyastolik = editTextDiyastolik.getText().toString();
 
-        UserInformation userInformation = new UserInformation(null, height, weight, waist, bloodSugarValue, hbA1c, sistolik, diyastolik);
+        UserInformation userInformation = new UserInformation(null, height, weight, waist, hbA1c);
         userInformationDAO.create(userInformation);
         userInformationList.add(userInformation);
         Toast.makeText(UserInformationTracking.this, "Bilgileriniz başarıyla kaydedildi!", Toast.LENGTH_SHORT).show();
@@ -189,12 +180,9 @@ public class UserInformationTracking extends AppCompatActivity {
                 editTextHeight.setText(userInformationList.get(0).getHeight());
                 editTextWeight.setText(userInformationList.get(0).getWeight());
                 editTextWaist.setText(userInformationList.get(0).getWaist());
-                editTextBloodSugarValue.setText(userInformationList.get(0).getBloodSugarValue());
                 editTextHbA1cPercent.setText(userInformationList.get(0).getHbA1cPercent());
-                editTextDiyastolik.setText(userInformationList.get(0).getDiyastolik());
-                editTextSistolik.setText(userInformationList.get(0).getSistolik());
 
-                if (editTextHeight.getText().toString().trim().length()==0 || editTextWeight.getText().toString().trim().length()==0 || editTextWaist.getText().toString().trim().length()==0 || editTextBloodSugarValue.getText().toString().trim().length()==0 || editTextHbA1cPercent.getText().toString().trim().length()==0 || editTextSistolik.getText().toString().trim().length()==0 || editTextDiyastolik.getText().toString().trim().length()==0) {
+                if (editTextHeight.getText().toString().trim().length()==0 || editTextWeight.getText().toString().trim().length()==0 || editTextWaist.getText().toString().trim().length()==0 || editTextHbA1cPercent.getText().toString().trim().length()==0) {
                     buttonRegister.setVisibility(View.VISIBLE);
                     buttonUpdate.setVisibility(View.GONE);
                 } else {
@@ -216,10 +204,7 @@ public class UserInformationTracking extends AppCompatActivity {
         userInformationToUpdate.setHeight(editTextHeight.getText().toString());
         userInformationToUpdate.setWeight(editTextWeight.getText().toString());
         userInformationToUpdate.setWaist(editTextWaist.getText().toString());
-        userInformationToUpdate.setBloodSugarValue(editTextBloodSugarValue.getText().toString());
         userInformationToUpdate.setHbA1cPercent(editTextHbA1cPercent.getText().toString());
-        userInformationToUpdate.setSistolik(editTextSistolik.getText().toString());
-        userInformationToUpdate.setDiyastolik(editTextDiyastolik.getText().toString());
         userInformationDAO.update(userInformationToUpdate);
     }
 

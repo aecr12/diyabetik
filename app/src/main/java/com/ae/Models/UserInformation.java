@@ -5,23 +5,17 @@ public class UserInformation {
     private String height;
     private String weight;
     private String waist;
-    private String bloodSugarValue;
     private String hbA1cPercent;
-    private String sistolik;
-    private String diyastolik;
 
     public UserInformation() {
     }
 
-    public UserInformation(String id, String height, String weight, String waist, String bloodSugarValue, String hbA1cPercent, String sistolik, String diyastolik) {
+    public UserInformation(String id, String height, String weight, String waist, String hbA1cPercent) {
         this.id = id;
         this.height = height;
         this.weight = weight;
         this.waist = waist;
-        this.bloodSugarValue = bloodSugarValue;
         this.hbA1cPercent = hbA1cPercent;
-        this.sistolik = sistolik;
-        this.diyastolik = diyastolik;
     }
 
     public String getId() {
@@ -57,14 +51,6 @@ public class UserInformation {
         this.waist = waist;
     }
 
-    public String getBloodSugarValue() {
-        return bloodSugarValue;
-    }
-
-    public void setBloodSugarValue(String bloodSugarValue) {
-        this.bloodSugarValue = bloodSugarValue;
-    }
-
     public String getHbA1cPercent() {
         return hbA1cPercent;
     }
@@ -73,19 +59,4 @@ public class UserInformation {
         this.hbA1cPercent = hbA1cPercent;
     }
 
-    public String getSistolik() {
-        return sistolik;
-    }
-
-    public void setSistolik(String sistolik) {
-        this.sistolik = sistolik;
-    }
-
-    public String getDiyastolik() {
-        return diyastolik;
-    }
-
-    public void setDiyastolik(String diyastolik) {
-        this.diyastolik = diyastolik;
-    }
 }

@@ -71,30 +71,12 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/bloodSugarValueTextInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/waistTextInputLayout"
-            android:hint="Son Ölçülen Kan Şekeri Değeri (mg/dL)"
-            app:endIconMode="clear_text">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextBloodSugarValue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/hbA1cPercentTextInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/bloodSugarValueTextInputLayout"
+            android:layout_below="@id/waistTextInputLayout"
             android:hint="HbA1c Değeri (%)"
             app:endIconMode="clear_text">
 
@@ -106,45 +88,13 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/sistolikTextInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/hbA1cPercentTextInputLayout"
-            android:hint="Sistolik Kan Basıncı/Tansiyon"
-            app:endIconMode="clear_text">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextSistolik"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editTextDiyastolikTextInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/sistolikTextInputLayout"
-            android:hint="Diyastolik Kan Basıncı/Tansiyon"
-            app:endIconMode="clear_text">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextDiyastolik"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal" />
-
-        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/buttonRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editTextDiyastolikTextInputLayout"
+            android:layout_below="@id/hbA1cPercentTextInputLayout"
             android:layout_marginTop="32dp"
             android:background="@drawable/rounded_button"
             android:text="Kaydet"
@@ -154,7 +104,7 @@
             android:id="@+id/buttonUpdate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editTextDiyastolikTextInputLayout"
+            android:layout_below="@id/hbA1cPercentTextInputLayout"
             android:layout_marginTop="32dp"
             android:background="@drawable/rounded_button"
             android:text="Güncelle"

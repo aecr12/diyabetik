@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -10,14 +9,16 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -41,6 +42,14 @@
         </provider>
 
         <service
+            android:name="com.ae.Receivers.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service
             android:name=".StepCounterService"
             android:enabled="true"
             android:exported="true"
@@ -48,8 +57,7 @@
 
         <activity
             android:name=".LoginSignUp"
-            android:exported="true"
-            >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -74,17 +82,18 @@
         <activity android:name=".LunchTracker" />
         <activity android:name=".DinnerTracker" />
         <activity android:name=".SnackTracker" />
-        <activity android:name=".BloodSugarWithHBA1CDiagram"/>
-        <activity android:name=".BloodSugarTracker"/>
-        <activity android:name=".BreakfastTracker"/>
-        <activity android:name=".DiabetesBook"/>
+        <activity android:name=".BloodSugarWithHBA1CDiagram" />
+        <activity android:name=".BloodSugarTracker" />
+        <activity android:name=".BreakfastTracker" />
+        <activity android:name=".DiabetesBook" />
+        <activity android:name=".TensionTracker" />
 
         <receiver
             android:name="com.ae.Receivers.StepCountReceiver"
             android:exported="false">
             <intent-filter>
-<!--                <data android:scheme="content" android:host="com.ae" android:path="/step_count" />-->
-                <action android:name="step_count_changed"/>
+                <!--                <data android:scheme="content" android:host="com.ae" android:path="/step_count" />-->
+                <action android:name="step_count_changed" />
             </intent-filter>
         </receiver>
     </application>

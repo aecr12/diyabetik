@@ -1,332 +1,436 @@
-<androidx.drawerlayout.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorMainActivityBackground">
+
 
     <RelativeLayout
-        android:id="@+id/main_content"
+        android:id="@+id/mainCardContainerLinerLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
-
-        </androidx.appcompat.widget.Toolbar>
-
-        <!-- Kullanıcı bilgileri -->
         <LinearLayout
-            android:id="@+id/user_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/toolbar"
-            android:layout_marginTop="12dp"
-            android:background="@color/white"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_height="150dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="28dp">
 
-            <ImageView
-                android:id="@+id/user_image"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:src="@drawable/app_logo" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewPersonalInformations"
+                android:layout_width="144dp"
+                android:layout_height="152dp"
+                android:backgroundTint="@color/colorMainActivityCards"
+                android:clickable="true"
+                android:elevation="5dp"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/colorBlack"
+                app:cardCornerRadius="20dp"
+                app:cardUseCompatPadding="true">
 
-            <TextView
-                android:id="@+id/user_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imageViewPersonalInformations"
+                        android:layout_width="144dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_personal_informations" />
+
+                    <TextView
+                        android:id="@+id/textViewPersonalInformations"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Kişisel Bilgiler"
+                        android:textColor="@color/white"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/colorMainActivityCards"
+                android:clickable="true"
+                android:elevation="5dp"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/colorBlack"
+                app:cardCornerRadius="20dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/textViewHeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="16dp"
+                        android:text="Boy: 180"/>
+
+                    <TextView
+                        android:id="@+id/textViewWeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="16dp"
+                        android:text="Kilo: 180"/>
+
+                    <TextView
+                        android:id="@+id/textViewWaist"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="16dp"
+                        android:text="Bel Çevresi: 180"/>
+
+                    <TextView
+                        android:id="@+id/textViewHba1c"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="16dp"
+                        android:text="HbA1c Değeri (%): 180"/>
+
+
+
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/content_layout"
+        <RelativeLayout
+            android:id="@+id/containerLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/user_layout"
+            android:gravity="bottom"
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/card_container"
+                android:id="@+id/firstRow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginVertical="3dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-                <!-- Kart 1 -->
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/card_personal_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp">
+                    android:id="@+id/cardViewTension"
+                    android:layout_width="144dp"
+                    android:layout_height="152dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:backgroundTint="@color/colorMainActivityCards"
+                    android:clickable="true"
+                    android:elevation="5dp"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/colorBlack"
+                    app:cardCornerRadius="20dp"
+                    app:cardUseCompatPadding="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
                         <ImageView
-                            android:id="@+id/image_1"
-                            android:layout_width="100dp"
+                            android:id="@+id/imageViewTension"
+                            android:layout_width="144dp"
                             android:layout_height="100dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/patient" />
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_tension" />
 
                         <TextView
-                            android:id="@+id/text_1"
-                            android:layout_width="match_parent"
+                            android:id="@+id/textViewTension"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="16dp"
-                            android:text="Kişsiel Bilgiler"
-                            android:textColor="@color/colorBlack"
-                            android:textSize="16sp" />
-
+                            android:gravity="center"
+                            android:text="Tansiyon Kayıt"
+                            android:textColor="@color/white"
+                            android:textSize="16dp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
 
-                <!-- Kart 2 -->
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/card_step_counter"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp">
+                    android:id="@+id/cardViewPedometer"
+                    android:layout_width="144dp"
+                    android:layout_height="152dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:backgroundTint="@color/colorMainActivityCards"
+                    android:clickable="true"
+                    android:elevation="5dp"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/colorBlack"
+                    app:cardCornerRadius="20dp"
+                    app:cardUseCompatPadding="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
                         <ImageView
-                            android:id="@+id/image_2"
-                            android:layout_width="100dp"
+                            android:id="@+id/imageViewPedometer"
+                            android:layout_width="144dp"
                             android:layout_height="100dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/step" />
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_pedometer" />
 
                         <TextView
-                            android:id="@+id/text_2"
-                            android:layout_width="match_parent"
+                            android:id="@+id/textViewPedometer"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="16dp"
+                            android:gravity="center"
                             android:text="Adımsayar"
-                            android:textColor="@color/black"
-                            android:textSize="16sp" />
-
+                            android:textColor="@color/white"
+                            android:textSize="16dp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
 
-                <!-- Kart 3 -->
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/secondRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/firstRow"
+                android:layout_marginVertical="3dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/card_bloodsugar_record"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp">
+                    android:id="@+id/cardViewBloodSugarTracker"
+                    android:layout_width="144dp"
+                    android:layout_height="152dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:backgroundTint="@color/colorMainActivityCards"
+                    android:clickable="true"
+                    android:elevation="5dp"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/colorBlack"
+                    app:cardCornerRadius="20dp"
+                    app:cardUseCompatPadding="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
                         <ImageView
-                            android:id="@+id/image_3"
-                            android:layout_width="100dp"
+                            android:id="@+id/imageViewBSugarNotes"
+                            android:layout_width="144dp"
                             android:layout_height="100dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/notes" />
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_b_sugar_notes" />
 
                         <TextView
-                            android:id="@+id/text_3"
-                            android:layout_width="match_parent"
+                            android:id="@+id/textViewBSugarNotes"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="16dp"
-                            android:text="Kan Şekeri Kayıt Defteri"
-                            android:textColor="@color/black"
-                            android:textSize="16sp" />
-
+                            android:gravity="center"
+                            android:text="Kan Şekeri Kayıt"
+                            android:textColor="@color/white"
+                            android:textSize="16dp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
 
-                <!-- Kart 4 -->
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/card_diabetes_book"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp">
+                    android:id="@+id/cardViewMedications"
+                    android:layout_width="144dp"
+                    android:layout_height="152dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:backgroundTint="@color/colorMainActivityCards"
+                    android:clickable="true"
+                    android:elevation="5dp"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/colorBlack"
+                    app:cardCornerRadius="20dp"
+                    app:cardUseCompatPadding="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
                         <ImageView
-                            android:id="@+id/image_4"
-                            android:layout_width="100dp"
+                            android:id="@+id/imageViewMedications"
+                            android:layout_width="144dp"
                             android:layout_height="100dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/diabetes_book" />
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_medications" />
 
                         <TextView
-                            android:id="@+id/text_4"
-                            android:layout_width="match_parent"
+                            android:id="@+id/textViewMedications"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="16dp"
-                            android:text="Diyabet Eğitim Kitapçığı"
-                            android:textColor="@color/black"
-                            android:textSize="16sp" />
+                            android:gravity="center"
+                            android:text="İlaç Takibi"
+                            android:textColor="@color/white"
+                            android:textSize="16dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/thirdRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/secondRow"
+                android:layout_marginVertical="3dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewMealTracker"
+                    android:layout_width="144dp"
+                    android:layout_height="152dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:backgroundTint="@color/colorMainActivityCards"
+                    android:clickable="true"
+                    android:elevation="5dp"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/colorBlack"
+                    app:cardCornerRadius="20dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageViewMeals"
+                            android:layout_width="144dp"
+                            android:layout_height="100dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_meals" />
+
+                        <TextView
+                            android:id="@+id/textViewMeals"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Öğün Takibi"
+                            android:textColor="@color/white"
+                            android:textSize="16dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewTreatmentChoices"
+                    android:layout_width="144dp"
+                    android:layout_height="152dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:backgroundTint="@color/colorMainActivityCards"
+                    android:clickable="true"
+                    android:elevation="5dp"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/colorBlack"
+                    app:cardCornerRadius="20dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageViewTreatments"
+                            android:layout_width="144dp"
+                            android:layout_height="100dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_treatments" />
+
+                        <TextView
+                            android:id="@+id/textViewTreatments"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Tedavi Seçimi"
+                            android:textColor="@color/white"
+                            android:textSize="16dp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
 
-        </LinearLayout>
-
-
-        <!--&lt;!&ndash; Ana İçerik &ndash;&gt;
-        <FrameLayout
-            android:id="@+id/content_frame"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/user_layout"
-            android:background="@color/white"
-            android:paddingTop="25dp">
-
-            <GridLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:alignmentMode="alignMargins"
-                android:columnCount="2"
-                android:columnOrderPreserved="false"
-                android:padding="28dp"
-                android:rowCount="2"
-                android:useDefaultMargins="true">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/thirdRow"
+                android:gravity="end"
+                android:orientation="horizontal">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/card1"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginBottom="4dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp">
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabPharmacy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/fab_margin"
+                    android:visibility="invisible"
+                    app:srcCompat="@drawable/ic_pharmacy" />
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/patient" />
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabDiabetesBook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/fab_margin"
+                    android:visibility="invisible"
+                    app:srcCompat="@drawable/ic_book" />
 
-                </androidx.cardview.widget.CardView>
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabHospital"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/fab_margin"
+                    android:visibility="invisible"
+                    app:srcCompat="@drawable/ic_hospital" />
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/card2"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="4dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/step" />
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/card3"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginBottom="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/notes" />
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/card4"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/diabetes_book" />
-
-                </androidx.cardview.widget.CardView>
-
-            </GridLayout>
-        </FrameLayout>-->
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/fab_margin"
+                    app:srcCompat="@drawable/ic_plus" />
+            </LinearLayout>
+        </RelativeLayout>
 
     </RelativeLayout>
-
-    <!-- Navigation Drawer -->
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigation_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@drawable/nav_header"
-        app:menu="@menu/nav_menu" />
 </androidx.drawerlayout.widget.DrawerLayout>

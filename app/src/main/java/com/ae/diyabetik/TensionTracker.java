@@ -19,31 +19,32 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ae.DAO.BloodSugarDAO;
 import com.ae.DAO.InformationCallback;
-import com.ae.Models.BloodSugar;
+import com.ae.DAO.TensionDAO;
+import com.ae.Models.Tension;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class BloodSugarTracker extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-    private EditText editTextBloodSugarValue,editTextDate;
+public class TensionTracker extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+    private EditText editTextSystolic, editTextDiastolic, editTextDate;
     private ImageButton imageButtonCalendar;
     private Button buttonSave;
     private int year, month, day, hour, minute;
     private RecyclerView recyclerView;
-    private BloodSugarAdapter bloodSugarAdapter;
-    private ArrayList<BloodSugar> bloodSugarList;
-    BloodSugarDAO bloodSugarDAO = new BloodSugarDAO();
+    private TensionAdapter tensionAdapter;
+    private ArrayList<Tension> tensionList;
+    TensionDAO tensionDAO = new TensionDAO();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.blood_sugar_tracker);
+        setContentView(R.layout.tension_tracker);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        editTextBloodSugarValue = findViewById(R.id.editTextBloodSugarValue);
+        editTextSystolic = findViewById(R.id.editTextSystolic);
+        editTextDiastolic = findViewById(R.id.editTextDiastolic);
         editTextDate = findViewById(R.id.editTextDate);
         editTextDate.setEnabled(false);
         imageButtonCalendar = findViewById(R.id.imageButtonCalendar);
@@ -51,11 +52,11 @@ public class BloodSugarTracker extends AppCompatActivity implements DatePickerDi
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        bloodSugarList = new ArrayList<>();
-        bloodSugarAdapter = new BloodSugarAdapter(bloodSugarList, this);
-        recyclerView.setAdapter(bloodSugarAdapter);
+        tensionList = new ArrayList<>();
+        tensionAdapter = new TensionAdapter(tensionList, this);
+        recyclerView.setAdapter(tensionAdapter);
 
-        loadBloodSugarData();
+        loadTensionData();
 
         imageButtonCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +68,7 @@ public class BloodSugarTracker extends AppCompatActivity implements DatePickerDi
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveBloodSugar();
+                saveTension();
             }
         });
         recyclerView.setOnClickListener(new View.OnClickListener() {
@@ -110,31 +111,32 @@ public class BloodSugarTracker extends AppCompatActivity implements DatePickerDi
         editTextDate.setText(selectedDateTime);
     }
 
-    private void saveBloodSugar() {
-        String bloodSugarValue = editTextBloodSugarValue.getText().toString();
+    private void saveTension() {
+        String systolic = editTextSystolic.getText().toString();
+        String diastolic = editTextDiastolic.getText().toString();
         String dateTime = editTextDate.getText().toString();
 
-        if (TextUtils.isEmpty(bloodSugarValue) || TextUtils.isEmpty(dateTime)) {
-            Toast.makeText(this, "Lütfen kan şekeri değerini ve tarihi giriniz.", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(systolic) || TextUtils.isEmpty(dateTime) || TextUtils.isEmpty(diastolic)) {
+            Toast.makeText(this, "Lütfen gerekli alanları doldurunuz", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        BloodSugar bloodSugar = new BloodSugar(null, Integer.parseInt(bloodSugarValue), dateTime);
-        bloodSugarDAO.create(bloodSugar);
+        Tension tension = new Tension(null, Integer.parseInt(systolic), Integer.parseInt(diastolic),dateTime);
+        tensionDAO.create(tension);
 
-        bloodSugarList.add(bloodSugar);
-        bloodSugarAdapter.notifyDataSetChanged();
+        tensionList.add(tension);
+        tensionAdapter.notifyDataSetChanged();
 
-        editTextBloodSugarValue.setText("");
+        editTextSystolic.setText("");
+        editTextDiastolic.setText("");
         editTextDate.setText("");
     }
 
-    private void loadBloodSugarData(){
-        bloodSugarDAO.read(bloodSugarList, new InformationCallback() {
+    private void loadTensionData() {
+        tensionDAO.read(tensionList, new InformationCallback() {
             @Override
             public void onInformationLoaded(List informationList) {
-                System.out.println("İçerik: "+ bloodSugarList.get(0).getBloodSugarValue());
-                bloodSugarAdapter.notifyDataSetChanged();
+                tensionAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -161,4 +163,5 @@ public class BloodSugarTracker extends AppCompatActivity implements DatePickerDi
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
