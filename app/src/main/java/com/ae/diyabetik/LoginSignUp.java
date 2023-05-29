@@ -51,8 +51,6 @@ public class LoginSignUp extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPassword);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        // mAuth.signOut();
-        //System.out.println("kullanıcı: " + mAuth.getCurrentUser().getUid());
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("811713593939-3t5k4k822u98lld2fb0n7iccjolp45pf.apps.googleusercontent.com")
                 .requestEmail()

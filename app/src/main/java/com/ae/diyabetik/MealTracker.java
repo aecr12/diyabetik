@@ -16,7 +16,6 @@ import androidx.cardview.widget.CardView;
 
 import com.ae.DAO.InformationCallback;
 import com.ae.DAO.WaterDAO;
-import com.ae.Models.StepCounter;
 import com.ae.Models.Water;
 
 import java.util.ArrayList;
@@ -24,10 +23,6 @@ import java.util.List;
 
 public class MealTracker extends AppCompatActivity {
 
-    private CardView kahvalti_karti;
-    private CardView ogleYemegiKarti;
-    private CardView aksamYemegiKarti;
-    private CardView araOgunKarti;
     private ImageButton azalt_button;
     private ImageButton arttir_button;
     private TextView sayac_textview;
@@ -35,16 +30,16 @@ public class MealTracker extends AppCompatActivity {
     WaterDAO waterDAO = new WaterDAO();
     List<Water> waterList = new ArrayList<>();
     Water water;
-
+    private CardView cardViewBreakfast, cardViewLunch, cardViewDinner, cardViewSnack;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.meal_tracker);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        kahvalti_karti = findViewById(R.id.kahvalti_karti);
-        ogleYemegiKarti = findViewById(R.id.ogle_yemegi_karti);
-        aksamYemegiKarti=findViewById(R.id.aksam_yemegi_karti);
-        araOgunKarti=findViewById(R.id.ara_ogun_karti);
+        cardViewBreakfast = findViewById(R.id.cardViewBreakfast);
+        cardViewLunch = findViewById(R.id.cardViewLunch);
+        cardViewDinner = findViewById(R.id.cardViewDinner);
+        cardViewSnack = findViewById(R.id.cardViewSnack);
         azalt_button=findViewById(R.id.azalt_button);
         arttir_button=findViewById(R.id.arttir_button);
         sayac_textview=findViewById(R.id.sayac_textview);
@@ -62,31 +57,30 @@ public class MealTracker extends AppCompatActivity {
             }
         });
 
-        kahvalti_karti.setOnClickListener(new View.OnClickListener() {
+        cardViewBreakfast.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent intent = new Intent(MealTracker.this,BreakfastTracker.class);
                 startActivity(intent);
             }
         });
-
-        ogleYemegiKarti.setOnClickListener(new View.OnClickListener() {
+        cardViewLunch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent intent = new Intent(MealTracker.this,LunchTracker.class);
                 startActivity(intent);
             }
         });
-        aksamYemegiKarti.setOnClickListener(new View.OnClickListener() {
+        cardViewDinner.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent intent = new Intent(MealTracker.this,DinnerTracker.class);
                 startActivity(intent);
             }
         });
-        araOgunKarti.setOnClickListener(new View.OnClickListener() {
+        cardViewSnack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent intent = new Intent(MealTracker.this,SnackTracker.class);
                 startActivity(intent);
             }
@@ -104,7 +98,6 @@ public class MealTracker extends AppCompatActivity {
 
             }
         });
-
         arttir_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,7 +154,5 @@ public class MealTracker extends AppCompatActivity {
 
             }
         });
-
-
     }
 }
