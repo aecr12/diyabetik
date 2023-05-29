@@ -23,6 +23,7 @@ import com.ae.Models.UserInformation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             imageViewTreatments;
     private TextView textViewPersonalInformations, textViewTension, textViewPedometer, textViewBloodSugarNotes, textViewMedications, textViewMeals,
             textViewTreatmens, textViewHeight, textViewWeight, textViewWaist, textViewHbA1c;
-    private FloatingActionButton fab, fabDiabetesBook, fabHospital, fabPharmacy;
+    private FloatingActionButton fab, fabDiabetesBook, fabHospital, fabPharmacy, fabLogout;
     private Intent intent;
     private boolean isOpen = false;
     private Animation anim1, anim2, anim3, anim4;
@@ -99,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         fabDiabetesBook = findViewById(R.id.fabDiabetesBook);
         fabHospital = findViewById(R.id.fabHospital);
         fabPharmacy = findViewById(R.id.fabPharmacy);
+        fabLogout = findViewById(R.id.fabLogout);
 
         anim1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim1); //open
         anim2 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim2); //close
@@ -159,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isOpen) {
+                    fabLogout.startAnimation(anim2);
                     fabHospital.startAnimation(anim2);
                     fabDiabetesBook.startAnimation(anim2);
                     fabPharmacy.startAnimation(anim2);
@@ -171,6 +174,8 @@ public class MainActivity extends AppCompatActivity {
                     fabDiabetesBook.setClickable(true);
                     fabPharmacy.startAnimation(anim1);
                     fabPharmacy.setClickable(true);
+                    fabLogout.startAnimation(anim1);
+                    fabLogout.setClickable(true);
                     fab.startAnimation(anim3);
                     isOpen = true;
                 }
@@ -182,6 +187,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 intent = new Intent(MainActivity.this,DiabetesBook.class);
                 startActivity(intent);
+            }
+        });
+
+        fabLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                if (FirebaseAuth.getInstance().getCurrentUser()==null){
+                    intent = new Intent(MainActivity.this,LoginSignUp.class);
+                    startActivity(intent);
+                    Toast.makeText(MainActivity.this,"Çıkış yapıldı", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

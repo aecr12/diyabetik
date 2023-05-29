@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TreatmentChoice {
-    String id;
+    private String id;
     private boolean insulin;
     private boolean pump;
     private boolean oralAntidiabetic;

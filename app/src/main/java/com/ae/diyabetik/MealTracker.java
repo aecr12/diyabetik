@@ -16,6 +16,7 @@ import androidx.cardview.widget.CardView;
 
 import com.ae.DAO.InformationCallback;
 import com.ae.DAO.WaterDAO;
+import com.ae.Models.StepCounter;
 import com.ae.Models.Water;
 
 import java.util.ArrayList;
@@ -33,7 +34,8 @@ public class MealTracker extends AppCompatActivity {
     private int suSayaci;
     WaterDAO waterDAO = new WaterDAO();
     List<Water> waterList = new ArrayList<>();
-    private boolean isLoaded = false;
+    Water water;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,13 +52,13 @@ public class MealTracker extends AppCompatActivity {
         waterDAO.read(waterList, new InformationCallback() {
             @Override
             public void onInformationLoaded(List informationList) {
-            suSayaci = waterList.get(0).getGlassesCount();
-            sayac_textview.setText(String.valueOf(suSayaci));
+                suSayaci = waterList.get(0).getGlassesCount();
             }
 
             @Override
             public void onInformationNotLoaded() {
-            suSayaci = 0;
+                suSayaci = 0;
+                saveWaterCount(suSayaci);
             }
         });
 
@@ -97,10 +99,7 @@ public class MealTracker extends AppCompatActivity {
                 }else {
                     suSayaci--;
                     sayac_textview.setText(String.valueOf(suSayaci));
-                    loadWaterCount();
-                    if (isLoaded == true){
-                        updateWaterCount(suSayaci);
-                    }
+                    updateWaterCount(suSayaci);
                 }
 
             }
@@ -111,13 +110,7 @@ public class MealTracker extends AppCompatActivity {
             public void onClick(View v) {
                 suSayaci++;
                 sayac_textview.setText(String.valueOf(suSayaci));
-                loadWaterCount();
-                if (isLoaded == true){
-                    updateWaterCount(suSayaci);
-                }else {
-                    saveWaterCount(suSayaci);
-                }
-
+                updateWaterCount(suSayaci);
             }
         });
     }
@@ -142,18 +135,25 @@ public class MealTracker extends AppCompatActivity {
     }
 
     private void saveWaterCount(int waterCount){
-        Water water = new Water(null,waterCount);
-        waterDAO.create(water);
+        waterList = waterDAO.read(waterList, new InformationCallback() {
+            @Override
+            public void onInformationLoaded(List informationList) {
+
+            }
+
+            @Override
+            public void onInformationNotLoaded() {
+                water = new Water(null, waterCount);
+                waterDAO.create(water);
+            }
+        });
     }
     private void updateWaterCount(int waterCount){
-        Water waterToUpdate = new Water(waterList.get(0).getId(),waterCount);
-        waterDAO.update(waterToUpdate);
-    }
-    private void loadWaterCount(){
         waterDAO.read(waterList, new InformationCallback() {
             @Override
             public void onInformationLoaded(List informationList) {
-                isLoaded = true;
+                Water waterToUpdate = new Water(waterList.get(0).getId(), waterCount);
+                waterDAO.update(waterToUpdate);
             }
 
             @Override
@@ -161,5 +161,7 @@ public class MealTracker extends AppCompatActivity {
 
             }
         });
+
+
     }
 }

@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:orientation="horizontal"
-            android:layout_marginTop="28dp">
+            android:layout_marginTop="35dp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewPersonalInformations"
@@ -400,10 +400,18 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabLogout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="11dp"
+                    android:visibility="invisible"
+                    app:srcCompat="@drawable/ic_logout" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/fabPharmacy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/fab_margin"
+                    android:layout_margin="11dp"
                     android:visibility="invisible"
                     app:srcCompat="@drawable/ic_pharmacy" />
 
@@ -411,7 +419,7 @@
                     android:id="@+id/fabDiabetesBook"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/fab_margin"
+                    android:layout_margin="11dp"
                     android:visibility="invisible"
                     app:srcCompat="@drawable/ic_book" />
 
@@ -419,7 +427,7 @@
                     android:id="@+id/fabHospital"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/fab_margin"
+                    android:layout_margin="11dp"
                     android:visibility="invisible"
                     app:srcCompat="@drawable/ic_hospital" />
 
@@ -427,7 +435,7 @@
                     android:id="@+id/fab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/fab_margin"
+                    android:layout_margin="11dp"
                     app:srcCompat="@drawable/ic_plus" />
             </LinearLayout>
         </RelativeLayout>

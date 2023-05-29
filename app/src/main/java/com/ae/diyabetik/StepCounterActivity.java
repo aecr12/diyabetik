@@ -1,10 +1,12 @@
 package com.ae.diyabetik;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.Menu;
@@ -19,6 +21,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.ae.DAO.InformationCallback;
 import com.ae.DAO.StepCounterDAO;
@@ -51,6 +55,8 @@ public class StepCounterActivity extends AppCompatActivity implements DatePicker
     private String selectedDate;
     private String monthString;
     private String dayString;
+    private static final int PERMISSION_REQUEST_ACTIVITY_RECOGNITION = 1001;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,10 +94,15 @@ public class StepCounterActivity extends AppCompatActivity implements DatePicker
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isRunning = true;
-                startButton.setEnabled(false);
-                stopButton.setEnabled(true);
-                startStepDetectorService();
+                if (checkPermission()) {
+                    isRunning = true;
+                    startButton.setEnabled(false);
+                    stopButton.setEnabled(true);
+                    startStepDetectorService();
+                } else {
+                    requestPermission();
+                }
+
             }
         });
 
@@ -213,6 +224,28 @@ public class StepCounterActivity extends AppCompatActivity implements DatePicker
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    private boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION);
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACTIVITY_RECOGNITION},
+                PERMISSION_REQUEST_ACTIVITY_RECOGNITION);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSION_REQUEST_ACTIVITY_RECOGNITION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // İzin verildiğinde yapılacak işlemler
+            } else {
+                // İzin reddedildiğinde yapılacak işlemler
+            }
+        }
     }
 
 }

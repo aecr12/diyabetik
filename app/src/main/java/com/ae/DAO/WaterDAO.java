@@ -51,6 +51,8 @@ public class WaterDAO implements IDAO<Water>{
                         waterCountList.add(water);
                     }
                     informationCallback.onInformationLoaded(waterCountList);
+                }else {
+                    informationCallback.onInformationNotLoaded();
                 }
 
             }
