@@ -196,7 +196,9 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseAuth.getInstance().signOut();
                 if (FirebaseAuth.getInstance().getCurrentUser()==null){
                     intent = new Intent(MainActivity.this,LoginSignUp.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
+                    finish();
                     Toast.makeText(MainActivity.this,"Çıkış yapıldı", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -220,7 +222,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();

@@ -9,9 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.ae.DAO.UserDAO;
 import com.ae.Models.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -23,11 +25,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.List;
 
 public class LoginSignUp extends AppCompatActivity {
     TextView textViewSignUp;
@@ -42,6 +48,7 @@ public class LoginSignUp extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference dbRef = firebaseDatabase.getReference("users");
     UserDAO userDAO = new UserDAO();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +58,9 @@ public class LoginSignUp extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPassword);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+
+        firebaseAuth = FirebaseAuth.getInstance();
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("811713593939-3t5k4k822u98lld2fb0n7iccjolp45pf.apps.googleusercontent.com")
                 .requestEmail()
@@ -63,20 +73,29 @@ public class LoginSignUp extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = editTextEmail.getText().toString();
-                String password = editTextPassword.getText().toString();
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                uid = user.getUid();
+                List<? extends UserInfo> providerData = firebaseUser.getProviderData();
+                for (UserInfo userInfo : providerData){
+                    firebaseUser.reload();
+                    String providerId = userInfo.getProviderId();
+                    if (providerId.equals(EmailAuthProvider.PROVIDER_ID) && firebaseUser.isEmailVerified()==true){
+                        String email = editTextEmail.getText().toString();
+                        String password = editTextPassword.getText().toString();
+                        mAuth.signInWithEmailAndPassword(email, password)
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        FirebaseUser user = mAuth.getCurrentUser();
+                                        uid = user.getUid();
 
-                                Intent intent = new Intent(LoginSignUp.this, MainActivity.class);
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(LoginSignUp.this, "Giriş işlemi başarısız.", Toast.LENGTH_LONG).show();
-                            }
-                        });
+                                        Intent intent = new Intent(LoginSignUp.this, MainActivity.class);
+                                        startActivity(intent);
+                                    } else {
+                                        Toast.makeText(LoginSignUp.this, "Giriş işlemi başarısız.", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                    }else {
+                        Toast.makeText(LoginSignUp.this, "Lütfen mail adresinizi doğrulayın", Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
         buttonGoogleSignin = findViewById(R.id.buttonGoogleSignIn);
@@ -107,13 +126,26 @@ public class LoginSignUp extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
-            // When user already sign in redirect to profile activity
-            startActivity(new Intent(LoginSignUp.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            List<? extends UserInfo> providerData = firebaseUser.getProviderData();
+
+            for (UserInfo userInfo : providerData) {
+                String providerId = userInfo.getProviderId();
+
+                if (providerId.equals(GoogleAuthProvider.PROVIDER_ID)) {
+                    // User signed in with Google, redirect to profile activity for Google sign-in
+                    startActivity(new Intent(LoginSignUp.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    break; // No need to check other providers
+                }else if(providerId.equals(EmailAuthProvider.PROVIDER_ID)) {
+                    startActivity(new Intent(LoginSignUp.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            }
+        } else {
+            // User not signed in, handle accordingly
+            // ...
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -145,7 +177,7 @@ public class LoginSignUp extends AppCompatActivity {
                                     String name = googleSignInAccount.getDisplayName();
                                     user.setId(task.getResult().getUser().getUid());
                                     user.setMail(task.getResult().getUser().getEmail());
-                                    user.setPassword(task.getResult().getUser().getUid()+name);
+                                    user.setPassword(task.getResult().getUser().getUid() + name);
                                     user.setAdSoyad(name);
                                     userDAO.create(user);
                                     // When task is successful redirect to profile activity display Toast

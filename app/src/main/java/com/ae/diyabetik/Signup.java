@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.ae.DAO.UserDAO;
 import com.ae.Models.User;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -69,14 +70,27 @@ public class Signup extends AppCompatActivity {
                 mAuth.createUserWithEmailAndPassword(user.getMail(), user.getPassword())
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                userDAO.create(user);
-                                Toast.makeText(Signup.this, "Kaydınız başarıyla gerçekleşti," +
-                                        " giriş sayfasına yönlendiriliyorsunuz.", Toast.LENGTH_LONG).show();
-
-                                Intent intent = new Intent(Signup.this, LoginSignUp.class);
-                                startActivity(intent);
+                                FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                if (firebaseUser != null) {
+                                    firebaseUser.sendEmailVerification()
+                                            .addOnCompleteListener(emailVerificationTask -> {
+                                                if (emailVerificationTask.isSuccessful()) {
+                                                    // Doğrulama e-postası başarıyla gönderildi
+                                                    Toast.makeText(Signup.this, "Kaydınız başarıyla gerçekleşti. Lütfen e-postanızı kontrol ederek hesabınızı doğrulayın.", Toast.LENGTH_LONG).show();
+                                                    Intent intent = new Intent(Signup.this, LoginSignUp.class);
+                                                    startActivity(intent);
+                                                } else {
+                                                    // Doğrulama e-postası gönderilemedi
+                                                    Toast.makeText(Signup.this, "Doğrulama e-postası gönderilemedi. Lütfen daha sonra tekrar deneyin.", Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+                                } else {
+                                    // Kullanıcı bulunamadı
+                                    Toast.makeText(Signup.this, "Kullanıcı oluşturulurken bir hata oluştu. Lütfen daha sonra tekrar deneyin.", Toast.LENGTH_LONG).show();
+                                }
                             } else {
-                                Toast.makeText(Signup.this, "Zaten kaydolmuşun orospu çocu", Toast.LENGTH_LONG).show();
+                                // Kullanıcı oluşturulamadı
+                                Toast.makeText(Signup.this, "Kaydınız gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.", Toast.LENGTH_LONG).show();
                             }
                         });
             }
