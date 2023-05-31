@@ -44,10 +44,11 @@ public class LoginSignUp extends AppCompatActivity {
     EditText editTextPassword;
     private String uid;
     GoogleSignInClient googleSignInClient;
-    FirebaseAuth firebaseAuth;
+    FirebaseAuth mAuth;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference dbRef = firebaseDatabase.getReference("users");
     UserDAO userDAO = new UserDAO();
+    private String providerId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,10 +58,8 @@ public class LoginSignUp extends AppCompatActivity {
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        mAuth = FirebaseAuth.getInstance();
 
-        firebaseAuth = FirebaseAuth.getInstance();
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("811713593939-3t5k4k822u98lld2fb0n7iccjolp45pf.apps.googleusercontent.com")
                 .requestEmail()
@@ -73,29 +72,33 @@ public class LoginSignUp extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<? extends UserInfo> providerData = firebaseUser.getProviderData();
-                for (UserInfo userInfo : providerData){
-                    firebaseUser.reload();
-                    String providerId = userInfo.getProviderId();
-                    if (providerId.equals(EmailAuthProvider.PROVIDER_ID) && firebaseUser.isEmailVerified()==true){
-                        String email = editTextEmail.getText().toString();
-                        String password = editTextPassword.getText().toString();
-                        mAuth.signInWithEmailAndPassword(email, password)
-                                .addOnCompleteListener(task -> {
-                                    if (task.isSuccessful()) {
-                                        FirebaseUser user = mAuth.getCurrentUser();
-                                        uid = user.getUid();
-
-                                        Intent intent = new Intent(LoginSignUp.this, MainActivity.class);
-                                        startActivity(intent);
-                                    } else {
-                                        Toast.makeText(LoginSignUp.this, "Giriş işlemi başarısız.", Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                    }else {
-                        Toast.makeText(LoginSignUp.this, "Lütfen mail adresinizi doğrulayın", Toast.LENGTH_LONG).show();
+                if (mAuth.getCurrentUser() != null) {
+                    List<? extends UserInfo> providerData = mAuth.getCurrentUser().getProviderData();
+                    for (UserInfo userInfo : providerData) {
+                        mAuth.getCurrentUser().reload();
+                        String providerId = userInfo.getProviderId();
+                        if (providerId.equals(EmailAuthProvider.PROVIDER_ID) && mAuth.getCurrentUser().isEmailVerified() == true) {
+                            String email = editTextEmail.getText().toString();
+                            String password = editTextPassword.getText().toString();
+                            mAuth.signInWithEmailAndPassword(email, password)
+                                    .addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            mAuth.getCurrentUser();
+                                            // uid = user.getUid();
+                                            Intent intent = new Intent(LoginSignUp.this, MainActivity.class);
+                                            startActivity(intent);
+                                        } else {
+                                            Toast.makeText(LoginSignUp.this, "Giriş işlemi başarısız.", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                        } else {
+                            Toast.makeText(LoginSignUp.this, "Lütfen mail adresinizi doğrulayın", Toast.LENGTH_LONG).show();
+                        }
                     }
+                } else {
+                    Toast.makeText(LoginSignUp.this, "Girdiğiniz bilgilere ilişkin Kullanıcı bulunamadı", Toast.LENGTH_LONG).show();
                 }
+
             }
         });
         buttonGoogleSignin = findViewById(R.id.buttonGoogleSignIn);
@@ -121,29 +124,28 @@ public class LoginSignUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(LoginSignUp.this,
-                        "Kayıt işlemi başarılı. Giriş sayfasına yönlendiriliyorsunuz", Toast.LENGTH_LONG).show();
+                        "Kayıt sayfasına yönlendiriliyorsunuz", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(LoginSignUp.this, Signup.class);
                 startActivity(intent);
+                finish();
             }
         });
-        if (firebaseUser != null) {
-            List<? extends UserInfo> providerData = firebaseUser.getProviderData();
-
+        if (mAuth.getCurrentUser()!=null){
+            System.out.println("1. if içinde ve current user durumu: " + mAuth.getCurrentUser());
+            List<? extends UserInfo> providerData = mAuth.getCurrentUser().getProviderData();
             for (UserInfo userInfo : providerData) {
-                String providerId = userInfo.getProviderId();
-
-                if (providerId.equals(GoogleAuthProvider.PROVIDER_ID)) {
-                    // User signed in with Google, redirect to profile activity for Google sign-in
-                    startActivity(new Intent(LoginSignUp.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                    break; // No need to check other providers
-                }else if(providerId.equals(EmailAuthProvider.PROVIDER_ID)) {
-                    startActivity(new Intent(LoginSignUp.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                }
+                providerId = userInfo.getProviderId();
             }
-        } else {
-            // User not signed in, handle accordingly
-            // ...
+            mAuth.getCurrentUser().reload();
+            if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().isEmailVerified() == true && providerId.equals(EmailAuthProvider.PROVIDER_ID)) {
+                System.out.println("2. if içinde ve current user durumu: " + mAuth.getCurrentUser());
+                startActivity(new Intent(LoginSignUp.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            } else if (mAuth.getCurrentUser() != null && providerId.equals(GoogleAuthProvider.PROVIDER_ID)) {
+                System.out.println("else if içinde ve current user durumu: " + mAuth.getCurrentUser());
+                startActivity(new Intent(LoginSignUp.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
         }
+
     }
 
     @Override
@@ -168,7 +170,7 @@ public class LoginSignUp extends AppCompatActivity {
                         // When sign in account is not equal to null initialize auth credential
                         AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
                         // Check credential
-                        firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        mAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 // Check condition

@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ae.Adapters.MedicineAdapter;
 import com.ae.DAO.InformationCallback;
 import com.ae.DAO.MedicineDAO;
 import com.ae.Models.Medicine;

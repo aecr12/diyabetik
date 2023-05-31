@@ -1,4 +1,4 @@
-package com.ae.diyabetik;
+package com.ae.Adapters;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -10,22 +10,26 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-import com.ae.DAO.LunchDAO;
-import com.ae.Models.Lunch;
+
+import com.ae.DAO.DinnerDAO;
+import com.ae.Models.Dinner;
+import com.ae.diyabetik.R;
+import com.ae.diyabetik.SwipeToDeleteCallback;
+
 import java.util.ArrayList;
 
-public class LunchAdapter extends RecyclerView.Adapter<LunchAdapter.ViewHolder> {
-
-    private ArrayList<Lunch> lunchList;
+public class DinnerAdapter extends RecyclerView.Adapter<DinnerAdapter.ViewHolder> {
+    private ArrayList<Dinner> dinnerList;
     private Context context;
-    LunchDAO lunchDAO = new LunchDAO();
-    EditText lunchNameEditText;
+    DinnerDAO dinnerDAO = new DinnerDAO();
+    EditText dinnerNameEditText;
 
-    public LunchAdapter(ArrayList<Lunch> lunchList, Context context) {
-        this.lunchList = lunchList;
+    public DinnerAdapter(ArrayList<Dinner> dinnerList, Context context) {
+        this.dinnerList = dinnerList;
         this.context = context;
     }
 
@@ -34,10 +38,10 @@ public class LunchAdapter extends RecyclerView.Adapter<LunchAdapter.ViewHolder> 
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
             int position = viewHolder.getAdapterPosition();
-            Lunch lunch = lunchList.get(position);
-            String lunchId = lunch.getId();
-            lunchDAO.delete(lunchId);
-            lunchList.remove(position);
+            Dinner dinner = dinnerList.get(position);
+            String dinnerId = dinner.getId();
+            dinnerDAO.delete(dinnerId);
+            dinnerList.remove(position);
             notifyItemRemoved(position);
         }
     };
@@ -50,21 +54,21 @@ public class LunchAdapter extends RecyclerView.Adapter<LunchAdapter.ViewHolder> 
     }
 
     @Override
-    public LunchAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.breakfast_food_card, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(LunchAdapter.ViewHolder holder, int position) {
-        Lunch lunch = lunchList.get(position);
-        holder.foodNameTextView.setText(String.valueOf(lunch.getName()));
-        holder.date.setText(lunch.getDate());
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        Dinner dinner = dinnerList.get(position);
+        holder.foodNameTextView.setText(String.valueOf(dinner.getName()));
+        holder.date.setText(dinner.getDate());
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                showUpdateLunchDialog(lunch, position);
+                showUpdateDinnerDialog(dinner, position);
                 return true;
             }
         });
@@ -72,7 +76,7 @@ public class LunchAdapter extends RecyclerView.Adapter<LunchAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return lunchList.size();
+        return dinnerList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -86,21 +90,21 @@ public class LunchAdapter extends RecyclerView.Adapter<LunchAdapter.ViewHolder> 
         }
     }
 
-    private void showUpdateLunchDialog(Lunch lunch, int adapterPosition) {
+    private void showUpdateDinnerDialog(Dinner dinner, int adapterPosition) {
 
         Dialog dialog1 = new Dialog(context);
         dialog1.setContentView(R.layout.dialog_update_meal);
-        lunchNameEditText = dialog1.findViewById(R.id.editTextFoodName);
+        dinnerNameEditText = dialog1.findViewById(R.id.editTextFoodName);
         Button updateButton = dialog1.findViewById(R.id.buttonUpdate);
         Button cancelButton = dialog1.findViewById(R.id.buttonCancel);
 
-        lunchNameEditText.setText(lunch.getName());
+        dinnerNameEditText.setText(dinner.getName());
 
 
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateLunchName(lunch, adapterPosition);
+                updateDinnerName(dinner, adapterPosition);
                 dialog1.dismiss();
             }
         });
@@ -117,11 +121,11 @@ public class LunchAdapter extends RecyclerView.Adapter<LunchAdapter.ViewHolder> 
                 (int) (0.55 * Resources.getSystem().getDisplayMetrics().heightPixels));
     }
 
-    private void updateLunchName(Lunch lunchToUpdate, int adapterPosition) {
-        String lunchName = lunchNameEditText.getText().toString();
-        lunchToUpdate.setName(lunchName);
+    private void updateDinnerName(Dinner dinnerToUpdate, int adapterPosition) {
+        String dinnerName = dinnerNameEditText.getText().toString();
+        dinnerToUpdate.setName(dinnerName);
 
-        lunchDAO.update(lunchToUpdate);
+        dinnerDAO.update(dinnerToUpdate);
         notifyItemChanged(adapterPosition);
     }
 }

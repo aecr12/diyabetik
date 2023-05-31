@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ae.Adapters.BloodSugarAdapter;
 import com.ae.DAO.BloodSugarDAO;
 import com.ae.DAO.InformationCallback;
 import com.ae.Models.BloodSugar;

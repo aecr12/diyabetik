@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ae.Adapters.TensionAdapter;
 import com.ae.DAO.InformationCallback;
 import com.ae.DAO.TensionDAO;
 import com.ae.Models.Tension;

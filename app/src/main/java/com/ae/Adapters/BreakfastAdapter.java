@@ -1,4 +1,4 @@
-package com.ae.diyabetik;
+package com.ae.Adapters;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -15,33 +15,33 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ae.DAO.SnackDAO;
-
-import com.ae.Models.Snack;
+import com.ae.DAO.BreakfastDAO;
+import com.ae.Models.Breakfast;
+import com.ae.diyabetik.R;
+import com.ae.diyabetik.SwipeToDeleteCallback;
 
 import java.util.ArrayList;
 
-public class SnackAdapter extends RecyclerView.Adapter<SnackAdapter.ViewHolder>{
+public class BreakfastAdapter extends RecyclerView.Adapter<BreakfastAdapter.ViewHolder> {
 
-    private ArrayList<Snack> snackList;
+    private ArrayList<Breakfast> breakfastList;
     private Context context;
-    SnackDAO snackDAO = new SnackDAO();
-    EditText snackNameEditText;
+    BreakfastDAO breakfastDAO = new BreakfastDAO();
+    EditText breakfastNameEditText;
 
-    public SnackAdapter(ArrayList<Snack> snackList, Context context) {
-        this.snackList = snackList;
-        this.context = context;
-    }
-
+     public BreakfastAdapter(ArrayList<Breakfast> breakfastList, Context context){
+         this.breakfastList = breakfastList;
+         this.context = context;
+     }
     private final ItemTouchHelper.Callback swipeToDeleteCallback = new SwipeToDeleteCallback() {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
             int position = viewHolder.getAdapterPosition();
-            Snack snack = snackList.get(position);
-            String snackId = snack.getId();
-            snackDAO.delete(snackId);
-            snackList.remove(position);
+            Breakfast breakfast = breakfastList.get(position);
+            String breakfastId = breakfast.getId();
+            breakfastDAO.delete(breakfastId);
+            breakfastList.remove(position);
             notifyItemRemoved(position);
         }
     };
@@ -52,33 +52,29 @@ public class SnackAdapter extends RecyclerView.Adapter<SnackAdapter.ViewHolder>{
         super.onAttachedToRecyclerView(recyclerView);
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.breakfast_food_card, parent, false);
         return new ViewHolder(view);
     }
-
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Snack snack = snackList.get(position);
-        holder.foodNameTextView.setText(String.valueOf(snack.getName()));
-        holder.date.setText(snack.getDate());
+    public void onBindViewHolder(BreakfastAdapter.ViewHolder holder, int position) {
+        Breakfast breakfast = breakfastList.get(position);
+        holder.foodNameTextView.setText(String.valueOf(breakfast.getName()));
+        holder.date.setText(breakfast.getDate());
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                showUpdateSnackDialog(snack, position);
+                showUpdateBreakfastDialog(breakfast, position);
                 return true;
             }
         });
     }
-
     @Override
     public int getItemCount() {
-        return snackList.size();
+        return breakfastList.size();
     }
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView foodNameTextView;
         public TextView date;
@@ -89,23 +85,22 @@ public class SnackAdapter extends RecyclerView.Adapter<SnackAdapter.ViewHolder>{
             date = itemView.findViewById(R.id.date);
         }
     }
-
-    private void showUpdateSnackDialog(Snack snack, int adapterPosition) {
+    private void showUpdateBreakfastDialog(Breakfast breakfast, int adapterPosition) {
 
         Dialog dialog1 = new Dialog(context);
         dialog1.setContentView(R.layout.dialog_update_meal);
-        snackNameEditText = dialog1.findViewById(R.id.editTextFoodName);
+        breakfastNameEditText = dialog1.findViewById(R.id.editTextFoodName);
         Button updateButton = dialog1.findViewById(R.id.buttonUpdate);
         Button cancelButton = dialog1.findViewById(R.id.buttonCancel);
 
-        snackNameEditText.setText(snack.getName());
+        breakfastNameEditText.setText(breakfast.getName());
 
 
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateSnackName(snack, adapterPosition);
-                dialog1.dismiss();
+             updateBreakfastName(breakfast,adapterPosition);
+             dialog1.dismiss();
             }
         });
 
@@ -120,13 +115,11 @@ public class SnackAdapter extends RecyclerView.Adapter<SnackAdapter.ViewHolder>{
         window.setLayout((int) (0.8 * Resources.getSystem().getDisplayMetrics().widthPixels),
                 (int) (0.55 * Resources.getSystem().getDisplayMetrics().heightPixels));
     }
+    private void updateBreakfastName(Breakfast breakfastToUpdate, int adapterPosition){
+        String breakfastName = breakfastNameEditText.getText().toString();
+        breakfastToUpdate.setName(breakfastName);
 
-    private void updateSnackName(Snack snackToUpdate, int adapterPosition) {
-        String snackName = snackNameEditText.getText().toString();
-        snackToUpdate.setName(snackName);
-
-        snackDAO.update(snackToUpdate);
+        breakfastDAO.update(breakfastToUpdate);
         notifyItemChanged(adapterPosition);
     }
-
 }

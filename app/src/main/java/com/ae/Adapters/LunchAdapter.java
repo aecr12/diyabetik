@@ -1,4 +1,4 @@
-package com.ae.diyabetik;
+package com.ae.Adapters;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -10,38 +10,37 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.ae.DAO.BreakfastDAO;
-import com.ae.Models.BloodSugar;
-import com.ae.Models.Breakfast;
+import com.ae.DAO.LunchDAO;
+import com.ae.Models.Lunch;
+import com.ae.diyabetik.R;
+import com.ae.diyabetik.SwipeToDeleteCallback;
 
 import java.util.ArrayList;
 
-public class BreakfastAdapter extends RecyclerView.Adapter<BreakfastAdapter.ViewHolder> {
+public class LunchAdapter extends RecyclerView.Adapter<LunchAdapter.ViewHolder> {
 
-    private ArrayList<Breakfast> breakfastList;
+    private ArrayList<Lunch> lunchList;
     private Context context;
-    BreakfastDAO breakfastDAO = new BreakfastDAO();
-    EditText breakfastNameEditText;
+    LunchDAO lunchDAO = new LunchDAO();
+    EditText lunchNameEditText;
 
-     public BreakfastAdapter(ArrayList<Breakfast> breakfastList, Context context){
-         this.breakfastList = breakfastList;
-         this.context = context;
-     }
+    public LunchAdapter(ArrayList<Lunch> lunchList, Context context) {
+        this.lunchList = lunchList;
+        this.context = context;
+    }
+
     private final ItemTouchHelper.Callback swipeToDeleteCallback = new SwipeToDeleteCallback() {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
             int position = viewHolder.getAdapterPosition();
-            Breakfast breakfast = breakfastList.get(position);
-            String breakfastId = breakfast.getId();
-            breakfastDAO.delete(breakfastId);
-            breakfastList.remove(position);
+            Lunch lunch = lunchList.get(position);
+            String lunchId = lunch.getId();
+            lunchDAO.delete(lunchId);
+            lunchList.remove(position);
             notifyItemRemoved(position);
         }
     };
@@ -52,29 +51,33 @@ public class BreakfastAdapter extends RecyclerView.Adapter<BreakfastAdapter.View
         super.onAttachedToRecyclerView(recyclerView);
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
+
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public LunchAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.breakfast_food_card, parent, false);
         return new ViewHolder(view);
     }
+
     @Override
-    public void onBindViewHolder(BreakfastAdapter.ViewHolder holder, int position) {
-        Breakfast breakfast = breakfastList.get(position);
-        holder.foodNameTextView.setText(String.valueOf(breakfast.getName()));
-        holder.date.setText(breakfast.getDate());
+    public void onBindViewHolder(LunchAdapter.ViewHolder holder, int position) {
+        Lunch lunch = lunchList.get(position);
+        holder.foodNameTextView.setText(String.valueOf(lunch.getName()));
+        holder.date.setText(lunch.getDate());
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                showUpdateBreakfastDialog(breakfast, position);
+                showUpdateLunchDialog(lunch, position);
                 return true;
             }
         });
     }
+
     @Override
     public int getItemCount() {
-        return breakfastList.size();
+        return lunchList.size();
     }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView foodNameTextView;
         public TextView date;
@@ -85,22 +88,23 @@ public class BreakfastAdapter extends RecyclerView.Adapter<BreakfastAdapter.View
             date = itemView.findViewById(R.id.date);
         }
     }
-    private void showUpdateBreakfastDialog(Breakfast breakfast, int adapterPosition) {
+
+    private void showUpdateLunchDialog(Lunch lunch, int adapterPosition) {
 
         Dialog dialog1 = new Dialog(context);
         dialog1.setContentView(R.layout.dialog_update_meal);
-        breakfastNameEditText = dialog1.findViewById(R.id.editTextFoodName);
+        lunchNameEditText = dialog1.findViewById(R.id.editTextFoodName);
         Button updateButton = dialog1.findViewById(R.id.buttonUpdate);
         Button cancelButton = dialog1.findViewById(R.id.buttonCancel);
 
-        breakfastNameEditText.setText(breakfast.getName());
+        lunchNameEditText.setText(lunch.getName());
 
 
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             updateBreakfastName(breakfast,adapterPosition);
-             dialog1.dismiss();
+                updateLunchName(lunch, adapterPosition);
+                dialog1.dismiss();
             }
         });
 
@@ -115,11 +119,12 @@ public class BreakfastAdapter extends RecyclerView.Adapter<BreakfastAdapter.View
         window.setLayout((int) (0.8 * Resources.getSystem().getDisplayMetrics().widthPixels),
                 (int) (0.55 * Resources.getSystem().getDisplayMetrics().heightPixels));
     }
-    private void updateBreakfastName(Breakfast breakfastToUpdate, int adapterPosition){
-        String breakfastName = breakfastNameEditText.getText().toString();
-        breakfastToUpdate.setName(breakfastName);
 
-        breakfastDAO.update(breakfastToUpdate);
+    private void updateLunchName(Lunch lunchToUpdate, int adapterPosition) {
+        String lunchName = lunchNameEditText.getText().toString();
+        lunchToUpdate.setName(lunchName);
+
+        lunchDAO.update(lunchToUpdate);
         notifyItemChanged(adapterPosition);
     }
 }

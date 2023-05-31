@@ -1,27 +1,20 @@
 package com.ae.diyabetik;
 
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ae.Adapters.DinnerAdapter;
 import com.ae.DAO.DinnerDAO;
 import com.ae.DAO.InformationCallback;
-import com.ae.DAO.LunchDAO;
 import com.ae.Models.Dinner;
-import com.ae.Models.Lunch;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;

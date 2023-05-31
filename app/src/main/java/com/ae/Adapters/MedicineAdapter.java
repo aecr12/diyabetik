@@ -1,4 +1,4 @@
-package com.ae.diyabetik;
+package com.ae.Adapters;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -25,9 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ae.DAO.MedicineDAO;
 import com.ae.Models.Medicine;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.ae.diyabetik.R;
+import com.ae.diyabetik.SwipeToDeleteCallback;
 
 import java.util.ArrayList;
 import java.util.Calendar;

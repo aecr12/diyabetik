@@ -1,10 +1,9 @@
-package com.ae.diyabetik;
+package com.ae.Adapters;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -20,28 +19,25 @@ import android.widget.TimePicker;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.ae.DAO.BloodSugarDAO;
-import com.ae.Models.BloodSugar;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.ae.DAO.TensionDAO;
+import com.ae.Models.Tension;
+import com.ae.diyabetik.R;
+import com.ae.diyabetik.SwipeToDeleteCallback;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
+public class TensionAdapter extends RecyclerView.Adapter<TensionAdapter.ViewHolder> implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
-public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.ViewHolder> implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-    private ArrayList<BloodSugar> bloodSugarList;
+    private ArrayList<Tension> tensionList;
     private int year, month, day, hour, minute;
     private Context context;
-    EditText bloodSugarValueEditText;
-    EditText dateEditText;
+    private EditText systolicEditText, diastolicEditText, dateEditText;
+    TensionDAO tensionDAO = new TensionDAO();
 
-    BloodSugarDAO bloodSugarDAO = new BloodSugarDAO();
-    public BloodSugarAdapter(ArrayList<BloodSugar> bloodSugarList, Context context) {
+    public TensionAdapter(ArrayList<Tension> tensionList, Context context) {
         this.context = context;
-        this.bloodSugarList = bloodSugarList;
+        this.tensionList = tensionList;
     }
 
     private final ItemTouchHelper.Callback swipeToDeleteCallback = new SwipeToDeleteCallback() {
@@ -49,10 +45,10 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
             int position = viewHolder.getAdapterPosition();
-            BloodSugar bloodSugar = bloodSugarList.get(position);
-            String bloodSugarId = bloodSugar.getId();
-            bloodSugarDAO.delete(bloodSugarId);
-            bloodSugarList.remove(position);
+            Tension tension = tensionList.get(position);
+            String tensionId = tension.getId();
+            tensionDAO.delete(tensionId);
+            tensionList.remove(position);
             notifyItemRemoved(position);
         }
     };
@@ -64,40 +60,30 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_blood_sugar, parent, false);
-        return new ViewHolder(view);
+    public TensionAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tension, parent, false);
+        return new TensionAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        BloodSugar bloodSugar = bloodSugarList.get(position);
-        holder.bloodSugarValueTextView.setText(String.valueOf(bloodSugar.getBloodSugarValue()));
-        holder.dateTextView.setText(bloodSugar.getDate());
+    public void onBindViewHolder(TensionAdapter.ViewHolder holder, int position) {
+        Tension tension = tensionList.get(position);
+        holder.systolicTextView.setText(String.valueOf(tension.getSystolic()));
+        holder.diastolicTextView.setText(String.valueOf(tension.getDiastolic()));
+        holder.dateTextView.setText(tension.getDate());
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                showUpdateBloodSugarDialog(bloodSugar, position);
+                showUpdateTensionDialog(tension, position);
                 return true;
             }
         });
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                BloodSugar bloodSugar1 = bloodSugarList.get(position);
-                String selectedValue = String.valueOf(bloodSugar1.getBloodSugarValue());
-                Intent intent = new Intent(context,BloodSugarWithHBA1CDiagram.class);
-                intent.putExtra("selectedValue",Float.parseFloat(selectedValue));
-                context.startActivity(intent);
-            }
-        });
-
     }
 
     @Override
     public int getItemCount() {
-        return bloodSugarList.size();
+        return tensionList.size();
     }
 
     @Override
@@ -121,12 +107,14 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView bloodSugarValueTextView;
+        public TextView systolicTextView;
+        public TextView diastolicTextView;
         public TextView dateTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            bloodSugarValueTextView = itemView.findViewById(R.id.textViewBloodSugarValue);
+            systolicTextView = itemView.findViewById(R.id.textViewSystolic);
+            diastolicTextView = itemView.findViewById(R.id.textViewDiastolic);
             dateTextView = itemView.findViewById(R.id.textViewDate);
         }
     }
@@ -142,18 +130,20 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
         DatePickerDialog datePickerDialog = new DatePickerDialog(context, this, year, month, day);
         datePickerDialog.show();
     }
-    private void showUpdateBloodSugarDialog(BloodSugar bloodSugar, int adapterPosition) {
+    private void showUpdateTensionDialog(Tension tension, int adapterPosition) {
         Dialog dialog = new Dialog(context);
-        dialog.setContentView(R.layout.dialog_update_blood_sugar);
-        bloodSugarValueEditText = dialog.findViewById(R.id.editTextBloodSugarValue);
+        dialog.setContentView(R.layout.dialog_update_tension);
+        systolicEditText = dialog.findViewById(R.id.editTextSystolic);
+        diastolicEditText = dialog.findViewById(R.id.editTextDiastolic);
         dateEditText = dialog.findViewById(R.id.editTextDate);
         dateEditText.setEnabled(false);
         ImageButton calendarImageButton = dialog.findViewById(R.id.imageButtonCalendar);
         Button updateButton = dialog.findViewById(R.id.buttonUpdate);
         Button cancelButton = dialog.findViewById(R.id.buttonCancel);
 
-        bloodSugarValueEditText.setText(String.valueOf(bloodSugar.getBloodSugarValue()));
-        dateEditText.setText(bloodSugar.getDate());
+        systolicEditText.setText(String.valueOf(tension.getSystolic()));
+        diastolicEditText.setText(String.valueOf(tension.getDiastolic()));
+        dateEditText.setText(tension.getDate());
 
         calendarImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,7 +155,7 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateBloodSugar(bloodSugar, adapterPosition);
+                updateTension(tension, adapterPosition);
                 dialog.dismiss();
             }
         });
@@ -183,15 +173,18 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
                 (int) (0.55 * Resources.getSystem().getDisplayMetrics().heightPixels));
     }
 
-    private void updateBloodSugar(BloodSugar bloodSugarToUpdate, int adapterPosition) {
+    private void updateTension(Tension tensionToUpdate, int adapterPosition) {
 
-        String bloodSugarValue = bloodSugarValueEditText.getText().toString();
+        String systolic = systolicEditText.getText().toString();
+        String diastolic = diastolicEditText.getText().toString();
         String date = dateEditText.getText().toString();
 
-        bloodSugarToUpdate.setBloodSugarValue(Integer.parseInt(bloodSugarValue));
-        bloodSugarToUpdate.setDate(date);
+        tensionToUpdate.setSystolic(Integer.parseInt(systolic));
+        tensionToUpdate.setDiastolic(Integer.parseInt(diastolic));
+        tensionToUpdate.setDate(date);
 
-        bloodSugarDAO.update(bloodSugarToUpdate);
+        tensionDAO.update(tensionToUpdate);
         notifyItemChanged(adapterPosition);
     }
+
 }

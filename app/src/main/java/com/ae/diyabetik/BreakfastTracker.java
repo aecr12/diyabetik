@@ -1,10 +1,7 @@
 package com.ae.diyabetik;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ae.Adapters.BreakfastAdapter;
 import com.ae.DAO.BreakfastDAO;
 import com.ae.DAO.InformationCallback;
 import com.ae.Models.Breakfast;
