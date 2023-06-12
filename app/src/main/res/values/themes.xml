@@ -23,7 +23,4 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Diyabetik.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.Diyabetik.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

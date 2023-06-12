@@ -40,17 +40,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/calendar" />
-    <Button
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Güncelle"
-        android:background="@drawable/rounded_button"
-        android:id="@+id/buttonUpdate"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:background="@drawable/rounded_button"
-        android:text="İptal"
-        android:id="@+id/buttonCancel"/>
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_below="@id/imageButtonCalendar">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Güncelle"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/rounded_button"
+            android:id="@+id/buttonUpdate"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button"
+            android:text="İptal"
+            android:id="@+id/buttonCancel"/>
+    </LinearLayout>
 </LinearLayout>

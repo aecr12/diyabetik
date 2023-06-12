@@ -22,19 +22,27 @@
         android:hint="Yeni Ürün Adı"
         android:inputType="text" />
 
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editTextFoodName"
-        android:text="Güncelle"
-        android:layout_margin="5dp"
-        android:background="@drawable/rounded_button"
-        android:id="@+id/buttonUpdate"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonUpdate"
-        android:background="@drawable/rounded_button"
-        android:text="İptal"
-        android:id="@+id/buttonCancel"/>
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_below="@id/editTextFoodName">
+
+        <Button
+            android:id="@+id/buttonUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button"
+            android:text="Güncelle"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button"
+            android:text="İptal"
+            android:id="@+id/buttonCancel"/>
+    </LinearLayout>
+
 </RelativeLayout>

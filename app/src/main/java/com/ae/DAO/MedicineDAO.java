@@ -16,7 +16,6 @@ import java.util.List;
 public class MedicineDAO implements IDAO<Medicine> {
 
     private String medicineId;
-    private ArrayList<Medicine> medicineArrayList;
 
     @Override
     public String create(Medicine medicine) {

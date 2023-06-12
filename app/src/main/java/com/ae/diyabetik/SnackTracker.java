@@ -1,7 +1,9 @@
 package com.ae.diyabetik;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -46,8 +48,25 @@ public class SnackTracker extends AppCompatActivity {
         snackAdapter = new SnackAdapter(snackList, this);
         recyclerView1.setLayoutManager(new LinearLayoutManager(this));
         recyclerView1.setAdapter(snackAdapter);
-
+        fab.setVisibility(View.INVISIBLE);
         loadSnackData();
+
+        editTextSnack.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    fab.setVisibility(View.VISIBLE);
+                } else {
+                    fab.setVisibility(View.INVISIBLE);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

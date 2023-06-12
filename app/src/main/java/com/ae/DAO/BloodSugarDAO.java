@@ -12,15 +12,16 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class BloodSugarDAO implements IDAO<BloodSugar> {
 
     private String bloodSugarId;
-    private ArrayList<BloodSugar> bloodSugarArrayList;
 
-    @Override
     public String create(BloodSugar bloodSugar) {
-        DatabaseReference dbReference = database.getReference("blood_sugar_data/"+uid).push();
+        DatabaseReference dbReference = database.getReference("blood_sugar_data/" + uid).push();
         bloodSugarId = dbReference.getKey();
         bloodSugar.setId(bloodSugarId);
         dbReference.setValue(bloodSugar);

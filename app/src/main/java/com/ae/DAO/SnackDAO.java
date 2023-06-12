@@ -16,8 +16,6 @@ import java.util.List;
 public class SnackDAO implements IDAO<Snack> {
 
     String foodId;
-    ArrayList<Snack> snackArrayList;
-
     @Override
     public String create(Snack snack) {
         DatabaseReference dbReference = database.getReference("meals/snack_data/"+uid).push();
@@ -40,7 +38,7 @@ public class SnackDAO implements IDAO<Snack> {
                         snack.setId(foodId);
                         snackList.add(snack);
                     }
-                    informationCallback.onInformationLoaded(snackArrayList);
+                    informationCallback.onInformationLoaded(snackList);
                 }
             }
 
