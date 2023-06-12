@@ -46,6 +46,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.tom-roush:pdfbox-android:2.0.27.0'
     implementation 'com.github.mhiew:android-pdf-viewer:3.2.0-beta.1'
@@ -69,7 +70,6 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.5.3'
     implementation 'com.google.firebase:firebase-messaging-ktx:23.1.2'
     implementation 'com.google.firebase:firebase-messaging:23.1.2'
-    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }

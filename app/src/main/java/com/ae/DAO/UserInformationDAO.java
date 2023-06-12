@@ -40,26 +40,28 @@ public class UserInformationDAO implements IDAO<UserInformation> {
     @Override
     public List<UserInformation> read(List<UserInformation> userInformationList, InformationCallback informationCallback) {
         DatabaseReference databaseReference = database.getReference().child("user_informations").child(uid);
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        userInformationId = dataSnapshot.getKey();
-                        UserInformation userInformation = dataSnapshot.getValue(UserInformation.class);
-                        userInformation.setId(userInformationId);
-                        userInformationList.add(userInformation);
+        if (databaseReference!=null){
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            userInformationId = dataSnapshot.getKey();
+                            UserInformation userInformation = dataSnapshot.getValue(UserInformation.class);
+                            userInformation.setId(userInformationId);
+                            userInformationList.add(userInformation);
+                        }
+                        informationCallback.onInformationLoaded(userInformationList);
                     }
-                    informationCallback.onInformationLoaded(userInformationList);
+
                 }
 
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+                }
+            });
+        }
         return userInformationList;
     }
 

@@ -10,18 +10,20 @@
         android:id="@+id/mainCardContainerLinerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/header"
             android:orientation="horizontal"
-            android:layout_marginTop="35dp">
+            android:layout_marginTop="10dp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewPersonalInformations"
-                android:layout_width="144dp"
-                android:layout_height="152dp"
+                android:layout_width="129.6dp"
+                android:layout_height="139.8dp"
                 android:backgroundTint="@color/colorMainActivityCards"
                 android:clickable="true"
                 android:elevation="5dp"
@@ -39,8 +41,8 @@
 
                     <ImageView
                         android:id="@+id/imageViewPersonalInformations"
-                        android:layout_width="144dp"
-                        android:layout_height="100dp"
+                        android:layout_width="136.8dp"
+                        android:layout_height="95dp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_personal_informations" />
 
@@ -58,7 +60,7 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="139.8dp"
                 android:backgroundTint="@color/colorMainActivityCards"
                 android:clickable="true"
                 android:elevation="5dp"
@@ -80,7 +82,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
                         android:textSize="16dp"
-                        android:text="Boy: 180"/>
+                        android:text="Boy:  ---"/>
 
                     <TextView
                         android:id="@+id/textViewWeight"
@@ -88,7 +90,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
                         android:textSize="16dp"
-                        android:text="Kilo: 180"/>
+                        android:text="Kilo: ---"/>
 
                     <TextView
                         android:id="@+id/textViewWaist"
@@ -96,7 +98,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
                         android:textSize="16dp"
-                        android:text="Bel Çevresi: 180"/>
+                        android:text="Bel Çevresi:  ---"/>
 
                     <TextView
                         android:id="@+id/textViewHba1c"
@@ -104,10 +106,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
                         android:textSize="16dp"
-                        android:text="HbA1c Değeri (%): 180"/>
-
-
-
+                        android:text="HbA1c Değeri (%): ---"/>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -117,7 +116,8 @@
         <RelativeLayout
             android:id="@+id/containerLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header"
             android:gravity="bottom"
             android:orientation="vertical">
 
@@ -125,14 +125,14 @@
                 android:id="@+id/firstRow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="3dp"
+                android:layout_marginVertical="1dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardViewTension"
-                    android:layout_width="144dp"
-                    android:layout_height="152dp"
+                    android:layout_width="129.6dp"
+                    android:layout_height="139.8dp"
                     android:layout_marginHorizontal="15dp"
                     android:backgroundTint="@color/colorMainActivityCards"
                     android:clickable="true"
@@ -151,8 +151,8 @@
 
                         <ImageView
                             android:id="@+id/imageViewTension"
-                            android:layout_width="144dp"
-                            android:layout_height="100dp"
+                            android:layout_width="136.8dp"
+                            android:layout_height="95dp"
                             android:layout_gravity="center"
                             android:src="@drawable/ic_tension" />
 
@@ -163,7 +163,7 @@
                             android:gravity="center"
                             android:text="Tansiyon Kayıt"
                             android:textColor="@color/white"
-                            android:textSize="16dp"
+                            android:textSize="14dp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -171,8 +171,8 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardViewPedometer"
-                    android:layout_width="144dp"
-                    android:layout_height="152dp"
+                    android:layout_width="129.6dp"
+                    android:layout_height="139.8dp"
                     android:layout_marginHorizontal="15dp"
                     android:backgroundTint="@color/colorMainActivityCards"
                     android:clickable="true"
@@ -191,8 +191,8 @@
 
                         <ImageView
                             android:id="@+id/imageViewPedometer"
-                            android:layout_width="144dp"
-                            android:layout_height="100dp"
+                            android:layout_width="136.8dp"
+                            android:layout_height="95dp"
                             android:layout_gravity="center"
                             android:src="@drawable/ic_pedometer" />
 
@@ -203,7 +203,7 @@
                             android:gravity="center"
                             android:text="Adımsayar"
                             android:textColor="@color/white"
-                            android:textSize="16dp"
+                            android:textSize="14dp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -216,14 +216,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/firstRow"
-                android:layout_marginVertical="3dp"
+                android:layout_marginVertical="1dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardViewBloodSugarTracker"
-                    android:layout_width="144dp"
-                    android:layout_height="152dp"
+                    android:layout_width="129.6dp"
+                    android:layout_height="139.8dp"
                     android:layout_marginHorizontal="15dp"
                     android:backgroundTint="@color/colorMainActivityCards"
                     android:clickable="true"
@@ -242,8 +242,8 @@
 
                         <ImageView
                             android:id="@+id/imageViewBSugarNotes"
-                            android:layout_width="144dp"
-                            android:layout_height="100dp"
+                            android:layout_width="136.8dp"
+                            android:layout_height="95dp"
                             android:layout_gravity="center"
                             android:src="@drawable/ic_b_sugar_notes" />
 
@@ -254,7 +254,7 @@
                             android:gravity="center"
                             android:text="Kan Şekeri Kayıt"
                             android:textColor="@color/white"
-                            android:textSize="16dp"
+                            android:textSize="14dp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -262,8 +262,8 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardViewMedications"
-                    android:layout_width="144dp"
-                    android:layout_height="152dp"
+                    android:layout_width="129.6dp"
+                    android:layout_height="139.8dp"
                     android:layout_marginHorizontal="15dp"
                     android:backgroundTint="@color/colorMainActivityCards"
                     android:clickable="true"
@@ -282,8 +282,8 @@
 
                         <ImageView
                             android:id="@+id/imageViewMedications"
-                            android:layout_width="144dp"
-                            android:layout_height="100dp"
+                            android:layout_width="136.8dp"
+                            android:layout_height="95dp"
                             android:layout_gravity="center"
                             android:src="@drawable/ic_medications" />
 
@@ -294,7 +294,7 @@
                             android:gravity="center"
                             android:text="İlaç Takibi"
                             android:textColor="@color/white"
-                            android:textSize="16dp"
+                            android:textSize="14dp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -307,14 +307,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/secondRow"
-                android:layout_marginVertical="3dp"
+                android:layout_marginVertical="1dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardViewMealTracker"
-                    android:layout_width="144dp"
-                    android:layout_height="152dp"
+                    android:layout_width="129.6dp"
+                    android:layout_height="139.8dp"
                     android:layout_marginHorizontal="15dp"
                     android:backgroundTint="@color/colorMainActivityCards"
                     android:clickable="true"
@@ -333,8 +333,8 @@
 
                         <ImageView
                             android:id="@+id/imageViewMeals"
-                            android:layout_width="144dp"
-                            android:layout_height="100dp"
+                            android:layout_width="136.8dp"
+                            android:layout_height="95dp"
                             android:layout_gravity="center"
                             android:src="@drawable/ic_meals" />
 
@@ -345,7 +345,7 @@
                             android:gravity="center"
                             android:text="Öğün Takibi"
                             android:textColor="@color/white"
-                            android:textSize="16dp"
+                            android:textSize="14dp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -353,8 +353,8 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardViewTreatmentChoices"
-                    android:layout_width="144dp"
-                    android:layout_height="152dp"
+                    android:layout_width="129.6dp"
+                    android:layout_height="139.8dp"
                     android:layout_marginHorizontal="15dp"
                     android:backgroundTint="@color/colorMainActivityCards"
                     android:clickable="true"
@@ -373,8 +373,8 @@
 
                         <ImageView
                             android:id="@+id/imageViewTreatments"
-                            android:layout_width="144dp"
-                            android:layout_height="100dp"
+                            android:layout_width="136.8dp"
+                            android:layout_height="95dp"
                             android:layout_gravity="center"
                             android:src="@drawable/ic_treatments" />
 
@@ -385,7 +385,7 @@
                             android:gravity="center"
                             android:text="Tedavi Seçimi"
                             android:textColor="@color/white"
-                            android:textSize="16dp"
+                            android:textSize="14dp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -439,6 +439,5 @@
                     app:srcCompat="@drawable/ic_plus" />
             </LinearLayout>
         </RelativeLayout>
-
     </RelativeLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

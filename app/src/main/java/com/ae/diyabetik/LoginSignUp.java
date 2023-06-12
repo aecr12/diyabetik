@@ -36,18 +36,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.List;
 
 public class LoginSignUp extends AppCompatActivity {
-    TextView textViewSignUp;
-    Button buttonLogin;
-    Button buttonGoogleSignin;
-    Button buttonAppleSigin;
-    EditText editTextEmail;
-    EditText editTextPassword;
-    private String uid;
-    GoogleSignInClient googleSignInClient;
-    FirebaseAuth mAuth;
-    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    DatabaseReference dbRef = firebaseDatabase.getReference("users");
-    UserDAO userDAO = new UserDAO();
+    private TextView textViewSignUp;
+    private Button buttonLogin, buttonGoogleSignin;
+    private EditText editTextEmail, editTextPassword;
+    private GoogleSignInClient googleSignInClient;
+    private FirebaseAuth mAuth;
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference dbRef = firebaseDatabase.getReference("users");
+    private UserDAO userDAO = new UserDAO();
     private String providerId;
 
     @Override
@@ -105,17 +101,8 @@ public class LoginSignUp extends AppCompatActivity {
         buttonGoogleSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Initialize sign in intent
                 Intent intent = googleSignInClient.getSignInIntent();
-                // Start activity for result
                 startActivityForResult(intent, 100);
-            }
-        });
-        buttonAppleSigin = findViewById(R.id.buttonAppleSignIn);
-        buttonAppleSigin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
             }
         });
 
@@ -131,17 +118,14 @@ public class LoginSignUp extends AppCompatActivity {
             }
         });
         if (mAuth.getCurrentUser()!=null){
-            System.out.println("1. if içinde ve current user durumu: " + mAuth.getCurrentUser());
             List<? extends UserInfo> providerData = mAuth.getCurrentUser().getProviderData();
             for (UserInfo userInfo : providerData) {
                 providerId = userInfo.getProviderId();
             }
             mAuth.getCurrentUser().reload();
             if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().isEmailVerified() == true && providerId.equals(EmailAuthProvider.PROVIDER_ID)) {
-                System.out.println("2. if içinde ve current user durumu: " + mAuth.getCurrentUser());
                 startActivity(new Intent(LoginSignUp.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             } else if (mAuth.getCurrentUser() != null && providerId.equals(GoogleAuthProvider.PROVIDER_ID)) {
-                System.out.println("else if içinde ve current user durumu: " + mAuth.getCurrentUser());
                 startActivity(new Intent(LoginSignUp.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         }
@@ -151,43 +135,28 @@ public class LoginSignUp extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // Check condition
         if (requestCode == 100) {
-            // When request code is equal to 100 initialize task
             Task<GoogleSignInAccount> signInAccountTask = GoogleSignIn.getSignedInAccountFromIntent(data);
-            // check condition
             if (signInAccountTask.isSuccessful()) {
-                // When google sign in successful initialize string
                 String s = "Google sign in successful";
-                // Display Toast
                 displayToast(s);
-                // Initialize sign in account
                 try {
-                    // Initialize sign in account
                     GoogleSignInAccount googleSignInAccount = signInAccountTask.getResult(ApiException.class);
-                    // Check condition
                     if (googleSignInAccount != null) {
-                        // When sign in account is not equal to null initialize auth credential
                         AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
-                        // Check credential
                         mAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                // Check condition
                                 if (task.isSuccessful()) {
                                     User user = new User();
                                     String name = googleSignInAccount.getDisplayName();
                                     user.setId(task.getResult().getUser().getUid());
                                     user.setMail(task.getResult().getUser().getEmail());
-                                    user.setPassword(task.getResult().getUser().getUid() + name);
                                     user.setAdSoyad(name);
                                     userDAO.create(user);
-                                    // When task is successful redirect to profile activity display Toast
                                     startActivity(new Intent(LoginSignUp.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                                    displayToast("Firebase authentication successful");
                                 } else {
-                                    // When task is unsuccessful display Toast
-                                    displayToast("Authentication Failed :" + task.getException().getMessage());
+                                    displayToast("Doğrulama başarısız :" + task.getException().getMessage());
                                 }
                             }
                         });

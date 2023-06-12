@@ -67,23 +67,13 @@
             android:text="Google Hesabı ile Devam Et"
             android:textColor="@android:color/white" />
 
-        <!-- Apple hesabı ile devam et butonu -->
-        <Button
-            android:id="@+id/buttonAppleSignIn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/buttonGoogleSignIn"
-            android:layout_marginHorizontal="24dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/rounded_button"
-            android:text="Apple Hesabı ile Devam Et"
-            android:textColor="@android:color/white" />
+
         <!-- Hesap oluşturma metni -->
         <TextView
             android:id="@+id/textViewSignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/buttonAppleSignIn"
+            android:layout_below="@+id/buttonGoogleSignIn"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
             android:text="Hesabın yok mu? Kayıt Ol"
