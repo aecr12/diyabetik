@@ -1,10 +1,10 @@
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_vertical"
     android:background="@color/colorMainActivityBackground">
-
 
     <RelativeLayout
         android:id="@+id/mainCardContainerLinerLayout"
@@ -116,9 +116,9 @@
         <RelativeLayout
             android:id="@+id/containerLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_below="@id/header"
-            android:gravity="bottom"
+            android:gravity="center_vertical"
             android:orientation="vertical">
 
             <LinearLayout
@@ -395,6 +395,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_below="@id/thirdRow"
                 android:gravity="end"
                 android:orientation="horizontal">
@@ -403,7 +404,7 @@
                     android:id="@+id/fabLogout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="11dp"
+                    android:layout_margin="8dp"
                     android:visibility="invisible"
                     app:srcCompat="@drawable/ic_logout" />
 
@@ -411,7 +412,7 @@
                     android:id="@+id/fabPharmacy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="11dp"
+                    android:layout_margin="8dp"
                     android:visibility="invisible"
                     app:srcCompat="@drawable/ic_pharmacy" />
 
@@ -419,7 +420,7 @@
                     android:id="@+id/fabDiabetesBook"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="11dp"
+                    android:layout_margin="8dp"
                     android:visibility="invisible"
                     app:srcCompat="@drawable/ic_book" />
 
@@ -427,7 +428,7 @@
                     android:id="@+id/fabHospital"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="11dp"
+                    android:layout_margin="8dp"
                     android:visibility="invisible"
                     app:srcCompat="@drawable/ic_hospital" />
 
@@ -435,9 +436,9 @@
                     android:id="@+id/fab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="11dp"
+                    android:layout_margin="8dp"
                     app:srcCompat="@drawable/ic_plus" />
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
-</androidx.drawerlayout.widget.DrawerLayout>
+</LinearLayout>
