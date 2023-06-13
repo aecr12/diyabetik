@@ -55,7 +55,6 @@ public class LoginSignUp extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPassword);
 
         mAuth = FirebaseAuth.getInstance();
-
         // google girişi için gerekli sign in bilgileri
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("811713593939-3t5k4k822u98lld2fb0n7iccjolp45pf.apps.googleusercontent.com")
@@ -71,9 +70,9 @@ public class LoginSignUp extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (mAuth.getCurrentUser() != null) {
+                    mAuth.getCurrentUser().reload();
                     List<? extends UserInfo> providerData = mAuth.getCurrentUser().getProviderData();
                     for (UserInfo userInfo : providerData) {
-                        mAuth.getCurrentUser().reload();
                         String providerId = userInfo.getProviderId();
                         // email onaylandıysa kullanıcı sisteme dahil ediliyor
                         if (providerId.equals(EmailAuthProvider.PROVIDER_ID) && mAuth.getCurrentUser().isEmailVerified() == true) {
@@ -94,7 +93,24 @@ public class LoginSignUp extends AppCompatActivity {
                         }
                     }
                 } else {
-                    Toast.makeText(LoginSignUp.this, "Girdiğiniz bilgilere ilişkin Kullanıcı bulunamadı", Toast.LENGTH_LONG).show();
+                    /*Toast.makeText(LoginSignUp.this, "Girdiğiniz bilgilere ilişkin Kullanıcı bulunamadı", Toast.LENGTH_LONG).show();*/
+                    String email = editTextEmail.getText().toString();
+                    String password = editTextPassword.getText().toString();
+                    mAuth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    mAuth.getCurrentUser();
+                                    if (mAuth.getCurrentUser().isEmailVerified()){
+                                        Intent intent = new Intent(LoginSignUp.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }else {
+                                        Toast.makeText(LoginSignUp.this, "Lütfen mail adresinizi doğrulayın", Toast.LENGTH_LONG).show();
+                                    }
+                                } else {
+                                    Toast.makeText(LoginSignUp.this, "Giriş işlemi başarısız.", Toast.LENGTH_LONG).show();
+                                }
+                            });
                 }
 
             }
@@ -124,7 +140,7 @@ public class LoginSignUp extends AppCompatActivity {
         });
 
         // giriş yapmış kullanıcının tekrar giriş yapmaması için kontrol
-        if (mAuth.getCurrentUser()!=null){
+        if (mAuth.getCurrentUser() != null) {
             List<? extends UserInfo> providerData = mAuth.getCurrentUser().getProviderData();
             for (UserInfo userInfo : providerData) {
                 providerId = userInfo.getProviderId();
@@ -146,7 +162,7 @@ public class LoginSignUp extends AppCompatActivity {
         if (requestCode == 100) {
             Task<GoogleSignInAccount> signInAccountTask = GoogleSignIn.getSignedInAccountFromIntent(data);
             if (signInAccountTask.isSuccessful()) {
-                String s = "Google sign in successful";
+                String s = "Giriş Başarılı";
                 displayToast(s);
                 try {
                     GoogleSignInAccount googleSignInAccount = signInAccountTask.getResult(ApiException.class);

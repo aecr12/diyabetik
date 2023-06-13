@@ -74,12 +74,12 @@ public class Signup extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            userDAO.create(new User(mAuth.getCurrentUser().getUid(), adSoyad, mail));
                             mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         Toast.makeText(Signup.this, "Kayıt başarıyla gerçekleşti. Doğrulama mailini onayladıktan sonra giriş yapabilirsiniz.", Toast.LENGTH_LONG).show();
+                                        userDAO.create(new User(mAuth.getCurrentUser().getUid(), adSoyad, mail));
                                         startActivity(new Intent(Signup.this, LoginSignUp.class));
                                         finish();
                                     } else {
