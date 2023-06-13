@@ -36,7 +36,7 @@ public class TensionTracker extends AppCompatActivity implements DatePickerDialo
     private RecyclerView recyclerView;
     private TensionAdapter tensionAdapter;
     private ArrayList<Tension> tensionList;
-    TensionDAO tensionDAO = new TensionDAO();
+    private TensionDAO tensionDAO = new TensionDAO();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

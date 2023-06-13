@@ -1,10 +1,7 @@
 package com.ae.DAO;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.ae.Models.Dinner;
-import com.ae.Models.Lunch;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

@@ -1,9 +1,7 @@
 package com.ae.diyabetik;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -11,28 +9,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-
 import com.ae.DAO.InformationCallback;
 import com.ae.DAO.UserInformationDAO;
 import com.ae.Models.UserInformation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.onesignal.OneSignal;
-
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
 
+    // bileşenlerin initalize edilmesi
     private CardView cardViewPersonalInformations, cardViewTension, cardViewPedometer, cardViewBloodSugarTracker, cardViewMedications, cardViewMealTracker,
             cardViewTreatmentChoices;
     private ImageView imageViewPersonalInformations, imageViewTension, imageViewPedometer, imageViewBloodSugarNotes, imageViewMedications, imageViewMeals,
@@ -42,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fab, fabDiabetesBook, fabHospital, fabPharmacy, fabLogout;
     private Intent intent;
     private boolean isOpen = false;
+    // fab için animasyonlar
     private Animation anim1, anim2, anim3, anim4;
     private UserInformationDAO userInformationDAO = new UserInformationDAO();
     private List<UserInformation> userInformationList;

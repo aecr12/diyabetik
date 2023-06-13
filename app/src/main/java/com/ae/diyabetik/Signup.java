@@ -20,21 +20,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class Signup extends AppCompatActivity {
-    ImageView imageViewLogo;
-    EditText editTextFullname, editTextEmail, editTextPassword;
-    Button buttonRegister;
-    List<User> userList;
-    UserDAO userDAO = new UserDAO();
+    private ImageView imageViewLogo;
+    private EditText editTextFullname, editTextEmail, editTextPassword;
+    private Button buttonRegister;
+    private List<User> userList;
+    private UserDAO userDAO = new UserDAO();
     private FirebaseAuth mAuth;
+
     boolean isEmpty(EditText text) {
         CharSequence str = text.getText().toString();
         return TextUtils.isEmpty(str);
@@ -57,6 +55,7 @@ public class Signup extends AppCompatActivity {
         userList = new ArrayList<>();
         mAuth = FirebaseAuth.getInstance();
 
+        // register butonuna basınca bilgiler doğru girildiyse yapılcak işlemler
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,31 +70,29 @@ public class Signup extends AppCompatActivity {
                 String mail = editTextEmail.getText().toString();
                 String password = editTextPassword.getText().toString();
 
-                mAuth.createUserWithEmailAndPassword(mail,password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()){
-                                    userDAO.create(new User(mAuth.getCurrentUser().getUid(),adSoyad, mail));
-                                    mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()){
-                                                Toast.makeText(Signup.this, "Kayıt başarıyla gerçekleşti. Doğrulama mailini onayladıktan sonra giriş yapabilirsiniz.",Toast.LENGTH_LONG).show();
-                                                startActivity(new Intent(Signup.this,LoginSignUp.class));
-                                                finish();
-                                            }else {
-                                                Toast.makeText(Signup.this, "Bir hata oluştu...",Toast.LENGTH_LONG).show();
-                                            }
-                                        }
-                                    });
-
-                                }else {
-                                    Toast.makeText(Signup.this, "Bir hata oluştu",Toast.LENGTH_LONG).show();
+                mAuth.createUserWithEmailAndPassword(mail, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            userDAO.create(new User(mAuth.getCurrentUser().getUid(), adSoyad, mail));
+                            mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(Signup.this, "Kayıt başarıyla gerçekleşti. Doğrulama mailini onayladıktan sonra giriş yapabilirsiniz.", Toast.LENGTH_LONG).show();
+                                        startActivity(new Intent(Signup.this, LoginSignUp.class));
+                                        finish();
+                                    } else {
+                                        Toast.makeText(Signup.this, "Bir hata oluştu...", Toast.LENGTH_LONG).show();
+                                    }
                                 }
-                            }
-                        });
+                            });
 
+                        } else {
+                            Toast.makeText(Signup.this, "Bir hata oluştu", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
             }
         });
 

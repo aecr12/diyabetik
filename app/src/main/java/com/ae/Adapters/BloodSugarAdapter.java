@@ -32,22 +32,28 @@ import java.util.Calendar;
 
 
 public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.ViewHolder> implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+
+    // Bileşenlerin initialize edilmesi
+
     private ArrayList<BloodSugar> bloodSugarList;
     private int year, month, day, hour, minute;
     private Context context;
-    EditText bloodSugarValueEditText;
-    EditText dateEditText;
+    private EditText bloodSugarValueEditText;
+    private EditText dateEditText;
 
-    BloodSugarDAO bloodSugarDAO = new BloodSugarDAO();
+    private BloodSugarDAO bloodSugarDAO = new BloodSugarDAO();
     public BloodSugarAdapter(ArrayList<BloodSugar> bloodSugarList, Context context) {
         this.context = context;
         this.bloodSugarList = bloodSugarList;
     }
 
+    //Swipe to delete işlemi için oluşturulan callback interfacesi çağrılıyor
     private final ItemTouchHelper.Callback swipeToDeleteCallback = new SwipeToDeleteCallback() {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
+            // position tıklanan elemanının konumunu alıyor, daha sonra listedeki yeri bulunup db ve
+            // view üzerinde silme işlemi yapılıyor
             int position = viewHolder.getAdapterPosition();
             BloodSugar bloodSugar = bloodSugarList.get(position);
             String bloodSugarId = bloodSugar.getId();
@@ -56,25 +62,30 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
             notifyItemRemoved(position);
         }
     };
-    private final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeToDeleteCallback);
 
+    // recycler viewdaki elemanlara dokunma, kaydırma gibi işlemeler için gerekli interface
+    private final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeToDeleteCallback);
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
+
+    // recy. view oluşturulduğunda liste elemanlarını temsil edecek elemanın View holdera eklenmesi (item_blood_sugar)
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_blood_sugar, parent, false);
         return new ViewHolder(view);
     }
 
+    // rec. view için gerekli view holderin oluşturulması ve oluşturulduğunda görüntülenecek elemanların içeriklerinin yüklenmesi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         BloodSugar bloodSugar = bloodSugarList.get(position);
         holder.bloodSugarValueTextView.setText(String.valueOf(bloodSugar.getBloodSugarValue()));
         holder.dateTextView.setText(bloodSugar.getDate());
 
+        // Uzun tıklama ile edit ekranının açılması
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -82,10 +93,14 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
                 return true;
             }
         });
+
+        // Dokununca rapor sayfasına yönlendirme
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 BloodSugar bloodSugar1 = bloodSugarList.get(position);
+
+                //Kan şekeri değeri, hba1c hesaplanması için gerekli activitye intent aracılığıyla gönderiliyor
                 String selectedValue = String.valueOf(bloodSugar1.getBloodSugarValue());
                 Intent intent = new Intent(context, BloodSugarWithHBA1CDiagram.class);
                 intent.putExtra("selectedValue",Float.parseFloat(selectedValue));
@@ -100,6 +115,7 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
         return bloodSugarList.size();
     }
 
+    // Kullanıcının tarih seçmesi için kullanılan interfacenin metotları
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         year = year;
@@ -119,7 +135,7 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
         dateEditText.setText(selectedDateTime);
     }
 
-
+    // View holder (View holder recycler viewda, tanımlanan eleman görünümünün attributelerini tutuyor)
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView bloodSugarValueTextView;
         public TextView dateTextView;
@@ -130,7 +146,7 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
             dateTextView = itemView.findViewById(R.id.textViewDate);
         }
     }
-
+    // Takvim iconuna tıklanınca kullanıcının tarih seçmesi için gerekli işlemler bu fonksiyonda yapıldı
     private void showDateTimePicker() {
         Calendar calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
@@ -142,6 +158,8 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
         DatePickerDialog datePickerDialog = new DatePickerDialog(context, this, year, month, day);
         datePickerDialog.show();
     }
+
+    // Edit durumunda kullanıcıya gösterilecek dialog ekranı
     private void showUpdateBloodSugarDialog(BloodSugar bloodSugar, int adapterPosition) {
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_update_blood_sugar);
@@ -165,6 +183,7 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // kullanıcı bilgileri yeniden girip güncelle butonuna basarsa aşağıdaki fonksiyon çalışacak
                 updateBloodSugar(bloodSugar, adapterPosition);
                 dialog.dismiss();
             }
@@ -173,6 +192,7 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Kullanıcı güncelleme işleminden vazgeçerse dialog ekranı kapanacak
                 dialog.dismiss();
             }
         });
@@ -183,6 +203,7 @@ public class BloodSugarAdapter extends RecyclerView.Adapter<BloodSugarAdapter.Vi
                 (int) (0.55 * Resources.getSystem().getDisplayMetrics().heightPixels));
     }
 
+    // Güncelleme işlemlerini liste ve db den yapacak metot
     private void updateBloodSugar(BloodSugar bloodSugarToUpdate, int adapterPosition) {
 
         String bloodSugarValue = bloodSugarValueEditText.getText().toString();

@@ -3,7 +3,6 @@ package com.ae.DAO;
 import androidx.annotation.NonNull;
 
 import com.ae.Models.TreatmentChoice;
-import com.ae.Models.UserInformation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

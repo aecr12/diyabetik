@@ -25,13 +25,15 @@ import java.util.Calendar;
 import java.util.List;
 
 public class LunchTracker extends AppCompatActivity {
-    ImageView imageViewLunch;
-    RecyclerView recyclerView1;
-    EditText editTextLunch;
-    FloatingActionButton fab;
+
+    // kullanılacak bileşenlerin initlaize edilmesi
+    private ImageView imageViewLunch;
+    private RecyclerView recyclerView1;
+    private EditText editTextLunch;
+    private FloatingActionButton fab;
     private ArrayList<Lunch> lunchList;
-    LunchAdapter lunchAdapter;
-    LunchDAO lunchDAO = new LunchDAO();
+    private LunchAdapter lunchAdapter;
+    private LunchDAO lunchDAO = new LunchDAO();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +50,11 @@ public class LunchTracker extends AppCompatActivity {
         recyclerView1.setLayoutManager(new LinearLayoutManager(this));
         recyclerView1.setAdapter(lunchAdapter);
         fab.setVisibility(View.INVISIBLE);
+
+        // mevcut datanın yüklenmesi
         loadLunchData();
 
+        // kullanıcı bilgi girişi yaparsa fab aktif olacak
         editTextLunch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -75,6 +80,7 @@ public class LunchTracker extends AppCompatActivity {
         });
     }
 
+    // girilen verilerin listeye ve dbye aktarılması
     private void saveLunch() {
         String lunchItemName = editTextLunch.getText().toString();
         if (TextUtils.isEmpty(lunchItemName)) {
@@ -90,6 +96,8 @@ public class LunchTracker extends AppCompatActivity {
         editTextLunch.setText("");
     }
 
+
+    // sayfa create olurken sonra verileri yükleyecek fonksiyon
     private void loadLunchData() {
         lunchDAO.read(lunchList, new InformationCallback() {
             @Override

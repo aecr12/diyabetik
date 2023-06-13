@@ -4,7 +4,6 @@ public class BloodSugarCalculation {
 
     private float bloodSugar;
     private float hba1c;
-    private float targetBloodSugar;
 
     private final float constHba1c = (float) 6.5;
 
@@ -17,13 +16,6 @@ public class BloodSugarCalculation {
     }
     public float getConstHba1c() {
         return constHba1c;
-    }
-
-    public float getBloodSugar() {
-        return bloodSugar;
-    }
-    public float getHba1c() {
-        return hba1c;
     }
 
 }

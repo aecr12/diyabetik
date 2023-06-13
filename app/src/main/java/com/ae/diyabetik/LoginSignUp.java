@@ -56,14 +56,16 @@ public class LoginSignUp extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        // google girişi için gerekli sign in bilgileri
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("811713593939-3t5k4k822u98lld2fb0n7iccjolp45pf.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
 
-        // Initialize sign in client
+        // giriş istemcisinin initalize edilmesi
         googleSignInClient = GoogleSignIn.getClient(LoginSignUp.this, googleSignInOptions);
 
+        // login butonuna basınca firebase email-password ile giriş apisi tetikleniyor
         buttonLogin = findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +75,7 @@ public class LoginSignUp extends AppCompatActivity {
                     for (UserInfo userInfo : providerData) {
                         mAuth.getCurrentUser().reload();
                         String providerId = userInfo.getProviderId();
+                        // email onaylandıysa kullanıcı sisteme dahil ediliyor
                         if (providerId.equals(EmailAuthProvider.PROVIDER_ID) && mAuth.getCurrentUser().isEmailVerified() == true) {
                             String email = editTextEmail.getText().toString();
                             String password = editTextPassword.getText().toString();
@@ -80,7 +83,6 @@ public class LoginSignUp extends AppCompatActivity {
                                     .addOnCompleteListener(task -> {
                                         if (task.isSuccessful()) {
                                             mAuth.getCurrentUser();
-                                            // uid = user.getUid();
                                             Intent intent = new Intent(LoginSignUp.this, MainActivity.class);
                                             startActivity(intent);
                                         } else {
@@ -97,6 +99,8 @@ public class LoginSignUp extends AppCompatActivity {
 
             }
         });
+
+        // google giriş butonuna dokunulunca google sign in cliente yönlendirme
         buttonGoogleSignin = findViewById(R.id.buttonGoogleSignIn);
         buttonGoogleSignin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +110,7 @@ public class LoginSignUp extends AppCompatActivity {
             }
         });
 
+        // henüz kayııt yoksa, kayıt sayfasına yönlendirme
         textViewSignUp = findViewById(R.id.textViewSignUp);
         textViewSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +122,8 @@ public class LoginSignUp extends AppCompatActivity {
                 finish();
             }
         });
+
+        // giriş yapmış kullanıcının tekrar giriş yapmaması için kontrol
         if (mAuth.getCurrentUser()!=null){
             List<? extends UserInfo> providerData = mAuth.getCurrentUser().getProviderData();
             for (UserInfo userInfo : providerData) {
@@ -132,6 +139,7 @@ public class LoginSignUp extends AppCompatActivity {
 
     }
 
+    // google giriş işlemlerinin yapıldığı result
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

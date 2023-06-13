@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +19,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -34,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+
 
 
 public class StepCounterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -73,6 +71,8 @@ public class StepCounterActivity extends AppCompatActivity implements DatePicker
         stepCountTextView = findViewById(R.id.textViewStepCount);
         startButton = findViewById(R.id.buttonStart);
         stopButton = findViewById(R.id.buttonStop);
+
+        // adımsayar sayfası ilk açıldığında veritabından kullanıcın adım sayısının yüklenmesi (her gün adım sayısı sıfırlanacak)
         stepCounterDAO.read(stepCounterList, new InformationCallback() {
             @Override
             public void onInformationLoaded(List informationList) {
@@ -85,12 +85,15 @@ public class StepCounterActivity extends AppCompatActivity implements DatePicker
             }
         });
 
+        // receiverden gelen adım sayısı bilgisinin gösterilmesi
         receiver = new StepCountReceiver(stepCount -> {
             stepCountTextView.setText(String.valueOf(stepCount));
         });
 
+        // Adım sayısını yakalamak için receiver oluşturuldu
         registerReceiver(receiver, new IntentFilter("step_count_changed"));
 
+        // başla butonuyla kullanıcıdan fiziksel aktiviteye erişme izni istenicek. İzin verilirse service başlayacak
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +119,7 @@ public class StepCounterActivity extends AppCompatActivity implements DatePicker
             }
         });
 
-        // Check if the service is running, and update the UI accordingly
+        // servis çalışırken adım sayısı değiştikçe textview üzerinde güncelleme
         if (isMyServiceRunning(StepCounterService.class)) {
             isRunning = true;
             startButton.setEnabled(false);
@@ -134,19 +137,19 @@ public class StepCounterActivity extends AppCompatActivity implements DatePicker
         });
     }
 
-    // Start the foreground service that detects steps
+    // servisin başlatılma fonksiyonu
     private void startStepDetectorService() {
         Intent intent = new Intent(this, StepCounterService.class);
         startForegroundService(intent);
     }
 
-    // Stop the foreground service
+    // Servisi durduran fonksiyon
     private void stopStepDetectorService() {
         Intent intent = new Intent(this, StepCounterService.class);
         stopService(intent);
     }
 
-    // Check if the specified service is running or not
+    // servis çalışıyor mu? - kontrol
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -171,6 +174,7 @@ public class StepCounterActivity extends AppCompatActivity implements DatePicker
         datePickerDialog.show();
     }
 
+    // geçmiş verilerin görüntülenmesi
     private void showByDate(){
         stepCounterDAO.getByDate(stepCounterList2, selectedDate, new InformationCallback() {
             @Override

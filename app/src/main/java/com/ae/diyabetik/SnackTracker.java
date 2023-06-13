@@ -26,13 +26,13 @@ import java.util.List;
 
 public class SnackTracker extends AppCompatActivity {
 
-    ImageView imageViewSnack;
-    RecyclerView recyclerView1;
-    EditText editTextSnack;
-    FloatingActionButton fab;
+    private ImageView imageViewSnack;
+    private RecyclerView recyclerView1;
+    private EditText editTextSnack;
+    private FloatingActionButton fab;
     private ArrayList<Snack> snackList;
-    SnackAdapter snackAdapter;
-    SnackDAO snackDAO = new SnackDAO();
+    private SnackAdapter snackAdapter;
+    private SnackDAO snackDAO = new SnackDAO();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

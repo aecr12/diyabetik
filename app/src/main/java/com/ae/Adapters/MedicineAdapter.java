@@ -36,8 +36,8 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.ViewHo
     private ArrayList<Medicine> medicineList;
     private int year, month, day, hour, minute;
     private Context context;
-    EditText medicineNameEditText;
-    EditText takenTimeEditText;
+    private EditText medicineNameEditText;
+    private EditText takenTimeEditText;
 
     MedicineDAO medicineDAO = new MedicineDAO();
     public MedicineAdapter(ArrayList<Medicine> medicineList, Context context){
@@ -174,15 +174,11 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.ViewHo
                 (int) (0.55 * Resources.getSystem().getDisplayMetrics().heightPixels));
     }
     private void updateMedicine(Medicine medicineToUpdate, int adapterPosition) {
-
         String medicineName = medicineNameEditText.getText().toString();
         String takenTime = takenTimeEditText.getText().toString();
-
         medicineToUpdate.setMedicineName(medicineName);
         medicineToUpdate.setTakenDate(takenTime);
-
         medicineDAO.update(medicineToUpdate);
-
         notifyItemChanged(adapterPosition);
     }
 }

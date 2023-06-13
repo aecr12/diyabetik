@@ -3,58 +3,37 @@ package com.ae.diyabetik;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Binder;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-
 import com.ae.DAO.InformationCallback;
 import com.ae.DAO.StepCounterDAO;
-import com.ae.Models.BloodSugar;
-import com.ae.Models.Snack;
 import com.ae.Models.StepCounter;
-import com.ae.Receivers.StepCountReceiver;
-import com.google.firebase.database.DatabaseError;
-
-import java.lang.reflect.Array;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
+
 import java.util.List;
 
 public class StepCounterService extends Service implements SensorEventListener {
+
+    // bu sayfada step detector sensör kullanıldı. alınan adım sayısı broadcast receiverle, adım sayısını kullancak activitye gönderildi
 
     private SensorManager sensorManager;
     private Sensor stepSensor;
     private int stepCount;
     private boolean isRunning;
     private final static String CHANNEL_ID = "1";
-    StepCounterDAO stepCounterDAO = new StepCounterDAO();
-    StepCounter stepCounter;
-    List<StepCounter> stepCounterList = new ArrayList<>();
-    List<StepCounter> updatedStepCounterList = new ArrayList<>();
+    private StepCounterDAO stepCounterDAO = new StepCounterDAO();
+    private StepCounter stepCounter;
+    private List<StepCounter> stepCounterList = new ArrayList<>();
+    private List<StepCounter> updatedStepCounterList = new ArrayList<>();
 
     @Override
     public void onCreate() {

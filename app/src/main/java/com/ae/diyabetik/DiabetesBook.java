@@ -1,18 +1,14 @@
 package com.ae.diyabetik;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.pdf.PdfDocument;
-import android.graphics.pdf.PdfRenderer;
+
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.barteksc.pdfviewer.PDFView;
@@ -24,11 +20,10 @@ import com.tom_roush.pdfbox.text.PDFTextStripper;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+
 import java.util.Locale;
 
 
@@ -52,18 +47,19 @@ public class DiabetesBook extends AppCompatActivity {
         PDDocument pd;
         BufferedWriter wr;
         PDFBoxResourceLoader.init(this);
+
+        // eğitim kitapçığının pdf olarak yüklenmesi
         try {
             pd = PDDocument.load(getAssets().open("diyabet.pdf"));
             file = new File(getExternalFilesDir(null), "dText.txt");
             wr = new BufferedWriter(new FileWriter(file));
             PDFTextStripper stripper = new PDFTextStripper();
-            stripper.setStartPage(3); //Start extracting from page 3
-            stripper.setEndPage(5); //Extract till page 5
+            stripper.setStartPage(3);
+            stripper.setEndPage(5);
             stripper.writeText(pd, wr);
             if (pd != null) {
                 pd.close();
             }
-            // I use close() to flush the stream.
             wr.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -94,6 +90,7 @@ public class DiabetesBook extends AppCompatActivity {
 
     }
 
+    // text to speech ile kitapçığın sesli okunması
     private void textToSpeech(String text) {
         textToSpeech = new TextToSpeech(this, status -> {
             if (status == TextToSpeech.SUCCESS) {
@@ -109,6 +106,7 @@ public class DiabetesBook extends AppCompatActivity {
         });
     }
 
+    // pdfnin görüntülenmesi
     private void displayFromAsset(String assetFileName) {
         pdfView.fromAsset(assetFileName)
                 .defaultPage(0)

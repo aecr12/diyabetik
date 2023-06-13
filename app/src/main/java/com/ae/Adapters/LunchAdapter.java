@@ -24,8 +24,8 @@ public class LunchAdapter extends RecyclerView.Adapter<LunchAdapter.ViewHolder> 
 
     private ArrayList<Lunch> lunchList;
     private Context context;
-    LunchDAO lunchDAO = new LunchDAO();
-    EditText lunchNameEditText;
+    private LunchDAO lunchDAO = new LunchDAO();
+    private EditText lunchNameEditText;
 
     public LunchAdapter(ArrayList<Lunch> lunchList, Context context) {
         this.lunchList = lunchList;

@@ -26,8 +26,8 @@ public class BreakfastAdapter extends RecyclerView.Adapter<BreakfastAdapter.View
 
     private ArrayList<Breakfast> breakfastList;
     private Context context;
-    BreakfastDAO breakfastDAO = new BreakfastDAO();
-    EditText breakfastNameEditText;
+    private BreakfastDAO breakfastDAO = new BreakfastDAO();
+    private EditText breakfastNameEditText;
 
      public BreakfastAdapter(ArrayList<Breakfast> breakfastList, Context context){
          this.breakfastList = breakfastList;

@@ -1,6 +1,5 @@
 package com.ae.Models;
 
-import java.util.ArrayList;
 
 public class BloodSugar {
     private String id;

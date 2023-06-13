@@ -29,6 +29,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class BloodSugarTracker extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+    // Gerekli bileşenlerin initialize edilmesi
     private EditText editTextBloodSugarValue,editTextDate;
     private ImageButton imageButtonCalendar;
     private Button buttonSave;
@@ -36,7 +37,7 @@ public class BloodSugarTracker extends AppCompatActivity implements DatePickerDi
     private RecyclerView recyclerView;
     private BloodSugarAdapter bloodSugarAdapter;
     private ArrayList<BloodSugar> bloodSugarList;
-    BloodSugarDAO bloodSugarDAO = new BloodSugarDAO();
+    private BloodSugarDAO bloodSugarDAO = new BloodSugarDAO();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,21 +51,26 @@ public class BloodSugarTracker extends AppCompatActivity implements DatePickerDi
         imageButtonCalendar = findViewById(R.id.imageButtonCalendar);
         buttonSave = findViewById(R.id.buttonSave);
 
+        // recyvler viewin initalize edilmesi ve verinin listeden yüklenmesi
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         bloodSugarList = new ArrayList<>();
         bloodSugarAdapter = new BloodSugarAdapter(bloodSugarList, this);
         recyclerView.setAdapter(bloodSugarAdapter);
 
+        // İlk yüklenmede kayıtlı verilerin view üzerinde gösterilmesi
+        // aşağıda yazılan metotta daha detaylı açıklanacak
         loadBloodSugarData();
 
+        // takvim iconu
         imageButtonCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)  {
                 showDateTimePicker();
             }
         });
 
+        // kaydet butonu
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,6 +117,8 @@ public class BloodSugarTracker extends AppCompatActivity implements DatePickerDi
         editTextDate.setText(selectedDateTime);
     }
 
+    // kaydet butonuna basınca tetiklencek fonksiyon
+    // veriler uygun formatta girilmişse viewa ve db ye ekleniyor
     private void saveBloodSugar() {
         String bloodSugarValue = editTextBloodSugarValue.getText().toString();
         String dateTime = editTextDate.getText().toString();
@@ -119,17 +127,15 @@ public class BloodSugarTracker extends AppCompatActivity implements DatePickerDi
             Toast.makeText(this, "Lütfen kan şekeri değerini ve tarihi giriniz.", Toast.LENGTH_SHORT).show();
             return;
         }
-
         BloodSugar bloodSugar = new BloodSugar(null, Integer.parseInt(bloodSugarValue), dateTime);
         bloodSugarDAO.create(bloodSugar);
-
         bloodSugarList.add(bloodSugar);
         bloodSugarAdapter.notifyDataSetChanged();
-
         editTextBloodSugarValue.setText("");
         editTextDate.setText("");
     }
 
+    // db de kayıtlı verilerin sayfa açıldığında görüntülenmesi
     private void loadBloodSugarData(){
         bloodSugarDAO.read(bloodSugarList, new InformationCallback() {
             @Override
@@ -152,6 +158,7 @@ public class BloodSugarTracker extends AppCompatActivity implements DatePickerDi
         return true;
     }
 
+    // geri butonuna asınca önceki sayfaya gidiliyor
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

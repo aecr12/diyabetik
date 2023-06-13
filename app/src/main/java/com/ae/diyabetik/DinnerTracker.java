@@ -26,13 +26,13 @@ import java.util.List;
 
 public class DinnerTracker extends AppCompatActivity {
 
-    ImageView imageViewDinner;
-    RecyclerView recyclerView1;
-    EditText editTextDinner;
-    FloatingActionButton fab;
+    private  ImageView imageViewDinner;
+    private  RecyclerView recyclerView1;
+    private EditText editTextDinner;
+    private FloatingActionButton fab;
     private ArrayList<Dinner> dinnerList;
-    DinnerAdapter dinnerAdapter;
-    DinnerDAO dinnerDAO = new DinnerDAO();
+    private DinnerAdapter dinnerAdapter;
+    private DinnerDAO dinnerDAO = new DinnerDAO();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,8 +103,6 @@ public class DinnerTracker extends AppCompatActivity {
 
             }
         });
-
     }
-
 }
 

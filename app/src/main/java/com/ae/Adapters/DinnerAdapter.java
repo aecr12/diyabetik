@@ -25,8 +25,8 @@ import java.util.ArrayList;
 public class DinnerAdapter extends RecyclerView.Adapter<DinnerAdapter.ViewHolder> {
     private ArrayList<Dinner> dinnerList;
     private Context context;
-    DinnerDAO dinnerDAO = new DinnerDAO();
-    EditText dinnerNameEditText;
+    private DinnerDAO dinnerDAO = new DinnerDAO();
+    private EditText dinnerNameEditText;
 
     public DinnerAdapter(ArrayList<Dinner> dinnerList, Context context) {
         this.dinnerList = dinnerList;

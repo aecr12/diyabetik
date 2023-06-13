@@ -26,13 +26,13 @@ import java.util.Calendar;
 import java.util.List;
 
 public class BreakfastTracker extends AppCompatActivity {
-    ImageView imageViewBreakfast;
-    RecyclerView recyclerView1;
-    EditText editTextBreakfast;
-    FloatingActionButton fab;
+    private ImageView imageViewBreakfast;
+    private RecyclerView recyclerView1;
+    private EditText editTextBreakfast;
+    private FloatingActionButton fab;
     private ArrayList<Breakfast> breakfastList;
-    BreakfastAdapter breakfastAdapter;
-    BreakfastDAO breakfastDAO = new BreakfastDAO();
+    private BreakfastAdapter breakfastAdapter;
+    private BreakfastDAO breakfastDAO = new BreakfastDAO();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

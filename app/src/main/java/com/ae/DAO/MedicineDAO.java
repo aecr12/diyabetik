@@ -1,16 +1,11 @@
 package com.ae.DAO;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.ae.Models.BloodSugar;
 import com.ae.Models.Medicine;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class MedicineDAO implements IDAO<Medicine> {
