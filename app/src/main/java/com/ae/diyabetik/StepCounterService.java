@@ -60,7 +60,7 @@ public class StepCounterService extends Service implements SensorEventListener {
             Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setContentTitle("Adımsayar çalışıyor...")
                     .setContentText(String.valueOf(stepCount))
-                    .setSmallIcon(R.drawable.app_logo)
+                    .setSmallIcon(R.mipmap.app_logo)
                     .build();
             startForeground(1, notification);
         } else {
@@ -112,7 +112,7 @@ public class StepCounterService extends Service implements SensorEventListener {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setContentTitle("Adımsayar çalışıyor")
                     .setContentText(String.valueOf(stepCount))
-                    .setSmallIcon(R.drawable.app_logo);
+                    .setSmallIcon(R.mipmap.app_logo);
 
             notificationManager.notify(1, builder.build());
         }

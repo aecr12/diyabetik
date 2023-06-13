@@ -12,10 +12,10 @@
         <ImageView
             android:id="@+id/imageViewlogo"
             android:layout_centerHorizontal="true"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:layout_marginTop="50dp"
-            android:src="@drawable/app_logo" />
+            android:src="@mipmap/app_logo" />
 
         <!-- Ad Soyad -->
         <EditText

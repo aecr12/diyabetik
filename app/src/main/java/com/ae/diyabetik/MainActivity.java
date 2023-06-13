@@ -49,14 +49,6 @@ public class MainActivity extends AppCompatActivity {
         cardViewMealTracker = findViewById(R.id.cardViewMealTracker);
         cardViewTreatmentChoices = findViewById(R.id.cardViewTreatmentChoices);
 
-        imageViewPersonalInformations = findViewById(R.id.imageViewPersonalInformations);
-        imageViewTension = findViewById(R.id.imageViewTension);
-        imageViewPedometer = findViewById(R.id.imageViewPedometer);
-        imageViewBloodSugarNotes = findViewById(R.id.imageViewBSugarNotes);
-        imageViewMedications = findViewById(R.id.imageViewMedications);
-        imageViewMeals = findViewById(R.id.imageViewMeals);
-        imageViewTreatments = findViewById(R.id.imageViewTreatments);
-
         textViewPersonalInformations = findViewById(R.id.textViewPersonalInformations);
         textViewTension = findViewById(R.id.textViewTension);
         textViewPedometer = findViewById(R.id.textViewPedometer);
@@ -77,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         anim1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim1); //open
         anim2 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim2); //close
-        anim3 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim2); //clock
+        anim3 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim3); //clock
         anim4 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim4); //anticlock
 
         userInformationList = new ArrayList<>();
