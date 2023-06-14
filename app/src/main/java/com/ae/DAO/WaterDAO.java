@@ -3,6 +3,7 @@ package com.ae.DAO;
 import androidx.annotation.NonNull;
 
 import com.ae.Models.Water;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -16,14 +17,14 @@ public class WaterDAO implements IDAO<Water>{
 
     @Override
     public String create(Water water) {
-        DatabaseReference dbReference = database.getReference("water_count_data/" + uid);
+        DatabaseReference dbReference = database.getReference("water_count_data/" + FirebaseAuth.getInstance().getCurrentUser().getUid());
         dbReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     return;
                 } else {
-                    DatabaseReference newDbReference = database.getReference("water_count_data/" + uid).push();
+                    DatabaseReference newDbReference = database.getReference("water_count_data/" + FirebaseAuth.getInstance().getCurrentUser().getUid()).push();
                     id = newDbReference.getKey();
                     water.setId(id);
                     newDbReference.setValue(water);
@@ -39,7 +40,7 @@ public class WaterDAO implements IDAO<Water>{
 
     @Override
     public List<Water> read(List<Water> waterCountList, InformationCallback informationCallback) {
-        DatabaseReference databaseReference = database.getReference().child("water_count_data").child(uid);
+        DatabaseReference databaseReference = database.getReference().child("water_count_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -68,7 +69,7 @@ public class WaterDAO implements IDAO<Water>{
 
     @Override
     public void update(Water water) {
-        DatabaseReference databaseReference = database.getReference().child("water_count_data").child(uid).child(water.getId());
+        DatabaseReference databaseReference = database.getReference().child("water_count_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(water.getId());
         databaseReference.setValue(water);
     }
 

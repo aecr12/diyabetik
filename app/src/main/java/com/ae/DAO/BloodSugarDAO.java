@@ -2,6 +2,7 @@ package com.ae.DAO;
 
 import androidx.annotation.NonNull;
 import com.ae.Models.BloodSugar;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -13,7 +14,7 @@ public class BloodSugarDAO implements IDAO<BloodSugar> {
     private String bloodSugarId;
 
     public String create(BloodSugar bloodSugar) {
-        DatabaseReference dbReference = database.getReference("blood_sugar_data/" + uid).push();
+        DatabaseReference dbReference = database.getReference("blood_sugar_data/" + FirebaseAuth.getInstance().getCurrentUser().getUid()).push();
         bloodSugarId = dbReference.getKey();
         bloodSugar.setId(bloodSugarId);
         dbReference.setValue(bloodSugar);
@@ -22,7 +23,7 @@ public class BloodSugarDAO implements IDAO<BloodSugar> {
 
     @Override
     public List<BloodSugar> read(List<BloodSugar> bloodSugarList, InformationCallback informationCallback) {
-        DatabaseReference databaseReference = database.getReference().child("blood_sugar_data").child(uid);
+        DatabaseReference databaseReference = database.getReference().child("blood_sugar_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -48,13 +49,13 @@ public class BloodSugarDAO implements IDAO<BloodSugar> {
 
     @Override
     public void update(BloodSugar bloodSugar) {
-        DatabaseReference databaseReference = database.getReference().child("blood_sugar_data").child(uid).child(bloodSugar.getId());
+        DatabaseReference databaseReference = database.getReference().child("blood_sugar_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(bloodSugar.getId());
         databaseReference.setValue(bloodSugar);
     }
 
     @Override
     public void delete(String id) {
-        DatabaseReference databaseReference = database.getReference().child("blood_sugar_data").child(uid).child(id);
+        DatabaseReference databaseReference = database.getReference().child("blood_sugar_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(id);
         databaseReference.removeValue();
     }
 }

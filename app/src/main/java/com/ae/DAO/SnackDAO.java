@@ -2,6 +2,7 @@ package com.ae.DAO;
 
 import androidx.annotation.NonNull;
 import com.ae.Models.Snack;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -13,7 +14,7 @@ public class SnackDAO implements IDAO<Snack> {
     String foodId;
     @Override
     public String create(Snack snack) {
-        DatabaseReference dbReference = database.getReference("meals/snack_data/"+uid).push();
+        DatabaseReference dbReference = database.getReference("meals/snack_data/"+ FirebaseAuth.getInstance().getCurrentUser().getUid()).push();
         foodId = dbReference.getKey();
         snack.setId(foodId);
         dbReference.setValue(snack);
@@ -22,7 +23,7 @@ public class SnackDAO implements IDAO<Snack> {
 
     @Override
     public List<Snack> read(List<Snack> snackList, InformationCallback informationCallback) {
-        DatabaseReference databaseReference = database.getReference().child("meals").child("snack_data").child(uid);
+        DatabaseReference databaseReference = database.getReference().child("meals").child("snack_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -48,13 +49,13 @@ public class SnackDAO implements IDAO<Snack> {
 
     @Override
     public void update(Snack snack) {
-        DatabaseReference databaseReference = database.getReference().child("meals").child("snack_data").child(uid).child(snack.getId());
+        DatabaseReference databaseReference = database.getReference().child("meals").child("snack_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(snack.getId());
         databaseReference.setValue(snack);
     }
 
     @Override
     public void delete(String id) {
-        DatabaseReference databaseReference = database.getReference().child("meals").child("snack_data").child(uid).child(id);
+        DatabaseReference databaseReference = database.getReference().child("meals").child("snack_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(id);
         databaseReference.removeValue();
     }
 }

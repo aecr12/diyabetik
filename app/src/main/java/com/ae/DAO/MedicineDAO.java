@@ -2,6 +2,7 @@ package com.ae.DAO;
 
 import androidx.annotation.NonNull;
 import com.ae.Models.Medicine;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -14,7 +15,7 @@ public class MedicineDAO implements IDAO<Medicine> {
 
     @Override
     public String create(Medicine medicine) {
-        DatabaseReference dbReference = database.getReference("medications/"+uid).push();
+        DatabaseReference dbReference = database.getReference("medications/"+ FirebaseAuth.getInstance().getCurrentUser().getUid()).push();
         medicineId = dbReference.getKey();
         medicine.setId(medicineId);
         dbReference.setValue(medicine);
@@ -23,7 +24,7 @@ public class MedicineDAO implements IDAO<Medicine> {
 
     @Override
     public List<Medicine> read(List<Medicine> medicineList, InformationCallback informationCallback) {
-        DatabaseReference databaseReference = database.getReference().child("medications").child(uid);
+        DatabaseReference databaseReference = database.getReference().child("medications").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -48,13 +49,13 @@ public class MedicineDAO implements IDAO<Medicine> {
 
     @Override
     public void update(Medicine medicine) {
-        DatabaseReference databaseReference = database.getReference().child("medications").child(uid).child(medicine.getId());
+        DatabaseReference databaseReference = database.getReference().child("medications").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(medicine.getId());
         databaseReference.setValue(medicine);
     }
 
     @Override
     public void delete(String id) {
-        DatabaseReference databaseReference = database.getReference().child("medications").child(uid).child(id);
+        DatabaseReference databaseReference = database.getReference().child("medications").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(id);
         databaseReference.removeValue();
     }
 

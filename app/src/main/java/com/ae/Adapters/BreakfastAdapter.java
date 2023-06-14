@@ -92,9 +92,7 @@ public class BreakfastAdapter extends RecyclerView.Adapter<BreakfastAdapter.View
         breakfastNameEditText = dialog1.findViewById(R.id.editTextFoodName);
         Button updateButton = dialog1.findViewById(R.id.buttonUpdate);
         Button cancelButton = dialog1.findViewById(R.id.buttonCancel);
-
         breakfastNameEditText.setText(breakfast.getName());
-
 
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override

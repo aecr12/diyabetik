@@ -2,6 +2,7 @@ package com.ae.DAO;
 
 import androidx.annotation.NonNull;
 import com.ae.Models.StepCounter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,7 +21,7 @@ public class StepCounterDAO implements IDAO<StepCounter> {
 
     @Override
     public String create(StepCounter stepCounter) {
-        DatabaseReference databaseReference = database.getReference().child("step_counter_data").child(uid).child(currentDate);
+        DatabaseReference databaseReference = database.getReference().child("step_counter_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(currentDate);
         Query query = databaseReference.orderByChild("stepCount").equalTo(stepCounter.getStepCount());
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -47,7 +48,7 @@ public class StepCounterDAO implements IDAO<StepCounter> {
 
     @Override
     public List<StepCounter> read(List<StepCounter> stepCounterList, InformationCallback informationCallback) {
-        DatabaseReference databaseReference = database.getReference().child("step_counter_data").child(uid).child(currentDate);
+        DatabaseReference databaseReference = database.getReference().child("step_counter_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(currentDate);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -74,7 +75,7 @@ public class StepCounterDAO implements IDAO<StepCounter> {
 
     @Override
     public void update(StepCounter stepCounter) {
-        DatabaseReference databaseReference = database.getReference().child("step_counter_data").child(uid).child(currentDate).child(stepCounter.getId());
+        DatabaseReference databaseReference = database.getReference().child("step_counter_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(currentDate).child(stepCounter.getId());
         databaseReference.setValue(stepCounter);
     }
 
@@ -84,7 +85,7 @@ public class StepCounterDAO implements IDAO<StepCounter> {
 
     }
     public List<StepCounter> getByDate(List<StepCounter> stepCounterList, String dateString, InformationCallback informationCallback){
-        DatabaseReference databaseReference = database.getReference().child("step_counter_data").child(uid).child(dateString);
+        DatabaseReference databaseReference = database.getReference().child("step_counter_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(dateString);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

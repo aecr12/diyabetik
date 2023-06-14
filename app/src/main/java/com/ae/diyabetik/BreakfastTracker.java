@@ -1,14 +1,22 @@
 package com.ae.diyabetik;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -17,9 +25,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ae.Adapters.BreakfastAdapter;
+import com.ae.Adapters.BreakfastAdapterForPastData;
 import com.ae.DAO.BreakfastDAO;
 import com.ae.DAO.InformationCallback;
 import com.ae.Models.Breakfast;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
@@ -35,6 +45,7 @@ public class BreakfastTracker extends AppCompatActivity {
     private ArrayList<Breakfast> breakfastList;
     private BreakfastAdapter breakfastAdapter;
     private BreakfastDAO breakfastDAO = new BreakfastDAO();
+    private BreakfastAdapterForPastData breakfastAdapterForPastData;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,6 +107,7 @@ public class BreakfastTracker extends AppCompatActivity {
     }
 
     private void loadBreakfastData() {
+
         breakfastDAO.read(breakfastList, new InformationCallback() {
             @Override
             public void onInformationLoaded(List informationList) {
@@ -113,6 +125,7 @@ public class BreakfastTracker extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
     }
 
@@ -120,12 +133,26 @@ public class BreakfastTracker extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        System.out.println("id: "+ id);
         if (id == android.R.id.home) {
             onBackPressed();
             return true;
+        }else if(id == R.id.action_pastdata){
+            showBottomSheetDialog();
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void showBottomSheetDialog() {
+
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(R.layout.bottom_sheet_dialog_layout);
+
+        RecyclerView recyclerView = bottomSheetDialog.findViewById(R.id.recViewForPastData);
+        breakfastAdapterForPastData = new BreakfastAdapterForPastData(breakfastList,this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(breakfastAdapterForPastData);
+        breakfastAdapter.notifyDataSetChanged();
+        bottomSheetDialog.show();
+
+    }
 }

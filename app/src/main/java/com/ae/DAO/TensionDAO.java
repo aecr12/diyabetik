@@ -2,6 +2,7 @@ package com.ae.DAO;
 
 import androidx.annotation.NonNull;
 import com.ae.Models.Tension;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -13,7 +14,7 @@ public class TensionDAO implements IDAO<Tension>{
 
     @Override
     public String create(Tension tension) {
-        DatabaseReference dbReference = database.getReference("tension_data/"+uid).push();
+        DatabaseReference dbReference = database.getReference("tension_data/"+ FirebaseAuth.getInstance().getCurrentUser().getUid()).push();
         tensionId = dbReference.getKey();
         tension.setId(tensionId);
         dbReference.setValue(tension);
@@ -22,7 +23,7 @@ public class TensionDAO implements IDAO<Tension>{
 
     @Override
     public List<Tension> read(List<Tension> tensionList, InformationCallback informationCallback) {
-        DatabaseReference databaseReference = database.getReference().child("tension_data").child(uid);
+        DatabaseReference databaseReference = database.getReference().child("tension_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -48,13 +49,13 @@ public class TensionDAO implements IDAO<Tension>{
 
     @Override
     public void update(Tension tension) {
-        DatabaseReference databaseReference = database.getReference().child("tension_data").child(uid).child(tension.getId());
+        DatabaseReference databaseReference = database.getReference().child("tension_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(tension.getId());
         databaseReference.setValue(tension);
     }
 
     @Override
     public void delete(String id) {
-        DatabaseReference databaseReference = database.getReference().child("tension_data").child(uid).child(id);
+        DatabaseReference databaseReference = database.getReference().child("tension_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(id);
         databaseReference.removeValue();
     }
 }

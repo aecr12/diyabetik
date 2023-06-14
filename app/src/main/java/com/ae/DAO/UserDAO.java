@@ -3,6 +3,8 @@ package com.ae.DAO;
 import androidx.annotation.NonNull;
 
 import com.ae.Models.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -15,14 +17,15 @@ public class UserDAO implements IDAO<User> {
 
     @Override
     public String create(User user) {
-        DatabaseReference dbReference = database.getReference("users/" + uid);
+        DatabaseReference dbReference = database.getReference("users/" + FirebaseAuth.getInstance().getCurrentUser().getUid());
         dbReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    System.out.println("zaten var");
                     return;
                 } else {
-                    DatabaseReference newDbReference = database.getReference("users/" + uid);
+                    DatabaseReference newDbReference = database.getReference("users/" + FirebaseAuth.getInstance().getCurrentUser().getUid());
                     userId = newDbReference.getKey();
                     user.setId(userId);
                     newDbReference.setValue(user);

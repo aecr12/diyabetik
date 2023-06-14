@@ -3,6 +3,7 @@ package com.ae.DAO;
 import androidx.annotation.NonNull;
 
 import com.ae.Models.TreatmentChoice;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -16,14 +17,14 @@ public class TreatmentChoiceDAO implements IDAO<TreatmentChoice>{
 
     @Override
     public String create(TreatmentChoice treatmentChoice) {
-        DatabaseReference dbReference = database.getReference("treatment_choices/" + uid);
+        DatabaseReference dbReference = database.getReference("treatment_choices/" + FirebaseAuth.getInstance().getCurrentUser().getUid());
         dbReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     return;
                 } else {
-                    DatabaseReference newDbReference = database.getReference("treatment_choices/" + uid).push();
+                    DatabaseReference newDbReference = database.getReference("treatment_choices/" + FirebaseAuth.getInstance().getCurrentUser().getUid()).push();
                     treatmentChoiceId = newDbReference.getKey();
                     treatmentChoice.setId(treatmentChoiceId);
                     newDbReference.setValue(treatmentChoice);
@@ -39,7 +40,7 @@ public class TreatmentChoiceDAO implements IDAO<TreatmentChoice>{
 
     @Override
     public List<TreatmentChoice> read(List<TreatmentChoice> treatmentChoiceList, InformationCallback informationCallback) {
-        DatabaseReference databaseReference = database.getReference().child("treatment_choices").child(uid);
+        DatabaseReference databaseReference = database.getReference().child("treatment_choices").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -65,7 +66,7 @@ public class TreatmentChoiceDAO implements IDAO<TreatmentChoice>{
 
     @Override
     public void update(TreatmentChoice treatmentChoice) {
-        DatabaseReference databaseReference = database.getReference().child("treatment_choices").child(uid).child(treatmentChoice.getId());
+        DatabaseReference databaseReference = database.getReference().child("treatment_choices").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(treatmentChoice.getId());
         databaseReference.setValue(treatmentChoice);
     }
 

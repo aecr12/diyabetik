@@ -140,7 +140,6 @@ public class BloodSugarTracker extends AppCompatActivity implements DatePickerDi
         bloodSugarDAO.read(bloodSugarList, new InformationCallback() {
             @Override
             public void onInformationLoaded(List informationList) {
-                System.out.println("İçerik: "+ bloodSugarList.get(0).getBloodSugarValue());
                 bloodSugarAdapter.notifyDataSetChanged();
             }
 

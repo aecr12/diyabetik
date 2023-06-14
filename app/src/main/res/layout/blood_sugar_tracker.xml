@@ -33,7 +33,6 @@
         android:id="@+id/imageButtonCalendar"
         android:layout_alignBottom="@id/editTextDate"
         android:layout_toEndOf="@id/editTextDate"
-
         android:background="@drawable/calendar"/>
 
     <Button

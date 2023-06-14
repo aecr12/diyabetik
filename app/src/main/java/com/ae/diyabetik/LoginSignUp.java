@@ -32,6 +32,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.ktx.Firebase;
 
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class LoginSignUp extends AppCompatActivity {
     private DatabaseReference dbRef = firebaseDatabase.getReference("users");
     private UserDAO userDAO = new UserDAO();
     private String providerId;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,13 +71,30 @@ public class LoginSignUp extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mAuth.getCurrentUser() != null) {
+                mAuth.signOut();
+                mAuth.signInWithEmailAndPassword(editTextEmail.getText().toString(), editTextPassword.getText().toString())
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                mAuth.getCurrentUser();
+                                Toast.makeText(LoginSignUp.this,mAuth.getCurrentUser().getEmail()+ " " + mAuth.getCurrentUser().getUid(), Toast.LENGTH_LONG).show();
+                                if (mAuth.getCurrentUser().isEmailVerified()){
+                                    Intent intent = new Intent(LoginSignUp.this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }else {
+                                    Toast.makeText(LoginSignUp.this, "Lütfen mail adresinizi doğrulayın", Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Toast.makeText(LoginSignUp.this, "Giriş işlemi başarısız.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                /*if (!mAuth.getCurrentUser().getEmail().equals(editTextEmail.getText().toString())) {
                     mAuth.getCurrentUser().reload();
                     List<? extends UserInfo> providerData = mAuth.getCurrentUser().getProviderData();
                     for (UserInfo userInfo : providerData) {
                         String providerId = userInfo.getProviderId();
                         // email onaylandıysa kullanıcı sisteme dahil ediliyor
-                        if (providerId.equals(EmailAuthProvider.PROVIDER_ID) && mAuth.getCurrentUser().isEmailVerified() == true) {
+                        if (providerId.equals(EmailAuthProvider.PROVIDER_ID) && mAuth.getCurrentUser().isEmailVerified() == true && mAuth.getCurrentUser().getEmail().equals(editTextEmail.getText().toString()) ) {
                             String email = editTextEmail.getText().toString();
                             String password = editTextPassword.getText().toString();
                             mAuth.signInWithEmailAndPassword(email, password)
@@ -93,7 +112,7 @@ public class LoginSignUp extends AppCompatActivity {
                         }
                     }
                 } else {
-                    /*Toast.makeText(LoginSignUp.this, "Girdiğiniz bilgilere ilişkin Kullanıcı bulunamadı", Toast.LENGTH_LONG).show();*/
+                    *//*Toast.makeText(LoginSignUp.this, "Girdiğiniz bilgilere ilişkin Kullanıcı bulunamadı", Toast.LENGTH_LONG).show();*//*
                     String email = editTextEmail.getText().toString();
                     String password = editTextPassword.getText().toString();
                     mAuth.signInWithEmailAndPassword(email, password)
@@ -111,7 +130,7 @@ public class LoginSignUp extends AppCompatActivity {
                                     Toast.makeText(LoginSignUp.this, "Giriş işlemi başarısız.", Toast.LENGTH_LONG).show();
                                 }
                             });
-                }
+                }*/
 
             }
         });

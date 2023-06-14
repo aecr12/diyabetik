@@ -1,19 +1,23 @@
 package com.ae.DAO;
 
 import androidx.annotation.NonNull;
+
 import com.ae.Models.Breakfast;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.List;
 
 public class BreakfastDAO implements IDAO<Breakfast> {
+
     private String foodId;
 
     @Override
     public String create(Breakfast breakfast) {
-        DatabaseReference dbReference = database.getReference("meals/breakfast_data/"+uid).push();
+        DatabaseReference dbReference = database.getReference("meals/breakfast_data/" + FirebaseAuth.getInstance().getCurrentUser().getUid()).push();
         foodId = dbReference.getKey();
         breakfast.setId(foodId);
         dbReference.setValue(breakfast);
@@ -22,7 +26,7 @@ public class BreakfastDAO implements IDAO<Breakfast> {
 
     @Override
     public List<Breakfast> read(List<Breakfast> breakfastList, InformationCallback informationCallback) {
-        DatabaseReference databaseReference = database.getReference().child("meals").child("breakfast_data").child(uid);
+        DatabaseReference databaseReference = database.getReference().child("meals").child("breakfast_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -36,7 +40,6 @@ public class BreakfastDAO implements IDAO<Breakfast> {
                     informationCallback.onInformationLoaded(breakfastList);
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -48,13 +51,13 @@ public class BreakfastDAO implements IDAO<Breakfast> {
 
     @Override
     public void update(Breakfast breakfast) {
-        DatabaseReference databaseReference = database.getReference().child("meals").child("breakfast_data").child(uid).child(breakfast.getId());
+        DatabaseReference databaseReference = database.getReference().child("meals").child("breakfast_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(breakfast.getId());
         databaseReference.setValue(breakfast);
     }
 
     @Override
     public void delete(String id) {
-        DatabaseReference databaseReference = database.getReference().child("meals").child("breakfast_data").child(uid).child(id);
+        DatabaseReference databaseReference = database.getReference().child("meals").child("breakfast_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(id);
         databaseReference.removeValue();
     }
 }

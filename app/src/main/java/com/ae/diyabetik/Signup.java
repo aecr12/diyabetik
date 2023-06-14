@@ -69,17 +69,21 @@ public class Signup extends AppCompatActivity {
                 String adSoyad = editTextFullname.getText().toString();
                 String mail = editTextEmail.getText().toString();
                 String password = editTextPassword.getText().toString();
-
+                mAuth.signOut();
                 mAuth.createUserWithEmailAndPassword(mail, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            Toast.makeText(Signup.this, task.getResult().getUser().getEmail(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(Signup.this, task.getResult().getUser().getEmail() + " " +  task.getResult().getUser().getUid(), Toast.LENGTH_LONG).show();
+                            User user = new User(mAuth.getCurrentUser().getUid(), editTextFullname.getText().toString(), task.getResult().getUser().getEmail());
+                            userDAO.create(user);
+                            Toast.makeText(Signup.this, user.getAdSoyad(),Toast.LENGTH_LONG).show();
                             mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         Toast.makeText(Signup.this, "Kayıt başarıyla gerçekleşti. Doğrulama mailini onayladıktan sonra giriş yapabilirsiniz.", Toast.LENGTH_LONG).show();
-                                        userDAO.create(new User(mAuth.getCurrentUser().getUid(), adSoyad, mail));
                                         startActivity(new Intent(Signup.this, LoginSignUp.class));
                                         finish();
                                     } else {
@@ -87,9 +91,8 @@ public class Signup extends AppCompatActivity {
                                     }
                                 }
                             });
-
                         } else {
-                            Toast.makeText(Signup.this, "Bir hata oluştu", Toast.LENGTH_LONG).show();
+                            System.out.println("task başarısız");
                         }
                     }
                 });
