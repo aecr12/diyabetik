@@ -36,18 +36,6 @@
             android:textAlignment="center"
             android:textSize="18sp"
             android:textStyle="bold" />
-
-        <ImageButton
-            android:id="@+id/imageButtonPDF"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="0.5"
-            android:layout_alignBottom="@+id/textViewFeedback"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/textViewFeedback"
-            android:background="#fff"
-            android:src="@drawable/ic_pdf1"
-            android:padding="10dp" />
     </LinearLayout>
 
 

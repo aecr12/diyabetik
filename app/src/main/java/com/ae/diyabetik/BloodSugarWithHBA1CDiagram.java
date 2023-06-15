@@ -7,8 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -40,8 +40,6 @@ public class BloodSugarWithHBA1CDiagram extends AppCompatActivity {
     private float selectedValue;
     // kullanıcıya geri bildirim verilecek textview
     private TextView textViewFeedback;
-    // kullanıcının raporu indirebilmesi için buton
-    private ImageButton imageButtonPDF;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,7 +47,6 @@ public class BloodSugarWithHBA1CDiagram extends AppCompatActivity {
         setContentView(R.layout.bloodsugar_with_hba1c_diagram);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         textViewFeedback = findViewById(R.id.textViewFeedback);
-        imageButtonPDF=findViewById(R.id.imageButtonPDF);
         ArrayList<BarEntry> barArrayList = new ArrayList();
         // chartın oluşturulması
         barChart = findViewById(R.id.chart);
@@ -77,32 +74,29 @@ public class BloodSugarWithHBA1CDiagram extends AppCompatActivity {
         float constHba1c = bloodSugarCalculation.getConstHba1c();
         float hba1c = bloodSugarCalculation.calculateHba1c(bloodSugar);
 
-
         barArrayList.add(new BarEntry(0,constHba1c));
         barArrayList.add(new BarEntry(1,hba1c));
         BarDataSet barDataSet = new BarDataSet(barArrayList,"Değerler");
-
         BarData barData = new BarData(barDataSet);
         barData.setBarWidth((float) 0.5);
 
         barChart.setData(barData);
+        Description description = new Description();
+        description.setText("");
+        barChart.setDescription(description);
+
         barDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
         barDataSet.setValueTextColors(Collections.singletonList(Color.BLACK));
         barDataSet.setValueTextSize(16f);
-        barChart.getDescription().setEnabled(true);
+        String[] labels = new String[]{"Etiket 1", "Etiket 2"};
+        barDataSet.setStackLabels(labels);
+
 
         if(hba1c>constHba1c){
             textViewFeedback.setText("HbA1c değeriniz ideal değerden %"+calculateDevationFromThreshold(constHba1c,hba1c)+" fazla.");
         }else{
             textViewFeedback.setText("HbA1c değeriniz olması gereken aralıkta.");
         }
-
-        imageButtonPDF.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createPDF();
-            }
-        });
     }
 
     public float calculateDevationFromThreshold(float constHba1c, float hba1c){
@@ -152,6 +146,8 @@ public class BloodSugarWithHBA1CDiagram extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem pastDataMenuItem = menu.findItem(R.id.action_pastdata);
+        pastDataMenuItem.setTitle("İndir");
         return true;
     }
 
@@ -162,6 +158,8 @@ public class BloodSugarWithHBA1CDiagram extends AppCompatActivity {
         if (id == android.R.id.home) {
             onBackPressed();
             return true;
+        }else if (id == R.id.action_pastdata){
+            createPDF();
         }
         return super.onOptionsItemSelected(item);
     }

@@ -45,6 +45,7 @@ public class MealTracker extends AppCompatActivity {
         arttir_button = findViewById(R.id.arttir_button);
         sayac_textview = findViewById(R.id.sayac_textview);
 
+        //kayıt yoksa liste üzerinden sayacı başlat
         waterDAO.read(waterList, new InformationCallback() {
             @Override
             public void onInformationLoaded(List informationList) {
@@ -58,7 +59,9 @@ public class MealTracker extends AppCompatActivity {
             }
         });
 
+        // sayfa açıldığında bilgileri yükle
         loadWaterCountData();
+
         cardViewBreakfast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
