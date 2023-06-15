@@ -35,60 +35,40 @@ public class UserInformationTracking extends AppCompatActivity {
         return TextUtils.isEmpty(str);
     }
 
-    private void isLegalHeight(EditText text) {
+    private boolean isLegalHeight(EditText text) {
         CharSequence str = text.getText().toString();
         if (Integer.parseInt(String.valueOf(str)) > 250) {
             text.setError("Geçerli bir boy bilgisi giriniz.");
-            return;
+            return false;
         }
+        return true;
     }
 
-    private void isLegalWeight(EditText text) {
+    private boolean isLegalWeight(EditText text) {
         CharSequence str = text.getText().toString();
         if (Integer.parseInt(String.valueOf(str)) > 400) {
             text.setError("Geçerli bir kilo bilgisi giriniz.");
-            return;
+            return false;
         }
+        return true;
     }
 
-    private void isLegalWaist(EditText text) {
+    private boolean isLegalWaist(EditText text) {
         CharSequence str = text.getText().toString();
         if (Integer.parseInt(String.valueOf(str)) > 250) {
             text.setError("Geçerli bir değer giriniz.");
-            return;
+            return false;
         }
+        return true;
     }
 
-    private void isLegalDiyastolik(EditText text) {
-        CharSequence str = text.getText().toString();
-        if (Integer.parseInt(String.valueOf(str)) > 200) {
-            text.setError("Geçerli bir değer giriniz.");
-            return;
-        }
-    }
-
-    private void isLegalSistolik(EditText text) {
-        CharSequence str = text.getText().toString();
-        if (Integer.parseInt(String.valueOf(str)) > 200) {
-            text.setError("Geçerli bir değer giriniz.");
-            return;
-        }
-    }
-
-    private void isLegalBloodSugarValue(EditText text) {
-        CharSequence str = text.getText().toString();
-        if (Integer.parseInt(String.valueOf(str)) > 1000) {
-            text.setError("Geçerli bir değer giriniz.");
-            return;
-        }
-    }
-
-    private void isLegalHbA1cPercent(EditText text) {
+    private boolean isLegalHbA1cPercent(EditText text) {
         CharSequence str = text.getText().toString();
         if (Integer.parseInt(String.valueOf(str)) > 100) {
             text.setError("Geçerli bir değer giriniz.");
-            return;
+            return false;
         }
+        return true;
     }
 
     @Override
@@ -113,10 +93,11 @@ public class UserInformationTracking extends AppCompatActivity {
                     Toast.makeText(UserInformationTracking.this, "Tüm alanları eksiksiz doldurunuz.", Toast.LENGTH_LONG).show();
                     return;
                 }
-                isLegalHeight(editTextHeight);
-                isLegalWeight(editTextWeight);
-                isLegalWaist(editTextWaist);
-                isLegalHbA1cPercent(editTextHbA1cPercent);
+                if (isLegalHeight(editTextHeight) == false || isLegalWeight(editTextWeight) == false || isLegalWaist(editTextWaist) == false || isLegalHbA1cPercent(editTextHbA1cPercent) == false){
+                    Toast.makeText(UserInformationTracking.this, "Tüm alanları doğru bir şekilde doldurunuz.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 saveUserInformation();
                 Toast.makeText(UserInformationTracking.this, "Bilgileriniz başarıyla kaydedildi", Toast.LENGTH_LONG);
                 Intent intent = new Intent(UserInformationTracking.this, MainActivity.class);
