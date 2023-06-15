@@ -27,10 +27,11 @@ public class MealTracker extends AppCompatActivity {
     private ImageButton arttir_button;
     private TextView sayac_textview;
     private int suSayaci;
-    WaterDAO waterDAO = new WaterDAO();
-    List<Water> waterList = new ArrayList<>();
-    Water water;
+    private WaterDAO waterDAO = new WaterDAO();
+    private List<Water> waterList = new ArrayList<>();
+    private Water water;
     private CardView cardViewBreakfast, cardViewLunch, cardViewDinner, cardViewSnack;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +41,9 @@ public class MealTracker extends AppCompatActivity {
         cardViewLunch = findViewById(R.id.cardViewLunch);
         cardViewDinner = findViewById(R.id.cardViewDinner);
         cardViewSnack = findViewById(R.id.cardViewSnack);
-        azalt_button=findViewById(R.id.azalt_button);
-        arttir_button=findViewById(R.id.arttir_button);
-        sayac_textview=findViewById(R.id.sayac_textview);
+        azalt_button = findViewById(R.id.azalt_button);
+        arttir_button = findViewById(R.id.arttir_button);
+        sayac_textview = findViewById(R.id.sayac_textview);
 
         waterDAO.read(waterList, new InformationCallback() {
             @Override
@@ -57,40 +58,41 @@ public class MealTracker extends AppCompatActivity {
             }
         });
 
+        loadWaterCountData();
         cardViewBreakfast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MealTracker.this,BreakfastTracker.class);
+                Intent intent = new Intent(MealTracker.this, BreakfastTracker.class);
                 startActivity(intent);
             }
         });
         cardViewLunch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MealTracker.this,LunchTracker.class);
+                Intent intent = new Intent(MealTracker.this, LunchTracker.class);
                 startActivity(intent);
             }
         });
         cardViewDinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MealTracker.this,DinnerTracker.class);
+                Intent intent = new Intent(MealTracker.this, DinnerTracker.class);
                 startActivity(intent);
             }
         });
         cardViewSnack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MealTracker.this,SnackTracker.class);
+                Intent intent = new Intent(MealTracker.this, SnackTracker.class);
                 startActivity(intent);
             }
         });
         azalt_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(suSayaci==0){
-                    Toast.makeText(MealTracker.this,"Nasıl negatif sayıda bardak su içebilirsiniz? Bence bardağa tükürdünüz",Toast.LENGTH_SHORT).show();
-                }else {
+                if (suSayaci == 0) {
+                    Toast.makeText(MealTracker.this, "Nasıl negatif sayıda bardak su içebilirsiniz? Bence bardağa tükürdünüz", Toast.LENGTH_SHORT).show();
+                } else {
                     suSayaci--;
                     sayac_textview.setText(String.valueOf(suSayaci));
                     updateWaterCount(suSayaci);
@@ -127,11 +129,10 @@ public class MealTracker extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveWaterCount(int waterCount){
+    private void saveWaterCount(int waterCount) {
         waterList = waterDAO.read(waterList, new InformationCallback() {
             @Override
             public void onInformationLoaded(List informationList) {
-
             }
 
             @Override
@@ -141,12 +142,27 @@ public class MealTracker extends AppCompatActivity {
             }
         });
     }
-    private void updateWaterCount(int waterCount){
+
+    private void updateWaterCount(int waterCount) {
         waterDAO.read(waterList, new InformationCallback() {
             @Override
             public void onInformationLoaded(List informationList) {
                 Water waterToUpdate = new Water(waterList.get(0).getId(), waterCount);
                 waterDAO.update(waterToUpdate);
+            }
+
+            @Override
+            public void onInformationNotLoaded() {
+
+            }
+        });
+    }
+
+    private void loadWaterCountData(){
+        waterDAO.read(waterList, new InformationCallback() {
+            @Override
+            public void onInformationLoaded(List informationList) {
+                sayac_textview.setText(String.valueOf(waterList.get(0).getGlassesCount()));
             }
 
             @Override
