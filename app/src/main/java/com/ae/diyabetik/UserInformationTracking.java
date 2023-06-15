@@ -120,6 +120,7 @@ public class UserInformationTracking extends AppCompatActivity {
                 saveUserInformation();
                 Toast.makeText(UserInformationTracking.this, "Bilgileriniz başarıyla kaydedildi", Toast.LENGTH_LONG);
                 Intent intent = new Intent(UserInformationTracking.this, MainActivity.class);
+                finish();
                 startActivity(intent);
             }
         });

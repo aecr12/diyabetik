@@ -59,6 +59,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewPersonalInformationsViewer"
                 android:layout_width="match_parent"
                 android:layout_height="139.8dp"
                 android:backgroundTint="@color/colorMainActivityCards"

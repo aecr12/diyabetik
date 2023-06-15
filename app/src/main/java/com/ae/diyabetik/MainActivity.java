@@ -24,9 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     // bileşenlerin initalize edilmesi
     private CardView cardViewPersonalInformations, cardViewTension, cardViewPedometer, cardViewBloodSugarTracker, cardViewMedications, cardViewMealTracker,
-            cardViewTreatmentChoices;
-    private ImageView imageViewPersonalInformations, imageViewTension, imageViewPedometer, imageViewBloodSugarNotes, imageViewMedications, imageViewMeals,
-            imageViewTreatments;
+            cardViewTreatmentChoices, cardViewPersonalInformationsViewer;
     private TextView textViewPersonalInformations, textViewTension, textViewPedometer, textViewBloodSugarNotes, textViewMedications, textViewMeals,
             textViewTreatmens, textViewHeight, textViewWeight, textViewWaist, textViewHbA1c;
     private FloatingActionButton fab, fabDiabetesBook, fabHospital, fabPharmacy, fabLogout;
@@ -34,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isOpen = false;
     // fab için animasyonlar
     private Animation anim1, anim2, anim3, anim4;
-    private UserInformationDAO userInformationDAO = new UserInformationDAO();
+    private UserInformationDAO userInformationDAO;
     private List<UserInformation> userInformationList;
 
     @Override
@@ -48,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         cardViewMedications = findViewById(R.id.cardViewMedications);
         cardViewMealTracker = findViewById(R.id.cardViewMealTracker);
         cardViewTreatmentChoices = findViewById(R.id.cardViewTreatmentChoices);
+        cardViewPersonalInformationsViewer = findViewById(R.id.cardViewPersonalInformationsViewer);
 
         textViewPersonalInformations = findViewById(R.id.textViewPersonalInformations);
         textViewTension = findViewById(R.id.textViewTension);
@@ -73,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
         anim4 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim4); //anticlock
 
         userInformationList = new ArrayList<>();
+
+        userInformationDAO = new UserInformationDAO();
+        loadData();
+
         cardViewTension.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,14 +172,31 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        moveTaskToBack(true);
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            loadData();
+        }
+    }
+
+    private void loadData(){
         userInformationDAO.read(userInformationList, new InformationCallback() {
             @Override
             public void onInformationLoaded(List informationList) {
-                textViewHeight.setText("Boy: "+userInformationList.get(0).getHeight() + " cm");
-                textViewWeight.setText("Kilo: "+ userInformationList.get(0).getWeight()+ " kg" );
-                textViewWaist.setText("Bel çevresi: "+ userInformationList.get(0).getWaist()+ " cm");
-                textViewHbA1c.setText("HbA1c Değeri: "+ userInformationList.get(0).getHbA1cPercent()+ " %");
+                initCardUi();
             }
 
             @Override
@@ -184,13 +205,15 @@ public class MainActivity extends AppCompatActivity {
                 textViewWeight.setText("Kilo: Henüz bir değer girmediniz" );
                 textViewWaist.setText("Bel çevresi: Henüz bir değer girmediniz.");
                 textViewHbA1c.setText("HbA1c Değeri: Hneüz bir değer girmediniz");
+                initCardUi();
+
             }
         });
     }
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        moveTaskToBack(true);
+    private void initCardUi(){
+        textViewHeight.setText("Boy: "+userInformationList.get(0).getHeight() + " cm");
+        textViewWeight.setText("Kilo: "+ userInformationList.get(0).getWeight()+ " kg" );
+        textViewWaist.setText("Bel çevresi: "+ userInformationList.get(0).getWaist()+ " cm");
+        textViewHbA1c.setText("HbA1c Değeri: "+ userInformationList.get(0).getHbA1cPercent()+ " %");
     }
-
 }
