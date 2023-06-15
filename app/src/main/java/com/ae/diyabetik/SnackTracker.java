@@ -15,10 +15,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ae.Adapters.BreakfastAdapterForPastData;
 import com.ae.Adapters.SnackAdapter;
+import com.ae.Adapters.SnackAdapterForPastData;
 import com.ae.DAO.InformationCallback;
 import com.ae.DAO.SnackDAO;
 import com.ae.Models.Snack;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
@@ -33,9 +36,10 @@ public class SnackTracker extends AppCompatActivity {
     private EditText editTextSnack;
     private FloatingActionButton fab;
     private ArrayList<Snack> snackList;
+    private ArrayList<Snack> snackListFilteredByDate;
     private SnackAdapter snackAdapter;
     private SnackDAO snackDAO = new SnackDAO();
-
+    private SnackAdapterForPastData snackAdapterForPastData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +51,12 @@ public class SnackTracker extends AppCompatActivity {
         editTextSnack = findViewById(R.id.editTextSnack);
         fab = findViewById(R.id.fab);
         snackList = new ArrayList<>();
-        snackAdapter = new SnackAdapter(snackList, this);
+        snackListFilteredByDate = new ArrayList<>();
+        snackAdapter = new SnackAdapter(snackListFilteredByDate, this);
         recyclerView1.setLayoutManager(new LinearLayoutManager(this));
         recyclerView1.setAdapter(snackAdapter);
         fab.setVisibility(View.INVISIBLE);
+        loadSnackDataFilteredByDate();
         loadSnackData();
 
         editTextSnack.addTextChangedListener(new TextWatcher() {
@@ -84,17 +90,32 @@ public class SnackTracker extends AppCompatActivity {
             Toast.makeText(SnackTracker.this, "Lütfen bir değer giriniz", Toast.LENGTH_LONG);
         }
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String currentDateTime = dateFormat.format(calendar.getTime());
         Snack snack = new Snack(null, snackItemName, currentDateTime);
         snackDAO.create(snack);
         snackList.add(snack);
+        snackListFilteredByDate.add(snack);
         snackAdapter.notifyDataSetChanged();
         editTextSnack.setText("");
     }
 
     private void loadSnackData() {
         snackDAO.read(snackList, new InformationCallback() {
+            @Override
+            public void onInformationLoaded(List informationList) {
+                snackAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onInformationNotLoaded() {
+
+            }
+        });
+    }
+
+    private void  loadSnackDataFilteredByDate(){
+        snackDAO.readByCurrentDate(snackListFilteredByDate, new InformationCallback() {
             @Override
             public void onInformationLoaded(List informationList) {
                 snackAdapter.notifyDataSetChanged();
@@ -120,8 +141,24 @@ public class SnackTracker extends AppCompatActivity {
         if (id == android.R.id.home) {
             onBackPressed();
             return true;
+        }else if(id == R.id.action_pastdata){
+            showBottomSheetDialog();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showBottomSheetDialog() {
+
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(R.layout.bottom_sheet_dialog_layout);
+
+        RecyclerView recyclerView = bottomSheetDialog.findViewById(R.id.recViewForPastData);
+        snackAdapterForPastData = new SnackAdapterForPastData(snackList,this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(snackAdapterForPastData);
+        snackAdapterForPastData.notifyDataSetChanged();
+        bottomSheetDialog.show();
+
     }
 }
 

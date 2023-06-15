@@ -9,7 +9,6 @@ public interface IDAO<T> {
 
     // Ortak veritabanı işlemeri için interface
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     String create(T t);
 

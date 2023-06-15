@@ -16,9 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ae.Adapters.LunchAdapter;
+import com.ae.Adapters.LunchAdapterForPastData;
 import com.ae.DAO.InformationCallback;
 import com.ae.DAO.LunchDAO;
 import com.ae.Models.Lunch;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
@@ -34,8 +36,10 @@ public class LunchTracker extends AppCompatActivity {
     private EditText editTextLunch;
     private FloatingActionButton fab;
     private ArrayList<Lunch> lunchList;
+    private ArrayList<Lunch> lunchListFilteredByDate;
     private LunchAdapter lunchAdapter;
     private LunchDAO lunchDAO = new LunchDAO();
+    private LunchAdapterForPastData lunchAdapterForPastData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +52,14 @@ public class LunchTracker extends AppCompatActivity {
         editTextLunch = findViewById(R.id.editTextLunch);
         fab = findViewById(R.id.fab);
         lunchList = new ArrayList<>();
-        lunchAdapter = new LunchAdapter(lunchList, this);
+        lunchListFilteredByDate = new ArrayList<>();
+        lunchAdapter = new LunchAdapter(lunchListFilteredByDate, this);
         recyclerView1.setLayoutManager(new LinearLayoutManager(this));
         recyclerView1.setAdapter(lunchAdapter);
         fab.setVisibility(View.INVISIBLE);
 
         // mevcut datanın yüklenmesi
+        loadLunchDataFilteredByDate();
         loadLunchData();
 
         // kullanıcı bilgi girişi yaparsa fab aktif olacak
@@ -61,6 +67,7 @@ public class LunchTracker extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
@@ -69,6 +76,7 @@ public class LunchTracker extends AppCompatActivity {
                     fab.setVisibility(View.INVISIBLE);
                 }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -89,11 +97,12 @@ public class LunchTracker extends AppCompatActivity {
             Toast.makeText(LunchTracker.this, "Lütfen bir değer giriniz", Toast.LENGTH_LONG);
         }
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String currentDateTime = dateFormat.format(calendar.getTime());
         Lunch lunch = new Lunch(null, lunchItemName, currentDateTime);
         lunchDAO.create(lunch);
         lunchList.add(lunch);
+        lunchListFilteredByDate.add(lunch);
         lunchAdapter.notifyDataSetChanged();
         editTextLunch.setText("");
     }
@@ -113,6 +122,21 @@ public class LunchTracker extends AppCompatActivity {
             }
         });
     }
+
+    private void  loadLunchDataFilteredByDate(){
+        lunchDAO.readByCurrentDate(lunchListFilteredByDate, new InformationCallback() {
+            @Override
+            public void onInformationLoaded(List informationList) {
+                lunchAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onInformationNotLoaded() {
+
+            }
+        });
+    }
+
     // geri butonu için menünün inflate edilmesi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -120,16 +144,31 @@ public class LunchTracker extends AppCompatActivity {
         return true;
     }
 
-    // geri butonuna asınca önceki sayfaya gidiliyor
+    // geri butonuna basınca önceki sayfaya gidiliyor
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        System.out.println("id: "+ id);
         if (id == android.R.id.home) {
             onBackPressed();
             return true;
+        } else if (id == R.id.action_pastdata) {
+            showBottomSheetDialog();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showBottomSheetDialog() {
+
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(R.layout.bottom_sheet_dialog_layout);
+
+        RecyclerView recyclerView = bottomSheetDialog.findViewById(R.id.recViewForPastData);
+        lunchAdapterForPastData = new LunchAdapterForPastData(lunchList, this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(lunchAdapterForPastData);
+        lunchAdapterForPastData.notifyDataSetChanged();
+        bottomSheetDialog.show();
+
     }
 
 }

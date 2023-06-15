@@ -1,22 +1,13 @@
 package com.ae.diyabetik;
-
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -43,9 +34,13 @@ public class BreakfastTracker extends AppCompatActivity {
     private EditText editTextBreakfast;
     private FloatingActionButton fab;
     private ArrayList<Breakfast> breakfastList;
+    private ArrayList<Breakfast> breakfastListFilteredByDate;
     private BreakfastAdapter breakfastAdapter;
     private BreakfastDAO breakfastDAO = new BreakfastDAO();
     private BreakfastAdapterForPastData breakfastAdapterForPastData;
+    Calendar calendar = Calendar.getInstance();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    String currentDateTime = dateFormat.format(calendar.getTime());
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,13 +52,14 @@ public class BreakfastTracker extends AppCompatActivity {
         editTextBreakfast = findViewById(R.id.editTextBreakfast);
         fab = findViewById(R.id.fab);
         breakfastList = new ArrayList<>();
-        breakfastAdapter = new BreakfastAdapter(breakfastList, this);
+        breakfastListFilteredByDate = new ArrayList<>();
+        breakfastAdapter = new BreakfastAdapter(breakfastListFilteredByDate, this);
         recyclerView1.setLayoutManager(new LinearLayoutManager(this));
         recyclerView1.setAdapter(breakfastAdapter);
         fab.setVisibility(View.INVISIBLE);
 
+        loadBreakfastDataFilteredByDate();
         loadBreakfastData();
-
         editTextBreakfast.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -96,18 +92,16 @@ public class BreakfastTracker extends AppCompatActivity {
         if (TextUtils.isEmpty(breakfastItemName)) {
             Toast.makeText(BreakfastTracker.this, "Lütfen bir değer giriniz", Toast.LENGTH_LONG);
         }
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        String currentDateTime = dateFormat.format(calendar.getTime());
+
         Breakfast breakfast = new Breakfast(null, breakfastItemName, currentDateTime);
         breakfastDAO.create(breakfast);
         breakfastList.add(breakfast);
+        breakfastListFilteredByDate.add(breakfast);
         breakfastAdapter.notifyDataSetChanged();
         editTextBreakfast.setText("");
     }
 
     private void loadBreakfastData() {
-
         breakfastDAO.read(breakfastList, new InformationCallback() {
             @Override
             public void onInformationLoaded(List informationList) {
@@ -120,6 +114,21 @@ public class BreakfastTracker extends AppCompatActivity {
             }
         });
     }
+
+    private void  loadBreakfastDataFilteredByDate(){
+        breakfastDAO.readByCurrentDate(breakfastListFilteredByDate, new InformationCallback() {
+            @Override
+            public void onInformationLoaded(List informationList) {
+                breakfastAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onInformationNotLoaded() {
+
+            }
+        });
+    }
+
 
     // geri butonu için menünün inflate edilmesi
     @Override
@@ -136,7 +145,7 @@ public class BreakfastTracker extends AppCompatActivity {
         if (id == android.R.id.home) {
             onBackPressed();
             return true;
-        }else if(id == R.id.action_pastdata){
+        } else if (id == R.id.action_pastdata) {
             showBottomSheetDialog();
         }
         return super.onOptionsItemSelected(item);
@@ -146,12 +155,11 @@ public class BreakfastTracker extends AppCompatActivity {
 
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         bottomSheetDialog.setContentView(R.layout.bottom_sheet_dialog_layout);
-
         RecyclerView recyclerView = bottomSheetDialog.findViewById(R.id.recViewForPastData);
-        breakfastAdapterForPastData = new BreakfastAdapterForPastData(breakfastList,this);
+        breakfastAdapterForPastData = new BreakfastAdapterForPastData(breakfastList, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(breakfastAdapterForPastData);
-        breakfastAdapter.notifyDataSetChanged();
+        breakfastAdapterForPastData.notifyDataSetChanged();
         bottomSheetDialog.show();
 
     }

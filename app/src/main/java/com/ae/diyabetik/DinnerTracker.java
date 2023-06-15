@@ -15,10 +15,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ae.Adapters.BreakfastAdapterForPastData;
 import com.ae.Adapters.DinnerAdapter;
+import com.ae.Adapters.DinnerAdapterForPastData;
 import com.ae.DAO.DinnerDAO;
 import com.ae.DAO.InformationCallback;
 import com.ae.Models.Dinner;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
@@ -33,8 +36,10 @@ public class DinnerTracker extends AppCompatActivity {
     private EditText editTextDinner;
     private FloatingActionButton fab;
     private ArrayList<Dinner> dinnerList;
+    private ArrayList<Dinner> dinnerListFilteredByDate;
     private DinnerAdapter dinnerAdapter;
     private DinnerDAO dinnerDAO = new DinnerDAO();
+    private DinnerAdapterForPastData dinnerAdapterForPastData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +52,8 @@ public class DinnerTracker extends AppCompatActivity {
         editTextDinner = findViewById(R.id.editTextDinner);
         fab = findViewById(R.id.fab);
         dinnerList = new ArrayList<>();
-        dinnerAdapter = new DinnerAdapter(dinnerList, this);
+        dinnerListFilteredByDate = new ArrayList<>();
+        dinnerAdapter = new DinnerAdapter(dinnerListFilteredByDate, this);
         recyclerView1.setLayoutManager(new LinearLayoutManager(this));
         recyclerView1.setAdapter(dinnerAdapter);
         fab.setVisibility(View.INVISIBLE);
@@ -84,11 +90,12 @@ public class DinnerTracker extends AppCompatActivity {
             Toast.makeText(DinnerTracker.this, "Lütfen bir değer giriniz", Toast.LENGTH_LONG);
         }
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String currentDateTime = dateFormat.format(calendar.getTime());
         Dinner dinner = new Dinner(null, dinnerItemName, currentDateTime);
         dinnerDAO.create(dinner);
         dinnerList.add(dinner);
+        dinnerListFilteredByDate.add(dinner);
         dinnerAdapter.notifyDataSetChanged();
         editTextDinner.setText("");
     }
@@ -107,7 +114,20 @@ public class DinnerTracker extends AppCompatActivity {
         });
     }
 
-    // geri butonu için menünün inflate edilmesi
+    private void  loadBreakfastDataFilteredByDate(){
+        dinnerDAO.readByCurrentDate(dinnerListFilteredByDate, new InformationCallback() {
+            @Override
+            public void onInformationLoaded(List informationList) {
+                dinnerAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onInformationNotLoaded() {
+
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -118,12 +138,27 @@ public class DinnerTracker extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        System.out.println("id: "+ id);
         if (id == android.R.id.home) {
             onBackPressed();
             return true;
+        }else if(id == R.id.action_pastdata){
+            showBottomSheetDialog();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showBottomSheetDialog() {
+
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(R.layout.bottom_sheet_dialog_layout);
+
+        RecyclerView recyclerView = bottomSheetDialog.findViewById(R.id.recViewForPastData);
+        dinnerAdapterForPastData = new DinnerAdapterForPastData(dinnerList,this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(dinnerAdapterForPastData);
+        dinnerAdapterForPastData.notifyDataSetChanged();
+        bottomSheetDialog.show();
+
     }
 }
 
